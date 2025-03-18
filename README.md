@@ -1,6 +1,5 @@
 # Đồ án JAVA 
 ## Đề tài: Quản lý bán văn phòng phẩm
-## OOP src code is in OOP branch
 ## Thành viên
 - `3123410349` *Nguyễn Bá Thiên*
 - `3123410384` *Trương Thanh Tòng*
