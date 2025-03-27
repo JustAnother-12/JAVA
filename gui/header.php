@@ -13,7 +13,7 @@
       rel="stylesheet"
       href="../../Assets/Font/fontawesome-6.6.0/css/all.min.css"
     />
-    <link rel="stylesheet" href="../../Assets/CSS/index.css" />
+    <link rel="stylesheet" href="../Assets/CSS/index.css" />
     <link rel="stylesheet" href="../Assets/CSS/Responsive.css" />
     <script type="module" src="../Javascript/Index.js"></script>
     <title>Welcome to MT3H</title>
