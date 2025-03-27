@@ -1,0 +1,14 @@
+{
+    "babel": true,
+    "plugins": ["jsdom-quokka-plugin"],
+        "jsdom": {
+        "file": "/html/file/path",
+        "html": "...",
+        "userAgent": "Interface.js",
+        "config": {
+            "pretendToBeVisual": true,
+            "runScripts": "dangerously",
+            "url": "http://localhost/"    
+        }
+    }
+ }

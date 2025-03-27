@@ -1,0 +1,171 @@
+#main-container .cart-ui-content img {
+     width: 100%;
+}
+
+.cart-ui-content #blank-cart,
+.cart-ui-content #cart {
+     display: none;
+}
+
+.cart-ui-content #blank-cart.active,
+.cart-ui-content #cart.active {
+     display: flex !important;
+     flex-flow: row wrap;
+}
+
+.cart-ui-content #blank-cart.active {
+     align-items: center;
+     flex-flow: column wrap;
+}
+
+#blank-cart img {
+     max-width: 30%;
+}
+
+/* css when user have at least one cart */
+.cart-ui-content #cart .header-cart-content {
+     display: flex;
+     align-items: center;
+}
+
+.cart-ui-content #cart input[type=checkbox] {
+     transform: scale(1.4);
+     outline: none;
+}
+
+.cart-ui-content #cart > div:last-child{
+     padding: 0 0 0 1em;
+}
+
+.cart-ui-content #cart .list-carts {
+     background: var(--primary-white);
+     display: flex;
+     flex-flow: column;
+}
+
+#cart .list-carts .block-product {
+     padding: 1em 0;
+     display: flex;
+     flex-flow: row wrap;
+     position: relative;
+     align-items: center;
+}
+
+.list-carts .block-product + .block-product::before {
+     content: " ";
+     top: 0;
+     left: 0;
+     right: 0;
+     opacity: 0.6;
+     padding: 0.2px;
+     position: absolute;
+     background: var(--border);
+     
+}
+
+.block-product .price-per-item {
+     color: var(--bg-red);
+}
+
+.block-product .product-cart {
+     display: flex;
+     flex-flow: row;
+}
+
+.block-product .info-product-cart {
+     display: flex;
+     flex-flow: column wrap;
+     justify-content: space-around;
+}
+
+#cart .number-product-cart .quantity-cart {
+     width: 4.25em;
+     height: 2.25em;
+     padding-left: 1em;
+     transform: translateX(40%);
+     outline: none;
+     text-align: center;
+     background: var(--primary-grey);
+     border-radius: var(--normal-radius);
+     border: 1px solid var(--primary-grey);
+}
+
+.number-product-cart .quantity-cart::-webkit-inner-spin-button {
+     transform: scale(1.2);
+}
+
+#cart .promotion-block-content .shop-voucher {
+     display: flex;
+     flex-direction: column;
+     justify-content: space-between;
+}
+
+.promotion-block-content .shop-voucher input {
+     flex-grow: 2;
+     outline: none;
+     background: none;
+     padding: var(--btn-height);
+     border: 1px solid var(--border);
+     border-top-left-radius: var(--normal-radius); 
+     border-bottom-left-radius: var(--normal-radius); 
+}
+
+.promotion-block-content .shop-voucher button {
+     padding: var(--btn-height);
+     background: var(--main-color);
+     border: 1px solid var(--border);
+     border-top-left-radius: unset;
+     border-bottom-left-radius: unset;
+}
+
+#cart .promotion-block-content .payment-methods {
+     text-transform: capitalize;
+}
+
+#cart .payment-methods img {
+     width: 10%;
+}
+
+.payment-methods li + li{
+     padding-top: 0.5em;
+}
+
+#cart .promotion-block-content .order-summary {
+     display: flex;
+     flex-flow: column wrap;
+     border-top: 1px solid var(--border);
+}
+
+.promotion-block-content .order-summary div {
+     padding: 0.25em 0;
+     display: flex;
+     flex-flow: row wrap;
+     justify-content: space-between;
+}
+
+.order-summary div:nth-child(5) {
+     border-bottom: 1px solid var(--border);
+}
+
+.order-summary .checkout-btn {
+     border: none;
+     cursor: pointer;
+     padding: var(--btn-height);
+     background: var(--bg-red);
+}
+
+.order-summary .checkout-btn:hover {
+     background: var(--bg-red) !important;
+}
+
+#cart .user-cart-note textarea {
+     width: 100%;
+     padding: 0.5em;
+     min-height: 10em;
+     margin-top: 0.25em;
+     resize: none;
+     outline: none;
+     border: none;
+     border-radius: var(--normal-radius);
+     background: var(--primary-grey)
+}

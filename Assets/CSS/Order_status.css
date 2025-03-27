@@ -1,0 +1,174 @@
+#history-order-container,
+#main-container .order-status-container {
+     overflow: hidden;
+     position: relative;
+}
+
+.order-status-container #blank-order {
+     width: 100%;
+     text-align: center;
+     flex-flow: column wrap;
+}
+
+.order-status-container #blank-order img{
+     width: 26%;
+     margin: auto;
+     padding-bottom: 1em;
+}
+
+#blank-order, 
+#customer-order,
+#history-order-container {
+     padding: 1.25em;
+     display: none;
+     background: var(--primary-white);
+     border-radius: var(--higher-radius);
+     position: relative;
+}
+
+.order-status-header {
+     border-bottom: 1px solid var(--border);
+}
+
+.order-info .block-order-info  {
+     min-height: 6em;
+     padding: 0.5em 0;
+}
+
+.order-info .block-order-info > h4 {
+     padding-bottom: 0.25em;
+}
+
+.order-info .tracking-bar {
+     display: flex; 
+     flex-grow: 1;
+     border-top: 1px solid var(--border);
+}
+
+.order-info .tracking-bar:not(:nth-child(2)) {
+     padding-inline: 1em;
+}
+
+.tracking-bar .dot-status {
+     min-height: 4.75em;
+     position: relative;
+}
+
+.tracking-bar .dot-status .dot-active 
+/* .tracking-bar .dot-status .dot-disable*/{
+     display: none;
+} 
+
+.tracking-bar .dot-status p {
+     font-weight: 500;
+     padding-top: 1em;
+     
+}
+
+.tracking-bar .shipped-dot p {
+     max-width: 12em;
+     margin-left: -2em;
+} 
+
+.tracking-bar .delivered-dot p {
+     max-width: 7.25em;
+     margin-left: auto;
+     margin-right: -2em;
+}
+
+.shipped-dot .dot-status > div {
+     transform: translateX(4%);
+}
+
+.shipped-dot .dot-status .border-arrow-top {
+     left: 0;
+     top: 1em;
+     transform: translateX(10%); 
+}    
+
+.in-transit-dot .dot-status .border-arrow-top {
+     top: 1em;
+     left: 50%;
+     transform: translateX(-50%);
+}
+
+.delivered-dot .dot-status > div {
+     transform: translateX(-4%);
+}
+
+.delivered-dot .dot-status .border-arrow-top {
+     top: 1em;
+     right: 0;
+     transform: translateX(-10%);
+}
+
+.order-info .tracking-table {
+     flex-flow:column-reverse;
+}
+
+.tracking-table .tracking-block:not(:first-child) {
+     border-top: 1px solid var(--border);
+} 
+
+.order-info .tracking-block .dot-status{
+     position: relative;
+}
+
+#customer-order .history-order-link {
+     max-width: 26%;
+     padding: 0.5em;
+     margin: auto;
+     color: var(--primary-white);
+     background: var(--main-color);
+     border-radius: var(--normal-radius);
+     border: 1px solid var(--main-color);
+}
+
+.history-order-table .block-product {
+     margin-bottom: 1em;
+     flex-basis: calc(50% - 0.5em);
+     display: flex;
+     flex-flow: column;
+     justify-content: space-between;
+}
+
+.history-order-table .block-product .cart-content {
+     height: 100%;
+     padding: 0.5em;
+     border-radius: var(--normal-radius);
+     border: 1px solid var(--main-color);
+     box-shadow: 0 0 1px var(--primary-dark);
+}
+
+#history-order-container .block-product img {
+     width: 10%;
+     height: 100%;
+     object-fit: contain;
+}
+
+.history-order-table .block-product .cart-content > div + div {
+     border-top: 1px solid var(--border);
+}
+
+.history-order-table .block-product .order-status {
+     cursor: pointer;
+}
+
+#history-order-container .block-product .buy-btn {
+     padding: 0.5em 1.5em;
+     background: var(--main-color);
+}
+
+.history-order-table .completed-order-info {
+     display: flex;
+}
+
+.overlay .status-container {
+     margin: auto;
+}
+
+.overlay .status-container .tracking-table {
+     padding: 1em;
+     background: var(--primary-white);
+     border-radius: var(--higher-radius);
+}

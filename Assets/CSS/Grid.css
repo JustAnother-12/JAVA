@@ -1,0 +1,601 @@
+/* Mobile */
+.grid {
+     padding: 0;
+     width: 100%;
+     display: block;
+}
+
+/* layout 1200px */
+.grid.wide {
+     max-width: 75em;    
+     margin: 0 auto;
+}
+
+/*define row & col for grid system */
+.grid-row {
+     display: flex;
+     flex-wrap: wrap;
+     margin-inline: -0.25em;
+     
+}
+
+.grid-row.no-gutter {
+     margin-inline: 0;
+}
+
+.grid-col {
+     padding-inline: 0.25em;
+}
+
+.grid-col.no-gutter {
+     padding-inline: 0 ;
+}
+
+/* define the number of Column to use (mobile) */
+.col-s-0 {
+     display: none;
+}
+
+.col-s-1 {
+     flex: 0 0 8.33333%;
+     max-width: 8.33333%;
+}
+
+.col-s-2 {
+     flex: 0 0 16.66667%;
+     max-width: 16.66667%;
+}
+
+.col-s-3 {
+     flex: 0 0 25%;
+     max-width: 25%;
+}
+
+.col-s-4 {
+     flex: 0 0 33.33333%;
+     max-width: 33.33333%;
+}
+
+.col-s-5 {
+     flex: 0 0 41.66667%;
+     max-width: 41.66667%;
+}
+
+.col-s-6 {
+     flex: 0 0 50%;
+     max-width: 50%;
+}
+
+.col-s-7 {
+     flex: 0 0 58.33333%;
+     max-width: 58.33333%;
+}
+
+.col-s-8 {
+     flex: 0 0 66.66667%;
+     max-width: 66.66667%;
+}
+
+.col-s-9 {
+     flex: 0 0 75%;
+     max-width: 75%;
+}
+
+.col-s-10 {
+     flex: 0 0 83.33333%;
+     max-width: 83.33333%;
+}
+
+.col-s-11 {
+     flex: 0 0 91.66667%;
+     max-width: 91.66667%;
+}
+
+.col-s-12 {
+     flex: 0 0 100%;
+     max-width: 100%;
+}
+/* end to define the number of column to use (mobile) */
+
+/*  set column offset (mobile)  */
+.col-so-1 {
+     margin-left: 8.33333%;
+}
+
+.col-so-2 {
+     margin-left: 16.66667%;
+}
+
+.col-so-3 {
+     margin-left: 25%;
+}
+
+.col-so-4 {
+     margin-left: 33.33333%;
+}
+
+.col-so-5 {
+     margin-left: 41.66667%;
+}
+
+.col-so-6 {
+     margin-left: 50%;
+}
+
+.col-so-7 {
+     margin-left: 58.33333%;
+}
+
+.col-so-8 {
+     margin-left: 66.66667%;
+}
+
+.col-so-9 {
+     margin-left: 75%;
+}
+
+.col-so-10 {
+     margin-left: 83.33333%;
+}
+
+.col-so-11 {
+     margin-left: 91.66667%;
+}
+/* end to set column offset (mobile) */
+
+/* Media Global */
+/* >= Tablet 46.25em = 740px, 69.5625em = 1113px*/
+@media (min-width: 46.25em) {
+     .grid-row {
+          margin-inline: -0.5em;
+     }
+
+     .grid-col {
+          padding-inline: 0.5em;
+     }
+     
+     /* overwrite display style */
+     .col-m-1,
+     .col-m-2,
+     .col-m-3,
+     .col-m-4,
+     .col-m-5,
+     .col-m-6,
+     .col-m-7,
+     .col-m-8,
+     .col-m-9,
+     .col-m-10,
+     .col-m-11,
+     .col-m-12 {
+          display: block;
+     }
+
+     /* define the number of Column to use (tablet) */
+     .col-m-0 {
+          display: none;
+     }
+
+     .col-m-1 {
+          flex: 0 0 8.33333%;
+          max-width: 8.33333%;
+     }
+
+     .col-m-2 {
+          flex: 0 0 16.66667%;
+          max-width: 16.66667%;
+     }
+
+     .col-m-3 {
+          flex: 0 0 25%;
+          max-width: 25%;
+     }
+
+     .col-m-4 {
+          flex: 0 0 33.33333%;
+          max-width: 33.33333%;
+     }
+
+     .col-m-5 {
+          flex: 0 0 41.66667%;
+          max-width: 41.66667%;
+     }
+
+     .col-m-6 {
+          flex: 0 0 50%;
+          max-width: 50%;
+     }
+
+     .col-m-7 {
+          flex: 0 0 58.33333%;
+          max-width: 58.33333%;
+     }
+
+     .col-m-8 {
+          flex: 0 0 66.66667%;
+          max-width: 66.66667%;
+     }
+
+     .col-m-9 {
+          flex: 0 0 75%;
+          max-width: 75%;
+     }
+
+     .col-m-10 {
+          flex: 0 0 83.33333%;
+          max-width: 83.33333%;
+     }
+
+     .col-m-11 {
+          flex: 0 0 91.66667%;
+          max-width: 91.66667%;
+     }
+
+     .col-m-12 {
+          flex: 0 0 100%;
+          max-width: 100%;
+     }
+     /* end to define the number of column to use (tablet) */
+
+     /*  set column offset (Tablet)  */
+     .col-mo-1 {
+          margin-left: 8.33333%;
+     }
+
+     .col-mo-2 {
+          margin-left: 16.66667%;
+     }
+
+     .col-mo-3 {
+          margin-left: 25%;
+     }
+
+     .col-mo-4 {
+          margin-left: 33.33333%;
+     }
+
+     .col-mo-5 {
+          margin-left: 41.66667%;
+     }
+
+     .col-mo-6 {
+          margin-left: 50%;
+     }
+
+     .col-mo-7 {
+          margin-left: 58.33333%;
+     }
+
+     .col-mo-8 {
+          margin-left: 66.66667%;
+     }
+
+     .col-mo-9 {
+          margin-left: 75%;
+     }
+
+     .col-mo-10 {
+          margin-left: 83.33333%;
+     }
+
+     .col-mo-11 {
+          margin-left: 91.66667%;
+     }
+     /* end to set column offset (Tablet) */
+}
+
+@media (min-width: 69.5625em) {
+     .grid-row {
+          margin-inline: -0.75em;
+     }
+
+     .grid-col {
+          padding-inline: 0.75em;
+     }
+
+     /* overwrite display style */
+     .col-l-1,
+     .col-l-2,
+     .col-l-2-4,
+     .col-l-3,
+     .col-l-4,
+     .col-l-5,
+     .col-l-6,
+     .col-l-7,
+     .col-l-8,
+     .col-l-9,
+     .col-l-10,
+     .col-l-11,
+     .col-l-12 {
+          display: block;
+     }
+
+     /* define the number of Column to use (pc) */
+     .col-l-0 {
+          display: none;
+     }
+
+     .col-l-1 {
+          flex: 0 0 8.33333%;
+          max-width: 8.33333%;
+     }
+
+     .col-l-2 {
+          flex: 0 0 16.66667%;
+          max-width: 16.66667%;
+     }
+
+     .col-l-2-4 {
+          flex: 0 0 20%;
+          max-width: 20%;
+     }
+
+     .col-l-3 {
+          flex: 0 0 25%;
+          max-width: 25%;
+     }
+
+     .col-l-4 {
+          flex: 0 0 33.33333%;
+          max-width: 33.33333%;
+     }
+
+     .col-l-5 {
+          flex: 0 0 41.66667%;
+          max-width: 41.66667%;
+     }
+
+     .col-l-6 {
+          flex: 0 0 50%;
+          max-width: 50%;
+     }
+
+     .col-l-7 {
+          flex: 0 0 58.33333%;
+          max-width: 58.33333%;
+     }
+
+     .col-l-8 {
+          flex: 0 0 66.66667%;
+          max-width: 66.66667%;
+     }
+
+     .col-l-9 {
+          flex: 0 0 75%;
+          max-width: 75%;
+     }
+
+     .col-l-10 {
+          flex: 0 0 83.33333%;
+          max-width: 83.33333%;
+     }
+
+     .col-l-11 {
+          flex: 0 0 91.66667%;
+          max-width: 91.66667%;
+     }
+
+     .col-l-12 {
+          flex: 0 0 100%;
+          max-width: 100%;
+     }
+     /* end to define the number of column to use (pc) */
+
+     /*  set column offset (pc)  */
+     .col-lo-1 {
+          margin-left: 8.33333%;
+     }
+
+     .col-lo-2 {
+          margin-left: 16.66667%;
+     }
+
+     .col-lo-2-4 {
+          margin-left: 20%;
+     }
+
+     .col-lo-3 {
+          margin-left: 25%;
+     }
+
+     .col-lo-4 {
+          margin-left: 33.33333%;
+     }
+
+     .col-lo-5 {
+          margin-left: 41.66667%;
+     }
+
+     .col-lo-6 {
+          margin-left: 50%;
+     }
+
+     .col-lo-7 {
+          margin-left: 58.33333%;
+     }
+
+     .col-lo-8 {
+          margin-left: 66.66667%;
+     }
+
+     .col-lo-9 {
+          margin-left: 75%;
+     }
+
+     .col-lo-10 {
+          margin-left: 83.33333%;
+     }
+
+     .col-lo-11 {
+          margin-left: 91.66667%;
+     }
+     /* end to set column offset (pc) */
+}
+/* end Media Global */
+
+/* >= Tablet 63.9375em = 1023px*/
+@media (min-width: 46.25em) and (max-width: 63.9375em) {
+     .grid {
+          max-width: 40.25em;
+     }
+}
+
+/* > PC low resolution 64em = 1024px, 77.4375em = 1239px */
+@media (min-width: 64em) and (max-width: 77.4375em) {
+     .grid.wide {
+          max-width: 61.5em ;
+     }
+     /* when resize screen vs max-width = 1239px */
+     .wide .grid-row {
+          margin-inline: -0.75em;
+     }
+     
+     .wide .grid-col {
+          padding-inline: 0.75em;
+     }
+
+     .wide .grid-row.no-gutter {
+          margin-inline: 0;
+     }
+
+     .wide .grid-col.no-gutter {
+          padding-inline: 0;
+     }
+
+     /* overwrite display style */
+     /* .wide .col-l-1,
+     .wide .col-l-2,
+     .wide .col-l-2-4,
+     .wide .col-l-3,
+     .wide .col-l-4,
+     .wide .col-l-5,
+     .wide .col-l-6,
+     .wide .col-l-7,
+     .wide .col-l-8,
+     .wide .col-l-9,
+     .wide .col-l-10,
+     .wide .col-l-11,
+     .wide .col-l-12 {
+          display: block;
+     } */
+
+     /* define the number of Column to use (pc) */
+     .wide .col-l-0 {
+          display: none;
+     }
+
+     .wide .col-l-1 {
+          flex: 0 0 8.33333%;
+          max-width: 8.33333%;
+     }
+
+     .wide .col-l-2 {
+          flex: 0 0 16.66667%;
+          max-width: 16.66667%;
+     }
+
+     .wide .col-l-2-4 {
+          flex: 0 0 20%;
+          max-width: 20%;
+     }
+
+     .wide .col-l-3 {
+          flex: 0 0 25%;
+          max-width: 25%;
+     }
+
+     .wide .col-l-4 {
+          flex: 0 0 33.33333%;
+          max-width: 33.33333%;
+     }
+
+     .wide .col-l-5 {
+          flex: 0 0 41.66667%;
+          max-width: 41.66667%;
+     }
+
+     .wide .col-l-6 {
+          flex: 0 0 50%;
+          max-width: 50%;
+     }
+
+     .wide .col-l-7 {
+          flex: 0 0 58.33333%;
+          max-width: 58.33333%;
+     }
+
+     .wide .col-l-8 {
+          flex: 0 0 66.66667%;
+          max-width: 66.66667%;
+     }
+
+     .wide .col-l-9 {
+          flex: 0 0 75%;
+          max-width: 75%;
+     }
+
+     .wide .col-l-10 {
+          flex: 0 0 83.33333%;
+          max-width: 83.33333%;
+     }
+
+     .wide .col-l-11 {
+          flex: 0 0 91.66667%;
+          max-width: 91.66667%;
+     }
+
+     .wide .col-l-12 {
+          flex: 0 0 100%;
+          max-width: 100%;
+     }
+     /* end to define the number of column to use (pc) */
+
+     /*  set column offset (pc)  */
+     .wide .col-lo-1 {
+          margin-left: 8.33333%;
+     }
+
+     .wide .col-lo-2 {
+          margin-left: 16.66667%;
+     }
+
+     .wide .col-lo-2-4 {
+          margin-left: 20%;
+     }
+
+     .wide .col-lo-3 {
+          margin-left: 25%;
+     }
+
+     .wide .col-lo-4 {
+          margin-left: 33.33333%;
+     }
+
+     .wide .col-lo-5 {
+          margin-left: 41.66667%;
+     }
+
+     .wide .col-lo-6 {
+          margin-left: 50%;
+     }
+
+     .wide .col-lo-7 {
+          margin-left: 58.33333%;
+     }
+
+     .wide .col-lo-8 {
+          margin-left: 66.66667%;
+     }
+
+     .wide .col-lo-9 {
+          margin-left: 75%;
+     }
+
+     .wide .col-lo-10 {
+          margin-left: 83.33333%;
+     }
+
+     .wide .col-lo-11 {
+          margin-left: 91.66667%;
+     }
+     /* end to set column offset (pc) */
+}

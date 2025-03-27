@@ -1,0 +1,175 @@
+#main-container #login-registration-form {
+     display: flex;
+     justify-content: center;
+     align-items: center;
+     min-height: 31em;   
+     padding-bottom: 1.25em;
+}
+
+#main-container #login-registration-form .user-box {
+     display: flex;
+     flex-flow: column wrap;
+     padding: 2em;
+     margin: 2em 2em;
+     background: var(--primary-white);
+     border-radius: var(--higher-radius);
+}
+
+#login-registration-form .user-box a {
+     color: var(--main-color);
+}
+
+#login-registration-form .user-box a:hover {
+     color: var(--btn-hover);
+}
+
+#login, 
+#register, 
+#forgot-password {
+     display: none;
+}
+
+.user-box #login-layout form,
+.user-box #register-layout form,
+.user-box #forgot-pass-layout form {
+     padding: 1.25em 0 0;
+     display: flex;
+     flex-flow: column wrap;
+}
+
+#login-layout form > p,
+#forgot-pass-layout form > p {
+     text-align: start;
+}
+
+.user-box #login-layout input,
+.user-box #register-layout input,
+.user-box #forgot-pass-layout input {
+     width: 22em;
+     opacity: 0.8;
+     padding-inline: 0.25em;
+     background: unset;
+     outline-style: none;
+     padding: var(--btn-height);
+     color: var(--primary-dark);
+     border-radius: var(--normal-radius);
+     border: 1px solid var(--primary-grey);
+}
+
+.user-box #login-layout button,
+.user-box #register-layout button,
+.user-box #forgot-pass-layout button {
+     height: 2.5em;
+     margin-top: 0.75em;
+     border: none;
+     cursor: pointer;
+     background: var(--main-color);
+}
+
+#login-registration-form .user-box div:nth-child(3) {
+     position: relative;
+}
+
+/* #login-registration-form .user-box div:nth-child(3)::before {
+     content: "";
+     left: 0;
+     top: 50%;
+     right: 56%;
+}
+
+#login-registration-form .user-box div:nth-child(3)::after {
+     content: "";
+     top: 50%;
+     right: 0;
+     left: 56%;
+} */
+
+/* #login-registration-form .user-box div:nth-child(3)::after,
+#login-registration-form .user-box div:nth-child(3)::before {
+     height: 2px;
+     opacity: 0.4;
+     position: absolute;
+     background: var(--primary-dark);
+} */
+
+#login-registration-form .user-box .customer-login-social {
+     display: flex;
+     flex-flow: column wrap;
+}
+
+.user-box .customer-login-social .btn-social-login {
+     gap: 6em;
+     padding-inline: 0.5em;
+     border: none;
+     display: flex;
+     align-items: center;
+     padding: var(--btn-height);
+}
+
+.user-box .customer-login-social #btn-facebook-login,
+.user-box .customer-login-social #btn-google-login {
+     cursor: pointer;
+     color: var(--primary-dark);
+}
+
+.user-box .customer-login-social #btn-facebook-login {
+     background-color: var(--main-color);
+}
+
+.user-box .customer-login-social #btn-google-login {
+
+     background-color: var(--bg-red);
+}
+
+.js-logout,
+.js-cancel,
+.js-login,
+.js-register,
+.js-forgot-password {
+     cursor: pointer;
+}
+
+.js-forgot-password span,
+.js-login span:last-child,
+.js-cancel span:last-child,
+.js-register span:last-child {
+     color: var(--main-color);
+}
+
+.js-forgot-password span:hover,
+.js-login span:last-child:hover,
+.js-cancel span:last-child:hover,
+.js-register span:last-child:hover {
+     color: var(--btn-hover);
+}
+
+/* for user page */
+.account-container {
+     margin-top: -1em;
+     margin: 1em 0 2em;
+     padding: 1em;
+     background: var(--primary-white);
+     border-radius: var(--higher-radius);
+}
+
+.account-info .user-card .js-submit-btn,
+.account-info .user-card .js-edit-btn {
+     padding: 0.5em 1.5em;
+     border: unset;
+     color: var(--primary-white);
+     background: var(--main-color);
+}
+
+.account-info .user-card input[type=text] {
+     border: none;
+     outline: none;
+}
+
+.account-container .history-order-link {
+     margin: 1em 0;
+     padding: 0.5em;
+     background: var(--main-color);
+     border-radius: var(--normal-radius);
+     border: 1px solid var(--main-color);
+     box-shadow: 0 0 1px var(--primary-dark);
+}
