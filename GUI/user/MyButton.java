@@ -1,4 +1,4 @@
-package user;
+package GUI.user;
 
 import java.awt.Color;
 import java.awt.Font;

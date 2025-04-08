@@ -1,10 +1,7 @@
-package user;
+package GUI.user;
 
 import java.awt.*;
-import java.awt.event.*;
-import java.sql.*;
 import javax.swing.*;
-import java.util.regex.Pattern;
 
 public class DangKy extends JFrame {
     private JPanel panel = new JPanel();
@@ -12,6 +9,7 @@ public class DangKy extends JFrame {
     protected JTextField txtHoTen = new JTextField();
     protected JTextField txtSDT = new JTextField();
     protected JTextField txtEmail = new JTextField();
+    protected JTextField txtUsername = new JTextField();
     protected JPasswordField txtMatKhau = new JPasswordField();
     protected JComboBox<String> cbDiaChi;
     protected JRadioButton rbNam = new JRadioButton("Nam");
@@ -38,13 +36,6 @@ public class DangKy extends JFrame {
         "Vĩnh Long", "Vĩnh Phúc", "Yên Bái"
     };
 
-    // Regex cho email
-    private static final String EMAIL_PATTERN = 
-        "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
-    
-    // Regex cho số điện thoại Việt Nam (bắt đầu bằng 0, theo sau là 9 số)
-    private static final String PHONE_PATTERN = 
-        "^0[35789][0-9]{8}$";
 
     public DangKy() {
         initComponents();
@@ -52,7 +43,7 @@ public class DangKy extends JFrame {
 
     private void initComponents() {
         setTitle("ĐĂNG KÝ");
-        setSize(400, 620);
+        setSize(400, 640);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
@@ -82,6 +73,12 @@ public class DangKy extends JFrame {
         txtEmail.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
         txtEmail.setBorder(BorderFactory.createTitledBorder("Email"));
         panel.add(txtEmail);
+        panel.add(Box.createRigidArea(new Dimension(0, 10)));
+
+        txtUsername.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+        txtUsername.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
+        txtUsername.setBorder(BorderFactory.createTitledBorder("Tài khoản"));
+        panel.add(txtUsername);
         panel.add(Box.createRigidArea(new Dimension(0, 10)));
 
         txtMatKhau.setFont(new Font("Segoe UI", Font.PLAIN, 16));
@@ -155,7 +152,7 @@ public class DangKy extends JFrame {
         cbDiaChi.setBorder(BorderFactory.createTitledBorder("Địa chỉ"));
         cbDiaChi.setBackground(Color.WHITE);
         panel.add(cbDiaChi);
-        panel.add(Box.createRigidArea(new Dimension(0, 50)));
+        panel.add(Box.createRigidArea(new Dimension(0, 10)));
 
         btnDangKy.setFont(new Font("Segoe UI", Font.BOLD, 16));
         btnDangKy.setBackground(Color.decode("#00B4DB"));

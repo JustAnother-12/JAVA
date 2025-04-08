@@ -1,39 +1,43 @@
-package user;
+package GUI.user;
+
 import javax.swing.*;
+
+import BLL.KhachHang_BLL;
+import DTO.KhachHang_DTO;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.sql.*;
 import java.util.regex.Pattern;
 
-public class TrangChu extends JFrame{
-    private HeaderPanel header;
-    private JPanel ContentPanel;
-    private CatalogPanel catalogPanel;
-    private ProductPanel productPanel;
-    private DangNhap dangnhapFrame;
+public class HeaderPanel extends JPanel {
+    private JPanel logoPanel, searchPanel, btnPanel;
+    protected JLabel logoIcon, searchIcon, accountIcon, cartIcon, accountLabel;
+    private JTextField searchBox;
     private DangKy dangkyFrame;
-    protected KhachHang khachhang;
+    private DangNhap dangnhapFrame;
+    protected KhachHang_BLL kh_BLL;
+    protected KhachHang_DTO khachhang;
+    private JFrame currFrame;
 
-    // Regex cho email
-    private static final String EMAIL_PATTERN = 
-        "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
-    
+     // Regex cho email
+     private static final String EMAIL_PATTERN = 
+     "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
+ 
     // Regex cho số điện thoại Việt Nam (bắt đầu bằng 0, theo sau là 9 số)
     private static final String PHONE_PATTERN = 
         "^0[35789][0-9]{8}$";
 
-    public TrangChu(){
+    public HeaderPanel() {
         initComponents();
-        setTitle("Trang Chủ");
-        setResizable(false);
     }
 
     MouseListener mouseListener = new MouseListener() {
         @Override
         public void mouseClicked(MouseEvent e) {
-            if(e.getSource() == header.accountIcon){
-                if(header.accountLabel.getText()==""){
+            if(e.getSource() == accountIcon){
+                if (currFrame != null)
+                    return;
+                if(accountLabel.getText()==""){
                     dangnhapFrame = new DangNhap();
                     addDangNhapEvent();
                 }
@@ -52,45 +56,6 @@ public class TrangChu extends JFrame{
         @Override
         public void mouseExited(MouseEvent e) {}
     };
-
-    private Connection connectDB() {
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            return DriverManager.getConnection("jdbc:mysql://localhost:3306/ban_van_phong_pham", "root", "123456789");
-        } catch (ClassNotFoundException | SQLException e) {
-            System.out.println(e.getMessage());
-            return null;
-        }
-    }
-
-    private boolean CheckAccount(String email, String passwd){
-        String query = "SELECT * FROM KHACHHANG WHERE email = ? AND passwordkh = ?";
-        try (Connection con = connectDB()) {
-            if (con != null) {
-                PreparedStatement prestmt = con.prepareStatement(query);
-                prestmt.setString(1, email);
-                prestmt.setString(2, passwd);
-                ResultSet rs = prestmt.executeQuery();
-                if(rs.next()){
-                    String id = rs.getString("makh");
-                    String ten = rs.getString("tenkh");
-                    String sdt = rs.getString("sdt");
-                    String gioitinh = rs.getString("gioitinh");
-                    String emailkh = rs.getString("email");
-                    String date = rs.getString("ngaysinh");
-                    String diachi = rs.getString("diachikh");
-                    String passwdkh = rs.getString("passwordkh");
-                    khachhang = new KhachHang(id, ten, sdt, gioitinh, diachi, emailkh, passwdkh, date);
-                }
-                return khachhang != null ? true : false;
-            }
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(dangnhapFrame, "Lỗi khi kiểm tra tài khoản: " + e.getMessage(), 
-                    "Lỗi", JOptionPane.ERROR_MESSAGE);
-            return false;
-        }
-        return false;
-    }
 
     private void addDangKyEvent(){
         dangkyFrame.btnDangKy.addActionListener(new ActionListener() {
@@ -143,7 +108,7 @@ public class TrangChu extends JFrame{
                 }
 
                 JOptionPane.showMessageDialog(dangkyFrame, "Đăng ký thành công!");
-                header.accountLabel.setText(hoTen);
+                accountLabel.setText(hoTen);
                 dangkyFrame.dispose();
             }
         });
@@ -152,12 +117,12 @@ public class TrangChu extends JFrame{
     private void addDangNhapEvent(){
         dangnhapFrame.btnDangNhap.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                String email = dangnhapFrame.txtEmail.getText().trim();
+                String username = dangnhapFrame.txtUsername.getText().trim();
                 String matKhau = new String(dangnhapFrame.txtMatKhau.getPassword()).trim();
-
-                if (CheckAccount(email, matKhau)) {
+                KhachHang_DTO kh = kh_BLL.getKhachHangFromAccount(username, matKhau);
+                if (kh != null) {
                     JOptionPane.showMessageDialog(dangnhapFrame, "Đăng nhập thành công!");
-                    header.accountLabel.setText(khachhang.getTen_KhachHang());
+                    accountLabel.setText(kh.getTen_KhachHang());
                     dangnhapFrame.dispose();
                     
                 } else {
@@ -175,36 +140,65 @@ public class TrangChu extends JFrame{
         });
     }
 
-
-    public void initComponents(){
-        JPanel spacer = new JPanel();
-        header = new HeaderPanel();
-        header.accountIcon.addMouseListener(mouseListener);
-
-        ContentPanel = new JPanel();
-        catalogPanel = new CatalogPanel();
-        productPanel = new ProductPanel();
-        spacer.setPreferredSize(new Dimension(20, 1));
-        spacer.setOpaque(false);
-        // spacer.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
-        // productPanel.setBorder(BorderFactory.createLineBorder(Color.decode("#cfdef3"), 35, false));
-
-        ContentPanel.setLayout(new BoxLayout(ContentPanel, BoxLayout.X_AXIS));
-        ContentPanel.setBackground(Color.decode("#cfdef3"));
-        ContentPanel.add(catalogPanel);
-        ContentPanel.add(spacer);
-        ContentPanel.add(productPanel);
-        ContentPanel.setPreferredSize(new Dimension(960,540));
+    
+    private void initComponents() {
+        // Header panel settings
+        setPreferredSize(new Dimension(1000, 100));
+        setBackground(Color.decode("#0083B0"));
         setLayout(new BorderLayout());
-        getContentPane().setBackground(Color.decode("#cfdef3"));
-        add(header, BorderLayout.NORTH);
-        add(ContentPanel, BorderLayout.CENTER);
-        setBounds(0, 0, 1000, 730);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
-        setVisible(true);
-    }
-    public static void main(String args[]){
-        new TrangChu();
+        kh_BLL = new KhachHang_BLL();
+
+        // ==== LOGO PANEL ====
+        logoPanel = new JPanel();
+        logoPanel.setPreferredSize(new Dimension(200, 100));
+        logoPanel.setOpaque(false);
+
+        logoIcon = new JLabel(new ImageIcon("GUI/user/Icon/logo.png")); 
+        logoPanel.add(logoIcon);
+
+        // ==== SEARCH PANEL ====
+        searchPanel = new JPanel();
+        searchPanel.setLayout(null);
+        searchPanel.setPreferredSize(new Dimension(500, 100));
+        searchPanel.setOpaque(false);
+
+        searchIcon = new JLabel(new ImageIcon("GUI/user/Icon/search.png"));
+        searchIcon.setBounds(10, 30, 30, 40);
+
+        searchBox = new JTextField();
+        searchBox.setBounds(50, 30, 400, 40);
+        searchBox.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+
+        searchPanel.add(searchIcon);
+        searchPanel.add(searchBox);
+
+        // ==== BUTTON PANEL ====
+        btnPanel = new JPanel();
+        btnPanel.setPreferredSize(new Dimension(300, 100));
+        btnPanel.setOpaque(false);
+        btnPanel.setLayout(null);
+
+        accountIcon = new JLabel(new ImageIcon("GUI/user/Icon/user.png"));
+        accountIcon.setBounds(20, 30, 30, 40);
+
+        cartIcon = new JLabel(new ImageIcon("GUI/user/Icon/shopping-cart.png"));
+        cartIcon.setBounds(180, 30, 40, 40);
+
+        accountLabel = new JLabel("");
+        accountLabel.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        accountLabel.setForeground(Color.WHITE);
+        accountLabel.setBounds(60, 40, 100, 20);
+
+        btnPanel.add(accountIcon);
+        btnPanel.add(accountLabel);
+        btnPanel.add(cartIcon);
+
+        accountIcon.addMouseListener(mouseListener);
+        
+        // ==== ADD TO HEADER ====
+        add(logoPanel, BorderLayout.WEST);
+        add(searchPanel, BorderLayout.CENTER);
+        add(btnPanel, BorderLayout.EAST);
     }
 }
+

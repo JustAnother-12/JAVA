@@ -1,6 +1,6 @@
-package user;
+package DTO;
 
-public class Model_Product_Description {
+public class Product_DescriptionDTO {
     private String name;
     private int soLuong;           // Quantity
     private String XuatXu;         // Origin
@@ -12,7 +12,7 @@ public class Model_Product_Description {
     private int BaoHanh;           // Warranty (in months or years, presumably)
 
     // No-argument constructor
-    public Model_Product_Description() {
+    public Product_DescriptionDTO() {
         this.name = "";
         this.soLuong = 0;
         this.XuatXu = "";
@@ -25,7 +25,7 @@ public class Model_Product_Description {
     }
 
     // Parameterized constructor
-    public Model_Product_Description(String name, int soLuong, String XuatXu, String TrongLuong, 
+    public Product_DescriptionDTO(String name, int soLuong, String XuatXu, String TrongLuong, 
                                      String KichThuocManHinh, String DungLuong, 
                                      String RAM, String ThuongHieu, int BaoHanh) {
         this.name = name;

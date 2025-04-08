@@ -1,5 +1,0 @@
-SA00000001, Tieng Viet Lop 1, 20000.0, 93, Nguyen Nhat Anh, Giao Khoa, Kim Dong, 2020
-SA00000002, Toan Lop 2, 25000.0, 198, Vu Trong Phung, Giao Khoa, Giao Duc, 2021
-SA00000003, Tieng Viet lop 2, 20000.0, 95, Nguyen Nhat Anh, Giao Khoa, Kim Dong, 2020
-SA00000004, Vat ly luong tu cho tre em, 100000.0, 88, ryan gosling, khoa hoc vien tuong, kim dong, 2024
-SA00000005, Dac Nhan Tam, 25000.0, 100, Tam Dac, Self help, kim dong, 1998

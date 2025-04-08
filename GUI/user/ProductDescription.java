@@ -1,5 +1,8 @@
-package user;
+package GUI.user;
 import javax.swing.*;
+
+import DTO.Product_DescriptionDTO;
+
 import java.awt.*;
 
 public class ProductDescription extends JFrame {
@@ -12,11 +15,11 @@ public class ProductDescription extends JFrame {
     private JLabel thuongHieuLabel;
     private JLabel baoHanhLabel;
 
-    public ProductDescription(Model_Product_Description data) {
+    public ProductDescription(Product_DescriptionDTO data) {
         initComponents(data);
     }
 
-    private void initComponents(Model_Product_Description data) {
+    private void initComponents(Product_DescriptionDTO data) {
         // Set up the JFrame
         setTitle(data.getname());
         setResizable(false);

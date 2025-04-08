@@ -1,9 +1,8 @@
-package user;
+package GUI.user;
+
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 
 import java.awt.*;
-import java.awt.event.*;
 
 public class CatalogPanel extends JPanel {
     private JLabel headerLabel;

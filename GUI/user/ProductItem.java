@@ -1,7 +1,8 @@
-package user;
+package GUI.user;
 
 import javax.swing.*;
-import javax.swing.border.LineBorder;
+
+import DTO.Product_Item_DTO;
 
 import java.awt.*;
 
@@ -16,11 +17,11 @@ public class ProductItem extends JPanel {
         return Namelb.getText();
     }
 
-    public ProductItem(Model_ProductItem data) {
+    public ProductItem(Product_Item_DTO data) {
         initComponents(data);
     }
 
-    private void initComponents(Model_ProductItem data) {
+    private void initComponents(Product_Item_DTO data) {
         setBackground(Color.WHITE);
         setPreferredSize(new Dimension(200, 300)); 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));

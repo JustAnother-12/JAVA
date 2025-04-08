@@ -1,19 +1,19 @@
-package OOP;
+package DTO;
 
-abstract class SanPham{
+public abstract class SanPham_DTO{
     private String ID_SanPham;
     private String Ten_SanPham;
     private double Gia_SanPham;
     private int SoLuong_SanPham;
 
-    public SanPham(){
+    public SanPham_DTO(){
         this.ID_SanPham="";
         this.Ten_SanPham="";
         this.Gia_SanPham=0.00;
         this.SoLuong_SanPham=0;
     }
 
-    public SanPham(String id, String ten, double gia, int soluong){
+    public SanPham_DTO(String id, String ten, double gia, int soluong){
         this.ID_SanPham = id;
         this.Ten_SanPham = ten;
         this.Gia_SanPham = gia;
@@ -55,18 +55,5 @@ abstract class SanPham{
     public void setSoLuong_SanPham(int SoLuong_SanPham) {
         this.SoLuong_SanPham = SoLuong_SanPham;
     }
-
-    public abstract void hienThiThongTin();
-
-    // @Override
-    // public String toString() {
-    //     return "ID_SanPham = " + ID_SanPham +", Ten_SanPham = " + Ten_SanPham + ", Gia_SanPham = " + Gia_SanPham
-    //             + ", SoLuong_SanPham_Con = " + SoLuong_SanPham;
-    // }
-
-    
-    // public abstract String hienThiThongTin1();
-    
-
     
 }

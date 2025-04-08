@@ -1,15 +1,16 @@
-package user;
+package DTO;
 
-public class KhachHang {
+public class KhachHang_DTO {
    private String Id_KhachHang ;
    private String Ten_KhachHang ;
    private String Sdt_KhachHang ;
    private String GioiTinh_KhachHang;
    private String DiaChi_KhachHang;
    private String Email;
+   private String Username;
    private String Pass_KhachHang;
    private String NgaySinh_KhachHang;
-   public KhachHang ()
+   public KhachHang_DTO ()
    {
       this.Id_KhachHang = "";
       this.Ten_KhachHang = "";
@@ -18,7 +19,7 @@ public class KhachHang {
       this.DiaChi_KhachHang = "";
       this.Pass_KhachHang = "";
    }
-   public KhachHang(String Id,String Ten, String Sdt,String gioiTinh, String DiaChi, String Email, String Pass, String NgaySinh)
+   public KhachHang_DTO(String Id,String Ten, String Sdt,String gioiTinh, String DiaChi, String Email, String user, String Pass, String NgaySinh)
 
    {
       this.Id_KhachHang = Id;
@@ -26,9 +27,17 @@ public class KhachHang {
       this.Sdt_KhachHang = Sdt;
       this.GioiTinh_KhachHang = gioiTinh;
       this.DiaChi_KhachHang = DiaChi;
+      this.Username = user;
       this.Pass_KhachHang = Pass;
       this.NgaySinh_KhachHang = NgaySinh;
       this.Email = Email;
+   }
+
+   public String getUsername() {
+       return Username;
+   }
+   public void setUsername(String username) {
+       Username = username;
    }
 
    public String getEmail(){

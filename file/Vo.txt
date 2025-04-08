@@ -1,5 +1,0 @@
-VO00000001, Vo Ke Oly, 5000.0, 180, Ke o, Thien Long, Giay
-VO00000002, Vo Trang, 4000.0, 68, Trang, Hong Ha, Giay
-VO00000003, Vo Campus, 30000.0, 180, Ke o, Campus, Giay
-VO00000004, Vo ABC, 15000.0, 68, Trang, Thien Long, Giay
-VO00000005, Vo Tibook, 15000.0, 174, Ke o, Thuan Tien, Giay

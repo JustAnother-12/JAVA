@@ -1,5 +1,0 @@
-BU00000001, But Bi Xanh, 3000.0, 125, Xanh, Bi, Thien Long
-BU00000002, But Mau Vang, 20000.0, 87, Vang, But Mau, Thien Long
-BU00000003, But Bi Do, 3000.0, 125, Do, Bi, Thien Long
-BU00000004, But Mau Cam, 20000.0, 87, Cam, But Mau, Thien Long
-BU00000005, But Bi Tim, 3000.0, 115, Tim, Bi, Thien Long

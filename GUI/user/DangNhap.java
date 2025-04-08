@@ -1,13 +1,13 @@
-package user;
+package GUI.user;
 
 import java.awt.*;
-import java.awt.event.*;
-import java.math.BigDecimal;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+// import java.awt.event.*;
+// import java.math.BigDecimal;
+// import java.sql.Connection;
+// import java.sql.DriverManager;
+// import java.sql.PreparedStatement;
+// import java.sql.ResultSet;
+// import java.sql.SQLException;
 
 import javax.swing.*;
 
@@ -15,7 +15,7 @@ import javax.swing.*;
 public class DangNhap extends JFrame{
     private JPanel panel = new JPanel();
     private JLabel lblTitle = new JLabel("ĐĂNG NHẬP", JLabel.CENTER);
-    protected JTextField txtEmail = new JTextField();
+    protected JTextField txtUsername = new JTextField();
     protected JPasswordField txtMatKhau = new JPasswordField();
     protected MyButton btnDangNhap = new MyButton("ĐĂNG NHẬP");
     protected MyButton btnDangKy = new MyButton("Chưa có tài khoản? Đăng ký");
@@ -45,10 +45,10 @@ public class DangNhap extends JFrame{
         panel.add(Box.createRigidArea(new Dimension(0, 20)));
 
         
-        txtEmail.setFont(new Font("Segoe UI", Font.PLAIN, 16));
-        txtEmail.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
-        txtEmail.setBorder(BorderFactory.createTitledBorder("Email"));
-        panel.add(txtEmail);
+        txtUsername.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+        txtUsername.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
+        txtUsername.setBorder(BorderFactory.createTitledBorder("Tài khoản"));
+        panel.add(txtUsername);
         panel.add(Box.createRigidArea(new Dimension(0, 10)));
 
         
