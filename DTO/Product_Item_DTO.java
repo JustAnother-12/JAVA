@@ -55,12 +55,18 @@ public class Product_Item_DTO {
     public Product_Item_DTO() {
     }
 
-    public Product_Item_DTO(String Title, String Image, String price) {
+    public Product_Item_DTO(String id, String Title, String Image, String price) {
+        this.ID = id;
         this.Title = Title;
         this.Imageicon = Image;
         this.price = price;
     }
 
+    public String getID() {
+        return ID;
+    }
+
+    private String ID;
     private String Title;
     private String Imageicon;
     private String price;

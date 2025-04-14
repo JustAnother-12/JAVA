@@ -7,12 +7,14 @@ import DTO.KhachHang_DTO;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.font.TextAttribute;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 public class HeaderPanel extends JPanel {
     private JPanel logoPanel, searchPanel, btnPanel;
     protected JLabel logoIcon, searchIcon, accountIcon, cartIcon, accountLabel;
-    private JTextField searchBox;
+    protected JTextField searchBox;
     private DangKy dangkyFrame;
     private DangNhap dangnhapFrame;
     protected KhachHang_BLL kh_BLL;
@@ -30,6 +32,23 @@ public class HeaderPanel extends JPanel {
     public HeaderPanel() {
         initComponents();
     }
+
+    FocusListener Focus = new FocusListener() {
+        @Override
+        public void focusGained(FocusEvent e) {
+            if (searchBox.getText().equals("Search...")) {
+                searchBox.setText("");
+                searchBox.setForeground(Color.BLACK);
+            }
+        }
+        @Override
+        public void focusLost(FocusEvent e) {
+            if (searchBox.getText().isEmpty()) {
+                searchBox.setForeground(Color.GRAY);
+                searchBox.setText("Search...");
+            }
+        }
+    };
 
     MouseListener mouseListener = new MouseListener() {
         @Override
@@ -51,10 +70,24 @@ public class HeaderPanel extends JPanel {
         public void mouseReleased(MouseEvent e) {}
 
         @Override
-        public void mouseEntered(MouseEvent e) {}
+        public void mouseEntered(MouseEvent e) {
+            if (e.getSource() == accountLabel  && !accountLabel.getText().equals("")){
+                Font font = accountLabel.getFont();
+                Map attributes = font.getAttributes();
+                attributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
+                accountLabel.setFont(font.deriveFont(attributes));
+            }
+        }
 
         @Override
-        public void mouseExited(MouseEvent e) {}
+        public void mouseExited(MouseEvent e) {
+            if (e.getSource() == accountLabel  && !accountLabel.getText().equals("")){
+                Font font = accountLabel.getFont();
+                Map attributes = font.getAttributes();
+                attributes.put(TextAttribute.UNDERLINE, null);
+                accountLabel.setFont(font.deriveFont(attributes));
+            }
+        }
     };
 
     private void addDangKyEvent(){
@@ -108,6 +141,7 @@ public class HeaderPanel extends JPanel {
                 }
 
                 JOptionPane.showMessageDialog(dangkyFrame, "Đăng ký thành công!");
+                khachhang = new KhachHang_DTO(date, hoTen, sdt, gioitinh, diaChi, email, matKhau, diaChi, ngay);
                 accountLabel.setText(hoTen);
                 dangkyFrame.dispose();
             }
@@ -119,10 +153,10 @@ public class HeaderPanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 String username = dangnhapFrame.txtUsername.getText().trim();
                 String matKhau = new String(dangnhapFrame.txtMatKhau.getPassword()).trim();
-                KhachHang_DTO kh = kh_BLL.getKhachHangFromAccount(username, matKhau);
-                if (kh != null) {
+                khachhang = kh_BLL.getKhachHangFromAccount(username, matKhau);
+                if (khachhang != null) {
                     JOptionPane.showMessageDialog(dangnhapFrame, "Đăng nhập thành công!");
-                    accountLabel.setText(kh.getTen_KhachHang());
+                    accountLabel.setText(khachhang.getTen_KhachHang());
                     dangnhapFrame.dispose();
                     
                 } else {
@@ -150,11 +184,14 @@ public class HeaderPanel extends JPanel {
 
         // ==== LOGO PANEL ====
         logoPanel = new JPanel();
+        logoPanel.setLayout(null);
         logoPanel.setPreferredSize(new Dimension(200, 100));
         logoPanel.setOpaque(false);
 
         logoIcon = new JLabel(new ImageIcon("GUI/user/Icon/logo.png")); 
+        logoIcon.setBounds(100, 30, 30, 40);
         logoPanel.add(logoIcon);
+        
 
         // ==== SEARCH PANEL ====
         searchPanel = new JPanel();
@@ -165,7 +202,7 @@ public class HeaderPanel extends JPanel {
         searchIcon = new JLabel(new ImageIcon("GUI/user/Icon/search.png"));
         searchIcon.setBounds(10, 30, 30, 40);
 
-        searchBox = new JTextField();
+        searchBox = new JTextField("Search...");
         searchBox.setBounds(50, 30, 400, 40);
         searchBox.setFont(new Font("Segoe UI", Font.PLAIN, 16));
 
@@ -194,6 +231,8 @@ public class HeaderPanel extends JPanel {
         btnPanel.add(cartIcon);
 
         accountIcon.addMouseListener(mouseListener);
+        accountLabel.addMouseListener(mouseListener);
+        searchBox.addFocusListener(Focus);
         
         // ==== ADD TO HEADER ====
         add(logoPanel, BorderLayout.WEST);

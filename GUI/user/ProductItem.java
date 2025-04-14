@@ -8,6 +8,7 @@ import java.awt.*;
 
 public class ProductItem extends JPanel {
     private MyButton addCart_btn;
+    private String ID;
     private JLabel Imagelb;
     private JLabel Namelb;
     private JLabel PriceTaglb;
@@ -15,6 +16,9 @@ public class ProductItem extends JPanel {
 
     public String getName(){
         return Namelb.getText();
+    }
+    public String getID(){
+        return ID;
     }
 
     public ProductItem(Product_Item_DTO data) {
@@ -26,6 +30,9 @@ public class ProductItem extends JPanel {
         setPreferredSize(new Dimension(200, 300)); 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        ID = data.getID();
+
         //new ImageIcon("user/ProductImage/LTG.png")
         Imagelb = new JLabel();
         Imagelb.setPreferredSize(new Dimension(180,180));

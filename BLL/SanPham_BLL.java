@@ -25,6 +25,18 @@ public class SanPham_BLL {
         return danhsachsp;
     }
 
+    public ArrayList<Sach_DTO> getAllSach(){
+        return Sachdao.getAllSach();
+    }
+
+    public ArrayList<Vo_DTO> getAllVo(){
+        return Vodao.getAllVo();
+    }
+
+    public ArrayList<But_DTO> getAllBut(){
+        return Butdao.getAllBut();
+    }
+
     public String addSP(SanPham_DTO sp){
         if(sp instanceof Sach_DTO){
             Sach_DTO sanpham = (Sach_DTO) sp;

@@ -5,15 +5,31 @@ import javax.swing.*;
 import java.awt.*;
 
 public class CatalogPanel extends JPanel {
-    private JLabel headerLabel;
-    private JPanel listPanel;
-    private JLabel sachLabel = new JLabel("SÁCH");
-    private JLabel voLabel = new JLabel("VỞ");
-    private JLabel butLabel = new JLabel("BÚT");
-    private JLabel list[] = {sachLabel, voLabel, butLabel};
+    protected JLabel headerLabel;
+    protected JPanel listPanel;
+    protected JLabel sachLabel = new JLabel("SÁCH");
+    protected JLabel voLabel = new JLabel("VỞ");
+    protected JLabel butLabel = new JLabel("BÚT");
+    protected JLabel list[] = {sachLabel, voLabel, butLabel};
 
     public CatalogPanel() {
         initComponents();
+    }
+
+    public void paintLabel(String name){
+        for (JLabel label : list){
+            if (label.getText().equals(name)){
+                label.setBackground(new Color(255,255,255, 80));
+                label.setOpaque(true);
+                label.revalidate();
+                label.repaint();
+            }
+            else{
+                label.setOpaque(false);
+                label.revalidate();
+                label.repaint();
+            }
+        }
     }
 
     private void initComponents() {
@@ -23,7 +39,8 @@ public class CatalogPanel extends JPanel {
         for (JLabel lb : list) {
             lb.setFont(new Font("Segoe UI", 1, 20));
             lb.setForeground(Color.WHITE);
-            // lb.addMouseListener(mouseListener);
+            lb.setMaximumSize(new Dimension(120, 50));
+            lb.setHorizontalAlignment(SwingConstants.LEADING);
             listPanel.add(lb);
             listPanel.add(Box.createVerticalStrut(15));
         }

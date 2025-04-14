@@ -1,12 +1,13 @@
 package GUI.user;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 
 import BLL.SanPham_BLL;
+import DTO.But_DTO;
 import DTO.Product_Item_DTO;
+import DTO.Sach_DTO;
 import DTO.SanPham_DTO;
-import DTO.Product_DescriptionDTO;
+import DTO.Vo_DTO;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -17,24 +18,63 @@ import java.util.ArrayList;
 public class ProductPanel extends JScrollPane {
     private JPanel ItemPanel;
     private ArrayList<ProductItem> ProductList;
-    private ArrayList<Product_DescriptionDTO> DescriptionList;
-    private ProductDescription CurrentDescription;
+    private ArrayList<Sach_DTO> SachDescriptionList;
+    private ArrayList<Vo_DTO> VoDescriptionList;
+    private ArrayList<But_DTO> ButDescriptionList;
+    private SachDescription CurrentSachDescription;
+    private VoDescription CurrentVoDescription;
+    private ButDescription CurrentButDescription;
     protected SanPham_BLL spBLL;
 
-    public ProductPanel() { 
+    public ProductPanel(String typename, String searchtext, FilterPanel filter) { 
         initComponents();
+        if (typename.equals("ALL")){
+            getAllSP(filter);
+        }
+        else if(typename.equals("SACH")){
+            getAllSach();
+        } 
+        else if(typename.equals("VO")){
+            getAllVo();
+        }
+        else if(typename.equals("BUT")){
+            getAllBut();
+        }
+        else if(typename.equals("SEARCH")){
+            getSearchedItem(searchtext, filter);
+        }
+        addEvent();
     }
 
     MouseListener mouseListener = new MouseListener() {
         @Override
         public void mouseClicked(MouseEvent e) {
-            if(CurrentDescription != null){
-                CurrentDescription.dispose();
-            }
+            if(CurrentSachDescription != null)
+                CurrentSachDescription.dispose();
+            else if(CurrentVoDescription != null)
+                CurrentVoDescription.dispose();
+            else if(CurrentButDescription != null)
+                CurrentButDescription.dispose();
             ProductItem item = (ProductItem) e.getSource();
-            for(Product_DescriptionDTO description:DescriptionList){
-                if (description.getname().equals(item.getName())) {
-                    CurrentDescription = new ProductDescription(description);
+            if (item.getID().contains("S")){
+                for(Sach_DTO description : SachDescriptionList){
+                    if(description.getTen_SanPham().equals(item.getName())){
+                        CurrentSachDescription = new SachDescription(description);
+                    }
+                }
+            }
+            else if(item.getID().contains("V")){
+                for(Vo_DTO description : VoDescriptionList){
+                    if(description.getTen_SanPham().equals(item.getName())){
+                        CurrentVoDescription = new VoDescription(description);
+                    }
+                }
+            }
+            else{
+                for(But_DTO description : ButDescriptionList){
+                    if(description.getTen_SanPham().equals(item.getName())){
+                        CurrentButDescription = new ButDescription(description);
+                    }
                 }
             }
         }
@@ -52,50 +92,176 @@ public class ProductPanel extends JScrollPane {
         public void mouseExited(MouseEvent e) {}
     };
 
-    private Connection connectDB() {
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            return DriverManager.getConnection("jdbc:mysql://localhost:3306/ban_van_phong_pham", "root", "123456789");
-        } catch (ClassNotFoundException | SQLException e) {
-            System.out.println(e.getMessage());
-            return null;
+    private void getAllSach(){
+        SachDescriptionList = new ArrayList<>();
+        VoDescriptionList = new ArrayList<>();
+        ButDescriptionList = new ArrayList<>();
+        ProductList = new ArrayList<>();
+        for(Sach_DTO sach : spBLL.getAllSach()){
+            String id = sach.getID_SanPham();
+            String ten = sach.getTen_SanPham();
+            double gia = sach.getGia_SanPham();
+
+            ProductItem item = new ProductItem(new Product_Item_DTO(id, ten, "LTG", String.valueOf(new BigDecimal(gia))));
+            ProductList.add(item);
+            ItemPanel.add(item);
+            SachDescriptionList.add(sach);
         }
     }
 
-    // private void getAllSp() {
-    //     DescriptionList = new ArrayList<>();
-    //     try (Connection con = connectDB()) {
-    //         if (con != null) {
-    //             Statement stmt = con.createStatement();
-    //             ResultSet rs = stmt.executeQuery("SELECT * FROM SANPHAM");
-    //             while (rs.next()) {
-    //                 String id = rs.getString("masp");
-    //                 String ten = rs.getString("tensp");
-    //                 double gia = rs.getDouble("dongiasp");
-    //                 int soLuong = rs.getInt("soluongsp");
-
-    //                 ProductItem item = new ProductItem(new Product_Item_DTO(ten, "LTG", String.valueOf(new BigDecimal(gia))));
-    //                 ProductList.add(item);
-    //                 ItemPanel.add(item);
-    //             }
-    //         }
-    //     } catch (SQLException e) {
-    //         System.out.println(e.getMessage());
-    //     }
-    // }
-
-    private void addAllSP(){
-        DescriptionList = new ArrayList<>();
+    private void getAllVo(){
+        SachDescriptionList = new ArrayList<>();
+        VoDescriptionList = new ArrayList<>();
+        ButDescriptionList = new ArrayList<>();
         ProductList = new ArrayList<>();
-        for( SanPham_DTO sp : spBLL.getAllSanPham()){
-            String id = sp.getID_SanPham();
-            String ten = sp.getTen_SanPham();
-            double gia = sp.getGia_SanPham();
-            int soLuong = sp.getSoLuong_SanPham();
+        for(Vo_DTO Vo : spBLL.getAllVo()){
+            String id = Vo.getID_SanPham();
+            String ten = Vo.getTen_SanPham();
+            double gia = Vo.getGia_SanPham();
 
-            ProductItem item = new ProductItem(new Product_Item_DTO(ten, "LTG", String.valueOf(new BigDecimal(gia))));
+            ProductItem item = new ProductItem(new Product_Item_DTO(id, ten, "LTG", String.valueOf(new BigDecimal(gia))));
             ProductList.add(item);
             ItemPanel.add(item);
+            VoDescriptionList.add(Vo);
+        }
+    }
+
+    private void getAllBut(){
+        SachDescriptionList = new ArrayList<>();
+        VoDescriptionList = new ArrayList<>();
+        ButDescriptionList = new ArrayList<>();
+        ProductList = new ArrayList<>();
+        for(But_DTO But : spBLL.getAllBut()){
+            String id = But.getID_SanPham();
+            String ten = But.getTen_SanPham();
+            double gia = But.getGia_SanPham();
+
+            ProductItem item = new ProductItem(new Product_Item_DTO(id, ten, "LTG", String.valueOf(new BigDecimal(gia))));
+            ProductList.add(item);
+            ItemPanel.add(item);
+            ButDescriptionList.add(But);
+        }
+    }
+
+    private void getAllSP(FilterPanel filter){
+        SachDescriptionList = new ArrayList<>();
+        VoDescriptionList = new ArrayList<>();
+        ButDescriptionList = new ArrayList<>();
+        ProductList = new ArrayList<>();
+        for(SanPham_DTO sp : spBLL.getAllSanPham()){
+            String id = null;
+            String ten = null;
+            double gia = 0.0;
+            if (filter == null){
+                id = sp.getID_SanPham();
+                ten = sp.getTen_SanPham();
+                gia = sp.getGia_SanPham();
+
+                ProductItem item = new ProductItem(new Product_Item_DTO(id, ten, "LTG", String.valueOf(new BigDecimal(gia))));
+                ProductList.add(item);
+                ItemPanel.add(item);
+
+                if (sp instanceof Sach_DTO){
+                    Sach_DTO sach = (Sach_DTO)sp;
+                    SachDescriptionList.add(sach);
+                }
+                else if (sp instanceof Vo_DTO){
+                    Vo_DTO vo = (Vo_DTO)sp;
+                    VoDescriptionList.add(vo);
+                }
+                else{
+                    But_DTO but = (But_DTO)sp;
+                    ButDescriptionList.add(but);
+                }
+            }
+            else{
+                SanPham_DTO sph = filter.Filter(sp);
+                    if(sph != null){
+                        id = sph.getID_SanPham();
+                        ten = sph.getTen_SanPham();
+                        gia = sph.getGia_SanPham();
+
+                        ProductItem item = new ProductItem(new Product_Item_DTO(id, ten, "LTG", String.valueOf(new BigDecimal(gia))));
+                        ProductList.add(item);
+                        ItemPanel.add(item);
+
+                        if (sph instanceof Sach_DTO){
+                            Sach_DTO sach = (Sach_DTO)sph;
+                            SachDescriptionList.add(sach);
+                        }
+                        else if (sph instanceof Vo_DTO){
+                            Vo_DTO vo = (Vo_DTO)sph;
+                            VoDescriptionList.add(vo);
+                        }
+                        else{
+                            But_DTO but = (But_DTO)sph;
+                            ButDescriptionList.add(but);
+                        }
+                    }
+            }
+        }
+    }
+
+    private void getSearchedItem(String searchtext, FilterPanel Filter){
+        SachDescriptionList = new ArrayList<>();
+        VoDescriptionList = new ArrayList<>();
+        ButDescriptionList = new ArrayList<>();
+        ProductList = new ArrayList<>();
+        for (SanPham_DTO sp : spBLL.getAllSanPham()){
+            if(sp.getTen_SanPham().toLowerCase().contains(searchtext.toLowerCase())){
+                String id = null;
+                String ten = null;
+                double gia = 0.0;
+                if(Filter == null){
+                    id = sp.getID_SanPham();
+                    ten = sp.getTen_SanPham();
+                    gia = sp.getGia_SanPham();
+
+                    ProductItem item = new ProductItem(new Product_Item_DTO(id, ten, "LTG", String.valueOf(new BigDecimal(gia))));
+                    ProductList.add(item);
+                    ItemPanel.add(item);
+
+                    if (sp instanceof Sach_DTO){
+                        Sach_DTO sach = (Sach_DTO)sp;
+                        SachDescriptionList.add(sach);
+                    }
+                    else if (sp instanceof Vo_DTO){
+                        Vo_DTO vo = (Vo_DTO)sp;
+                        VoDescriptionList.add(vo);
+                    }
+                    else{
+                        But_DTO but = (But_DTO)sp;
+                        ButDescriptionList.add(but);
+                    }
+                }
+                else{
+                    SanPham_DTO sph = Filter.Filter(sp);
+                    if(sph != null){
+                        id = sph.getID_SanPham();
+                        ten = sph.getTen_SanPham();
+                        gia = sph.getGia_SanPham();
+
+                        ProductItem item = new ProductItem(new Product_Item_DTO(id, ten, "LTG", String.valueOf(new BigDecimal(gia))));
+                        ProductList.add(item);
+                        ItemPanel.add(item);
+
+                        if (sph instanceof Sach_DTO){
+                            Sach_DTO sach = (Sach_DTO)sph;
+                            SachDescriptionList.add(sach);
+                        }
+                        else if (sph instanceof Vo_DTO){
+                            Vo_DTO vo = (Vo_DTO)sph;
+                            VoDescriptionList.add(vo);
+                        }
+                        else{
+                            But_DTO but = (But_DTO)sph;
+                            ButDescriptionList.add(but);
+                        }
+                    }
+                }
+
+                
+            }
         }
     }
 
@@ -107,15 +273,11 @@ public class ProductPanel extends JScrollPane {
 
     private void initComponents() {
         spBLL = new SanPham_BLL();
-        ItemPanel = new JPanel(new GridLayout(0, 3, 35, 35));
+        ItemPanel = new JPanel(new WrapLayout(WrapLayout.LEADING, 35, 35));
         ItemPanel.setBackground(Color.decode("#cfdef3"));
-        ItemPanel.setBorder(BorderFactory.createEmptyBorder(20, 0, 0, 20));
-
-        // getAllSp(); // Fetch and populate items from DB
-        addAllSP();
+        ItemPanel.setBorder(BorderFactory.createEmptyBorder(-15, -15, 0, 20));
         ItemPanel.revalidate();
         ItemPanel.repaint();
-        addEvent();
 
         setViewportView(ItemPanel);
         setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
