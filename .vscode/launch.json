@@ -1,0 +1,40 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        
+
+        {
+            "type": "cmake",
+            "request": "launch",
+            "name": "CMake: Configure project",
+            "cmakeDebugType": "configure",
+            "clean": false,
+            "configureAll": false
+        },
+        
+
+        {
+            "type": "java",
+            "name": "Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        },
+        {
+            "type": "java",
+            "name": "TrangChu",
+            "request": "launch",
+            "mainClass": "GUI.user.TrangChu",
+            "projectName": "JAVA_136c8796"
+        },
+        {
+            "type": "java",
+            "name": "MainThien",
+            "request": "launch",
+            "mainClass": "OOP.MainThien",
+            "projectName": "JAVA_136c8796"
+        }
+    ]
+}
