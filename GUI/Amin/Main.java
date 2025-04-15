@@ -1,5 +1,10 @@
 package GUI.Amin;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.swing.*;
+import java.awt.Color;
+import java.awt.event.ActionEvent;  
+
 public class Main extends JFrame {
     AccountTable accountForm;
     CustomerTable customerForm;
