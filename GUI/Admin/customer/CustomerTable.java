@@ -15,6 +15,8 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
+import BLL.KhachHang_BLL;
+import DTO.KhachHang_DTO;
 
 /**
  *
@@ -24,6 +26,8 @@ public class CustomerTable extends javax.swing.JPanel implements Header.searchLi
     private DefaultTableModel tableModel;
     private JTable table;
     private ArrayList<Object> customerList = new ArrayList<>();
+    private KhachHang_BLL khBLL = new KhachHang_BLL();
+
     public CustomerTable() {
         initComponents();
         setLayout(null);
@@ -112,21 +116,26 @@ public class CustomerTable extends javax.swing.JPanel implements Header.searchLi
         return this.customerList;
     }
     private void loadDataFormDatabase() {
-        try (Connection conn = DatabaseConnection.getConnection()) {
-                String queryforcs = "SELECT * FROM KHACHHANG";
-                PreparedStatement pstmt = conn.prepareStatement(queryforcs);
-                ResultSet rs = pstmt.executeQuery();
+        // try (Connection conn = DatabaseConnection.getConnection()) {
+        //         String queryforcs = "SELECT * FROM KHACHHANG";
+        //         PreparedStatement pstmt = conn.prepareStatement(queryforcs);
+        //         ResultSet rs = pstmt.executeQuery();
                 
-                while (rs.next()) {
-                    String id = rs.getString("makh");
-                    String name = rs.getString("tenkh");
-                    String username = rs.getString("username");
-                    String phone = rs.getString("sdt");
-                    customer kh = new customer(id, name, username, phone);
-                    customerList.add(kh);
-                    tableModel.addRow(new Object[]{id, name, username, phone,"Chi tiết" + "Xóa"});
-                }
-        } catch (Exception e) {}
+        //         while (rs.next()) {
+        //             String id = rs.getString("makh");
+        //             String name = rs.getString("tenkh");
+        //             String username = rs.getString("username");
+        //             String phone = rs.getString("sdt");
+        //             customer kh = new customer(id, name, username, phone);
+        //             customerList.add(kh);
+        //             tableModel.addRow(new Object[]{id, name, username, phone,"Chi tiết" + "Xóa"});
+        //         }
+        // } catch (Exception e) {}
+        for(KhachHang_DTO kh : khBLL.getAllKhachHang()){
+            customerList.add(kh);
+            tableModel.addRow(new Object[]{kh.getId_KhachHang(), kh.getTen_KhachHang(), kh.getUsername(), kh.getSdt_KhachHang(),"Chi tiết" + "Xóa"});
+        }
+
     }
     private void sortTable(boolean ascending) {
         TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(tableModel);
@@ -139,26 +148,26 @@ public class CustomerTable extends javax.swing.JPanel implements Header.searchLi
         }
         sorter.sort();
     }
-    public void deleteCustomer(String id) {
-        try (Connection conn = DatabaseConnection.getConnection()) {
-            String checkQuery = "SELECT COUNT(*) FROM KHACHHANG WHERE makh = ?";
-            PreparedStatement checkStmt = conn.prepareStatement(checkQuery);
-            checkStmt.setString(1, id);
-            ResultSet rs = checkStmt.executeQuery();
-            if (rs.next() && rs.getInt(1) > 0) {
-                String deleteQuery = "DELETE FROM KHACHHANG WHERE makh = ?";
-                PreparedStatement pstmt = conn.prepareStatement(deleteQuery);
-                pstmt.setString(1, id);
-                pstmt.executeUpdate();
-                JOptionPane.showMessageDialog(this, "Xóa tài khoản khách hàng thành công!");
-            }
-            // Cập nhật lại bảng
-            loadDataFormDatabase();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Lỗi khi xóa khách hàng: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
-        }
-    }
+    // public void deleteCustomer(String id) {
+    //     try (Connection conn = DatabaseConnection.getConnection()) {
+    //         String checkQuery = "SELECT COUNT(*) FROM KHACHHANG WHERE makh = ?";
+    //         PreparedStatement checkStmt = conn.prepareStatement(checkQuery);
+    //         checkStmt.setString(1, id);
+    //         ResultSet rs = checkStmt.executeQuery();
+    //         if (rs.next() && rs.getInt(1) > 0) {
+    //             String deleteQuery = "DELETE FROM KHACHHANG WHERE makh = ?";
+    //             PreparedStatement pstmt = conn.prepareStatement(deleteQuery);
+    //             pstmt.setString(1, id);
+    //             pstmt.executeUpdate();
+    //             JOptionPane.showMessageDialog(this, "Xóa tài khoản khách hàng thành công!");
+    //         }
+    //         // Cập nhật lại bảng
+    //         loadDataFormDatabase();
+    //     } catch (SQLException e) {
+    //         e.printStackTrace();
+    //         JOptionPane.showMessageDialog(this, "Lỗi khi xóa khách hàng: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+    //     }
+    // }
     private void initComponents() {//GEN-BEGIN:initComponents
         setLayout(new java.awt.BorderLayout());
 
