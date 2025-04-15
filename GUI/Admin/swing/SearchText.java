@@ -1,4 +1,4 @@
-// package com.raven.swing;
+package GUI.Admin.swing;
 
 import java.awt.Color;
 import java.awt.FontMetrics;
@@ -33,6 +33,7 @@ public class SearchText extends JTextField {
             g.drawString(hint, ins.left, h / 2 + fm.getAscent() / 2 - 2);
         }
     }
+    
     private EventTextField event;
         public void addEvent(EventTextField event) {
         this.event = event;

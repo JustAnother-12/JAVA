@@ -1,14 +1,6 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-package com.raven.order;
+package DTO;
 
-/**
- *
- * @author ADMIN
- */
-public class order {
+public class Order_DTO {
     private String madonhang;
     private String diachidat;
     private String ngaydat;
@@ -17,10 +9,10 @@ public class order {
     private String manv;
     private String makh;
 
-    public order() {
+    public Order_DTO() {
     }
 
-    public order(String madonhang, String diachidat, String ngaydat, String tinhtrang,
+    public Order_DTO(String madonhang, String diachidat, String ngaydat, String tinhtrang,
                  double tongtien, String manv, String makh) {
         this.madonhang = madonhang;
         this.diachidat = diachidat;

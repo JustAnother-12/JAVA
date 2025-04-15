@@ -1,4 +1,4 @@
-package com.raven.swing;
+package GUI.Admin.swing;
 
 import java.awt.Color;
 import java.awt.Dimension;

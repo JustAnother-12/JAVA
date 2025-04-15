@@ -1,4 +1,4 @@
-package GUI.Amin;
+package GUI.Admin;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.*;

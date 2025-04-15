@@ -1,4 +1,4 @@
-package com.raven.swing;
+package GUI.Admin.swing;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -11,8 +11,7 @@ public class PanelBorder extends javax.swing.JPanel {
         setOpaque(false);
     }
 
-    @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    
     private void initComponents() {
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -25,7 +24,7 @@ public class PanelBorder extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 197, Short.MAX_VALUE)
         );
-    }// </editor-fold>//GEN-END:initComponents
+    }
 
     @Override
     protected void paintComponent(Graphics grphcs) {
@@ -35,7 +34,4 @@ public class PanelBorder extends javax.swing.JPanel {
         g2.fillRoundRect(0, 0, getWidth(), getHeight(), 15, 15);
         super.paintComponent(grphcs);
     }
-
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    // End of variables declaration//GEN-END:variables
 }

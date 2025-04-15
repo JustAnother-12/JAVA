@@ -1,20 +1,19 @@
-package com.raven.component;
+package GUI.Admin.component;
 
-import com.raven.model.Model_Menu;
-import com.raven.swing.ListMenu;
-import java.awt.Color;
-import java.awt.GradientPaint;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
-import java.util.List;
-import javax.swing.JFrame;
-import com.raven.swing.MenuSelectedListener;
+import DTO.Model_Menu;
+import GUI.Admin.swing.ListMenu;
+import GUI.Admin.swing.MenuSelectedListener;
 
-public class Menu extends javax.swing.JPanel {
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+
+
+public class Menu extends JPanel {
+    private javax.swing.JLabel jLabel1;
+    private ListMenu<String> listMenu1;
+    private javax.swing.JPanel panelMoving;
+    private MenuSelectedListener event;
 
     public Menu() {
         initComponents();
@@ -23,7 +22,7 @@ public class Menu extends javax.swing.JPanel {
         init();
         setSize(200, 800);
     }
-    private MenuSelectedListener event;
+    
     public void addEventMenuSelected(MenuSelectedListener event) {
         this.event = event;
         listMenu1.addEventMenuSelected(event);
@@ -45,19 +44,17 @@ public class Menu extends javax.swing.JPanel {
         listMenu1.setSelectedIndex(0);
     }
 
-    @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        panelMoving = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        listMenu1 = new com.raven.swing.ListMenu<>();
+        panelMoving = new JPanel();
+        jLabel1 = new JLabel();
+        listMenu1 = new ListMenu<>();
 
         panelMoving.setOpaque(false);
 
-        jLabel1.setFont(new java.awt.Font("sansserif", 1, 18)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("sansserif", 1, 18));
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/raven/icon/logo.png"))); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/raven/icon/logo.png")));
         jLabel1.setText("Application");
 
         javax.swing.GroupLayout panelMovingLayout = new javax.swing.GroupLayout(panelMoving);
@@ -94,7 +91,7 @@ public class Menu extends javax.swing.JPanel {
                 .addGap(35, 35, 35)
                 .addComponent(listMenu1, javax.swing.GroupLayout.DEFAULT_SIZE, 394, Short.MAX_VALUE))
         );
-    }// </editor-fold>//GEN-END:initComponents
+    }
 
     @Override
     protected void paintChildren(Graphics grphcs) {
@@ -127,9 +124,4 @@ public class Menu extends javax.swing.JPanel {
         });
     }
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
-    private com.raven.swing.ListMenu<String> listMenu1;
-    private javax.swing.JPanel panelMoving;
-    // End of variables declaration//GEN-END:variables
 }

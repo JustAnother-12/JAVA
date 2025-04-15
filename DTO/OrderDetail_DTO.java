@@ -1,24 +1,16 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-package com.raven.order;
+package DTO;
 
-/**
- *
- * @author ADMIN
- */
-public class orderDetail {
+public class OrderDetail_DTO {
     private String madonhang;
     private String masp;
     private int soluong;
     private double dongia;
     private double thanhtien;
 
-    public orderDetail() {
+    public OrderDetail_DTO() {
     }
 
-    public orderDetail(String madonhang, String masp, int soluong, double dongia, double thanhtien) {
+    public OrderDetail_DTO(String madonhang, String masp, int soluong, double dongia, double thanhtien) {
         this.madonhang = madonhang;
         this.masp = masp;
         this.soluong = soluong;
