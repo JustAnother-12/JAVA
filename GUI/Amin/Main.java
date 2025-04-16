@@ -6,7 +6,7 @@ import java.awt.Color;
 import java.awt.event.ActionEvent;  
 
 public class Main extends JFrame {
-    AccountTable accountForm;
+    NhanVienTable accountForm;
     CustomerTable customerForm;
     OrderTable ordeForm;
     ProdmaFrame productForm;
@@ -21,7 +21,7 @@ public class Main extends JFrame {
         setBackground(new Color(0, 0, 0, 0));
         menu1.initMoving(Main.this);
         setSize(1000,800);
-        accountForm = new AccountTable();
+        accountForm = new NhanVienTable();
         customerForm = new CustomerTable();
         ordeForm = new OrderTable();
         productForm = new ProdmaFrame();

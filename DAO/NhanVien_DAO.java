@@ -1,16 +1,10 @@
 package DAO;
-import java.awt.Color;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collections;
-import javax.swing.JButton;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.table.*;
 import DTO.NhanVien_DTO;
 
@@ -57,7 +51,7 @@ public class NhanVien_DAO extends javax.swing.JPanel {
                 }
         } catch (Exception e) {}
     }
-    public void deleteAccount(String id, DefaultTableModel tableModel,ArrayList<Object> accountList) {
+    public void deleteStaff(String id, DefaultTableModel tableModel,ArrayList<Object> accountList) {
         try (Connection conn = DatabaseConnection.getConnection()) {
                 String checkQuery = "SELECT COUNT(*) FROM NHANVIEN WHERE manv = ?";
                 PreparedStatement checkStmt = conn.prepareStatement(checkQuery);
@@ -81,5 +75,36 @@ public class NhanVien_DAO extends javax.swing.JPanel {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Lỗi khi xóa tài khoản: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
+    }
+    public NhanVien_DTO getDataOfStaff(NhanVien_DTO nv) {
+        NhanVien_DTO a = null; // Khởi tạo a với giá trị null
+        String query = "SELECT * FROM NHANVIEN WHERE manv = ?"; // Truy vấn để lấy dữ liệu
+
+        try (Connection conn = DatabaseConnection.getConnection(); // Kết nối đến cơ sở dữ liệu
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+         
+            pstmt.setString(1, nv.getManv()); // Thiết lập ID của khách hàng
+            ResultSet rs = pstmt.executeQuery(); // Thực thi truy vấn
+
+            if (rs.next()) { // Nếu có kết quả
+                // Tạo đối tượng customer từ kết quả truy vấn
+                a = new NhanVien_DTO(
+                    rs.getString("manv"),
+                    rs.getString("tennv"),
+                    rs.getString("chucvu"),
+                    rs.getString("sdt"),
+                    rs.getString("username"),
+                    rs.getString("password"),
+                    rs.getString("diachinv"),
+                    rs.getString("CCCD"),
+                    rs.getString("gioitinh"),
+                    rs.getString("ngaysinh")
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(); // In ra lỗi nếu có
+        }   
+
+        return a; // Trả về đối tượng customer hoặc null nếu không tìm thấy
     }
 }

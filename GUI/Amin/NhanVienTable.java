@@ -24,18 +24,21 @@ import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableModel;
 import java.awt.Color;
 import java.awt.*;
+
+import BLL.NutGiaoDien_BLL;
+import BLL.NutSuKien_BLL;
 import BLL.SapXepTangGiam;
-import DTO.NhanVien_DTO.NhanVien_DTO;
+import DTO.NhanVien_DTO.*;
 import DAO.NhanVien_DAO;
-import DAO.NhanVien_DAO.DatabaseConnection;
+import DAO.NhanVien_DAO.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class AccountTable extends JPanel {
+public class NhanVienTable extends JPanel {
     private DefaultTableModel tableModel;
     private JTable table;
     private ArrayList<Object> accountList = new ArrayList<>();
-    public AccountTable() {
+    public NhanVienTable() {
         initComponents();
         setLayout(null);
         setBounds(0,0, 800, 650);
@@ -48,7 +51,7 @@ public class AccountTable extends JPanel {
         btnAdd.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new AddAccount(tableModel); // Mở form thêm nhân viên
+                ThemNhanVien addAccount = new ThemNhanVien(tableModel); // Mở form thêm nhân viên
             }
         });
         // Nút sắp xếp tăng
@@ -98,8 +101,8 @@ public class AccountTable extends JPanel {
         NhanVien_DAO nhanVien_DAO = new NhanVien_DAO(); 
         nhanVien_DAO.loadDataFormDatabase(tableModel, accountList);
         // Cột "Tác vụ" có 2 nút "Chi tiết" và "Xóa"
-        table.getColumn("Tác vụ").setCellRenderer(new ButtonRenderer("staff"));
-        table.getColumn("Tác vụ").setCellEditor(new ButtonEditor(this));
+        table.getColumn("Tác vụ").setCellRenderer(new NutGiaoDien_BLL("staff"));
+        table.getColumn("Tác vụ").setCellEditor(new NutSuKien_BLL(this,tableModel));
 
         // ScrollPane chứa bảng
         JScrollPane scrollPane = new JScrollPane(table);
