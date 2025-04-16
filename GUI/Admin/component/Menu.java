@@ -54,7 +54,7 @@ public class Menu extends JPanel {
 
         jLabel1.setFont(new java.awt.Font("sansserif", 1, 18));
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/raven/icon/logo.png")));
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/Admin/icon/logo.png")));
         jLabel1.setText("Application");
 
         javax.swing.GroupLayout panelMovingLayout = new javax.swing.GroupLayout(panelMoving);

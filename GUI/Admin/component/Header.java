@@ -83,12 +83,12 @@ public class Header extends JPanel {
         setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         setName(""); 
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/raven/icon/search.png"))); 
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/Admin/icon/search.png"))); 
 
-        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/raven/icon/menu.png"))); 
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/Admin/icon/menu.png"))); 
         jLabel2.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
-        jToggleButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/raven/icon/close.jpg"))); 
+        jToggleButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/Admin/icon/close.jpg"))); 
         jToggleButton1.setBorder(null);
         jToggleButton1.setBorderPainted(false);
         jToggleButton1.addActionListener(new java.awt.event.ActionListener() {

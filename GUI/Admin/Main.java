@@ -10,7 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import GUI.Admin.customer.CustomerTable;
 import GUI.Admin.order.OrderTable;
-import GUI.Admin.product.ProdmaFrame;
+// import GUI.Admin.product.ProdmaFrame;
 import GUI.Admin.swing.*;
 import java.awt.event.InputMethodEvent;
 
@@ -18,12 +18,17 @@ public class Main extends JFrame {
     NhanVienTable accountForm;
     CustomerTable customerForm;
     OrderTable ordeForm;
-    ProdmaFrame productForm;
-    /**
-     * Creates new form Main
-     */
+    // ProdmaFrame productForm;
+
+    private GUI.Admin.component.Header header2;
+    private javax.swing.JPanel mainPanel;
+    private GUI.Admin.component.Menu menu1;
+    private GUI.Admin.swing.PanelBorder panelBorder1;
+  
     private final JLabel placeholder = new JLabel("");
     private JToggleButton bt1;
+
+
     public Main() {
         initComponents();
         myinit();
@@ -33,27 +38,27 @@ public class Main extends JFrame {
         accountForm = new NhanVienTable();
         customerForm = new CustomerTable();
         ordeForm = new OrderTable();
-        productForm = new ProdmaFrame();
+        // productForm = new ProdmaFrame();
         menu1.addEventMenuSelected(new MenuSelectedListener() {
             @Override
             public void menuSelected(int index) {
                 if (index == 1) {
-                    setForm(productForm);
-                    header2.setSearchListener(customerForm);
-                    header2.getjLabel2().setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/raven/icon/none.jpg")));
+                    // setForm(productForm);
+                    // header2.setSearchListener(customerForm);
+                    // header2.getjLabel2().setIcon(new javax.swing.ImageIcon(getClass().getResource("Admin/icon/none.jpg")));
                 }
                 else if (index == 2) {
                     setForm(accountForm);
-                    header2.getjLabel2().setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/raven/icon/menu.png")));
+                    header2.getjLabel2().setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/Admin/icon/menu.png")));
                     header2.setSearchListener(accountForm);
                 } else if (index == 3) {
                     setForm(customerForm);
                     header2.setSearchListener(customerForm);
-                    header2.getjLabel2().setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/raven/icon/none.jpg")));
+                    header2.getjLabel2().setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/Admin/icon/none.jpg")));
                 } else if (index == 4) {
                     setForm(ordeForm);
                     header2.setSearchListener(ordeForm);
-                    header2.getjLabel2().setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/raven/icon/none.jpg")));
+                    header2.getjLabel2().setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/Admin/icon/none.jpg")));
                 } else if (index == 1) {
                     setForm(new JPanel());
                 }
@@ -85,14 +90,14 @@ public class Main extends JFrame {
 
         panelBorder1.setPreferredSize(new java.awt.Dimension(1000, 600));
 
-        header2.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
-        header2.addInputMethodListener(new java.awt.event.InputMethodListener() {
-            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
-            }
-            public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
-                inputSearchEvent(evt);
-            }
-        });
+        header2.setFont(new java.awt.Font("sansserif", 0, 14)); 
+        // header2.addInputMethodListener(new java.awt.event.InputMethodListener() {
+        //     public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
+        //     }
+        //     public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
+        //         inputSearchEvent(evt);
+        //     }
+        // });
 
         javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
         mainPanel.setLayout(mainPanelLayout);
@@ -155,9 +160,6 @@ public class Main extends JFrame {
         new Main().setVisible(true);
     }
 
-    private GUI.Admin.component.Header header2;
-    private javax.swing.JPanel mainPanel;
-    private GUI.Admin.component.Menu menu1;
-    private GUI.Admin.swing.PanelBorder panelBorder1;
+    
 }
 

@@ -1,3 +1,4 @@
+package GUI.Admin.product;
 
 // import com.mycompany.prodma.DB;
 // import com.mycompany.prodma.Product;
@@ -11,6 +12,8 @@ import java.util.logging.Logger;
 import javax.swing.border.Border;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
+
+// import DB;
 
 
 public class ProdmaFrame extends JFrame {
@@ -57,26 +60,26 @@ public class ProdmaFrame extends JFrame {
     }
 
     // đọc csdl
-    public ArrayList<Product> getProductList()
-    {
-        ArrayList<Product> list = new ArrayList<>();
-        String selectQuery = "SELECT * FROM `products`";
-        Statement st;
-        ResultSet rs;  
-        try {
-            st = DB.getConnection().createStatement();
-            rs = st.executeQuery(selectQuery);
-            Product product;
-            while(rs.next()){
-                product = new Product(rs.getInt("id"),rs.getString("name"),rs.getString("category"),rs.getInt("quantity"),rs.getDouble("price"),rs.getString("image"));
-                list.add(product);
-            }    
-        } catch (SQLException ex) {
-            Logger.getLogger(ProdmaFrame.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        productArray = list;
-        return list;
-    }
+    // public ArrayList<Product> getProductList()
+    // {
+    //     ArrayList<Product> list = new ArrayList<>();
+    //     String selectQuery = "SELECT * FROM `products`";
+    //     Statement st;
+    //     ResultSet rs;  
+    //     try {
+    //         st = DB.getConnection().createStatement();
+    //         rs = st.executeQuery(selectQuery);
+    //         Product product;
+    //         while(rs.next()){
+    //             product = new Product(rs.getInt("id"),rs.getString("name"),rs.getString("category"),rs.getInt("quantity"),rs.getDouble("price"),rs.getString("image"));
+    //             list.add(product);
+    //         }    
+    //     } catch (SQLException ex) {
+    //         Logger.getLogger(ProdmaFrame.class.getName()).log(Level.SEVERE, null, ex);
+    //     }
+    //     productArray = list;
+    //     return list;
+    // }
 
     //show product
     public void showProduct()

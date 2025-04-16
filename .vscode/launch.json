@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Main",
+            "request": "launch",
+            "mainClass": "GUI.Admin.Main",
+            "projectName": "JAVA_1c7fabf8"
+        },
+        {
+            "type": "java",
             "name": "ProdmaFrame",
             "request": "launch",
             "mainClass": "ProdmaFrame",
