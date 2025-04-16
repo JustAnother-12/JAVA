@@ -1,12 +1,5 @@
 package GUI.Admin.order;
 
-import com.raven.account.AccountTable;
-import com.raven.account.AddAccount;
-import com.raven.account.ButtonEditor;
-import com.raven.account.ButtonRenderer;
-import com.raven.account.customer;
-import com.raven.account.staff;
-
 import DAO.DatabaseConnection;
 import DTO.Order_DTO;
 import DTO.OrderDetail_DTO;
@@ -18,6 +11,8 @@ import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import javax.swing.table.*;
+import BLL.NutGiaoDien_BLL;
+import BLL.NutSuKien_BLL;
 import BLL.Order_BLL;
 
 
@@ -81,8 +76,8 @@ public class OrderTable extends javax.swing.JPanel implements Header.searchListe
         // Thêm dữ liệu mẫu
         loadDataFormDatabase();
         // Cột "Tác vụ" có 3 nút "Xác nhận" "Chi tiết" và "Xóa"
-        table.getColumn("Tác vụ").setCellRenderer(new ButtonRenderer("order",orderList));
-        table.getColumn("Tác vụ").setCellEditor(new ButtonEditor(this));
+        table.getColumn("Tác vụ").setCellRenderer(new NutGiaoDien_BLL("order"));
+        table.getColumn("Tác vụ").setCellEditor(new NutSuKien_BLL(this, tableModel));
         table.getColumnModel().getColumn(0).setPreferredWidth(100); // Mã đơn hàng
         table.getColumnModel().getColumn(1).setPreferredWidth(150); // Tên khách hàng
         table.getColumnModel().getColumn(2).setPreferredWidth(100); // Tình trạng
@@ -95,15 +90,6 @@ public class OrderTable extends javax.swing.JPanel implements Header.searchListe
         add(scrollPane);
         revalidate();
         repaint();
-    }
-    @Override
-    public void setName(String name) {
-        super.setName(name); 
-    }
-
-    @Override
-    public String getName() {
-        return super.getName(); 
     }
     public void searchById(String text) {
         TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(tableModel);

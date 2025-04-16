@@ -1,4 +1,4 @@
-package GUI.Admin;
+package GUI.Admin.staff;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;

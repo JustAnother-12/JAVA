@@ -19,6 +19,12 @@ public class KhachHang_DTO {
       this.DiaChi_KhachHang = "";
       this.Pass_KhachHang = "";
    }
+   public KhachHang_DTO(String Id,String Ten, String user, String Sdt) {
+      this.Id_KhachHang = Id;
+      this.Ten_KhachHang = Ten;
+      this.Sdt_KhachHang = Sdt;
+      this.Username = user;
+   }
    public KhachHang_DTO(String Id,String Ten, String Sdt,String gioiTinh, String DiaChi, String Email, String user, String Pass, String NgaySinh)
 
    {

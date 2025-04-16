@@ -1,4 +1,4 @@
-package GUI.Amin;
+package GUI.Admin.staff;
 
 import DAO.ChiTietThongTinTaiKhoan_DAO;
 import DAO.DatabaseConnection;

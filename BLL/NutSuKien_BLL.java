@@ -2,19 +2,22 @@ package BLL;
 
 import javax.swing.*;
 import javax.swing.table.TableCellEditor;
+import DAO.Customer_DAO;
 import DAO.NhanVien_DAO;
 import DTO.KhachHang_DTO;
 import DTO.NhanVien_DTO;
-import GUI.Admin.ChiTietNhanVien;
-import GUI.Admin.NhanVienTable;
+import DTO.Order_DTO;
+import DAO.Order_DAO;
+import GUI.Admin.customer.CustomerTable;
+import GUI.Admin.staff.ChiTietNhanVien;
+import GUI.Admin.staff.NhanVienTable;
+import GUI.Admin.order.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.text.ParseException;
 import javax.swing.table.DefaultTableModel;
 import java.util.*;
 
-public class NutSuKien_BLL extends JPanel implements TableCellEditor {
+public class NutSuKien_BLL implements TableCellEditor {
     private JPanel panel;
     private JButton btnDetail, btnDelete, btnConfirm;
     private int selectedRow;
@@ -55,8 +58,36 @@ public class NutSuKien_BLL extends JPanel implements TableCellEditor {
 
         btnDelete.addActionListener(e -> deleteRow(tableModel));
     }
-
-
+    @Override
+    public boolean isCellEditable(EventObject anEvent) {
+        return true;
+    }
+    @Override
+    public void cancelCellEditing() {
+        if (table != null) {
+            table.getCellEditor().stopCellEditing();
+        }
+    }
+    @Override
+    public void addCellEditorListener(javax.swing.event.CellEditorListener l) {
+        // Not implemented
+    }
+    @Override
+    public void removeCellEditorListener(javax.swing.event.CellEditorListener l) {
+        // Not implemented
+    }
+    @Override
+    public boolean shouldSelectCell(EventObject anEvent) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+    @Override
+    public boolean stopCellEditing() {
+        if (table != null) {
+            table.getCellEditor().stopCellEditing();
+        }
+        return true;
+    }
     @Override
     public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
         this.table = table;
@@ -66,7 +97,7 @@ public class NutSuKien_BLL extends JPanel implements TableCellEditor {
             panel.add(btnDelete);
         } else if (formType == FormType.ORDER) {
             if(orderList != null && row < orderList.getOrderList().size()) {
-                order temp = orderList.getOrderAt(row);
+                Order_DTO temp = orderList.getOrderAt(row);
                 if("Chưa xử lý".equalsIgnoreCase(temp.getTinhtrang())) 
                 panel.add(btnConfirm);    
             }
@@ -110,8 +141,8 @@ public class NutSuKien_BLL extends JPanel implements TableCellEditor {
                 new ChiTietNhanVien((KhachHang_DTO) obj); 
             } else if (obj instanceof NhanVien_DTO) {
                 new ChiTietNhanVien((NhanVien_DTO) obj); 
-            } else if(obj instanceof order) {
-                new OrderDetailForm((order)obj, orderList.getOrderDetailList());
+            } else if(obj instanceof Order_DTO) {
+                new OrderDetailForm((Order_DTO)obj, orderList.getOrderDetailList());
             } else {
                 // Nếu không tìm thấy account hợp lệ, hiển thị thông báo
                 showDetailDialog("Lỗi", "Không tìm thấy thông tin tài khoản.");
@@ -136,7 +167,7 @@ public class NutSuKien_BLL extends JPanel implements TableCellEditor {
     }
     private Object findOrderById(String id) {
         for (Object order : orderList.getOrderList()) {
-            if (order instanceof order && ((order) order).getMadonhang().equals(id)) {
+            if (order instanceof Order_DTO && ((Order_DTO) order).getMadonhang().equals(id)) {
                 return order;
             }
         }
@@ -149,11 +180,13 @@ public class NutSuKien_BLL extends JPanel implements TableCellEditor {
             if (confirm == JOptionPane.YES_OPTION) {
                 if (formType == FormType.STAFF) {
                     NhanVien_DAO temp = new NhanVien_DAO();
-                    temp.deleteStaff(id,tableModel, staffList);
+                    temp.deleteStaff(id, tableModel, staffList.getAccountList());
                 } else if (formType == FormType.CUSTOMER){
-                    customerList.deleteCustomer(id);
+                    Customer_DAO temp = new Customer_DAO();
+                    temp.deleteCustomer(id, tableModel, customerList.getCustomerList());
                 } else if (formType == FormType.ORDER) {
-                    orderList.deleteOrder(id);
+                    Order_DAO temp = new Order_DAO();
+                    temp.DeleteOrder(id);
                 }
                 ((DefaultTableModel) table.getModel()).removeRow(selectedRow);
                 stopCellEditing();

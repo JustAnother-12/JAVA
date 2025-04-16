@@ -1,43 +1,29 @@
-package GUI.Admin;
+package GUI.Admin.staff;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collections;
-
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.RowFilter;
-import javax.swing.RowSorter;
-import javax.swing.SortOrder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableRowSorter;
-import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableCellEditor;
-import javax.swing.table.TableModel;
 import java.awt.Color;
 import java.awt.*;
 
+import BLL.NhanVien_BLL;
 import BLL.NutGiaoDien_BLL;
 import BLL.NutSuKien_BLL;
 import BLL.SapXepTangGiam;
-import DTO.NhanVien_DTO.*;
+import DTO.NhanVien_DTO;
 import DAO.NhanVien_DAO;
-import DAO.NhanVien_DAO.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class NhanVienTable extends JPanel {
+public class NhanVienTable extends JPanel  implements GUI.Admin.component.Header.searchListener{
     private DefaultTableModel tableModel;
     private JTable table;
-    private ArrayList<Object> accountList = new ArrayList<>();
+    private ArrayList<NhanVien_DTO> staffList = new ArrayList<>();
     public NhanVienTable() {
         initComponents();
         setLayout(null);
@@ -51,7 +37,7 @@ public class NhanVienTable extends JPanel {
         btnAdd.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ThemNhanVien addAccount = new ThemNhanVien(tableModel); // Mở form thêm nhân viên
+                new ThemNhanVien(tableModel); // Mở form thêm nhân viên
             }
         });
         // Nút sắp xếp tăng
@@ -99,7 +85,7 @@ public class NhanVienTable extends JPanel {
 
         // Thêm dữ liệu mẫu
         NhanVien_DAO nhanVien_DAO = new NhanVien_DAO(); 
-        nhanVien_DAO.loadDataFormDatabase(tableModel, accountList);
+        nhanVien_DAO.loadDataFormDatabase(tableModel, staffList);
         // Cột "Tác vụ" có 2 nút "Chi tiết" và "Xóa"
         table.getColumn("Tác vụ").setCellRenderer(new NutGiaoDien_BLL("staff"));
         table.getColumn("Tác vụ").setCellEditor(new NutSuKien_BLL(this,tableModel));
@@ -113,8 +99,8 @@ public class NhanVienTable extends JPanel {
     }
     
     
-    public ArrayList<Object> getAccountList() {
-        return this.accountList;
+    public ArrayList<NhanVien_DTO> getAccountList() {
+        return this.staffList;
     }
     
     private void initComponents() {
@@ -124,12 +110,14 @@ public class NhanVienTable extends JPanel {
 
     @Override
     public void onSearch(String text) {
-        searchById(text);
+        NhanVien_BLL temp = new NhanVien_BLL();
+        temp.searchById(text, tableModel, table);
     }
 
     @Override
     public void onFilterByRole(String role) {
-        filterByRole(role);
+        NhanVien_DAO temp = new NhanVien_DAO();
+        temp.filterByRole(role, tableModel, staffList);
     }
 
 }

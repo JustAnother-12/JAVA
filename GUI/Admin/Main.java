@@ -1,9 +1,18 @@
 package GUI.Admin;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+
+import GUI.Admin.staff.NhanVienTable;
+
 import javax.swing.*;
 import java.awt.Color;
 import java.awt.event.ActionEvent;  
+import java.awt.event.ActionListener;
+import GUI.Admin.customer.CustomerTable;
+import GUI.Admin.order.OrderTable;
+import GUI.Admin.product.ProdmaFrame;
+import GUI.Admin.swing.*;
+import java.awt.event.InputMethodEvent;
 
 public class Main extends JFrame {
     NhanVienTable accountForm;
@@ -66,9 +75,9 @@ public class Main extends JFrame {
    
     private void initComponents() {
 
-        panelBorder1 = new com.raven.swing.PanelBorder();
-        menu1 = new com.raven.component.Menu();
-        header2 = new com.raven.component.Header();
+        panelBorder1 = new GUI.Admin.swing.PanelBorder();
+        menu1 = new GUI.Admin.component.Menu();
+        header2 = new GUI.Admin.component.Header();
         mainPanel = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -146,9 +155,9 @@ public class Main extends JFrame {
         new Main().setVisible(true);
     }
 
-    private com.raven.component.Header header2;
+    private GUI.Admin.component.Header header2;
     private javax.swing.JPanel mainPanel;
-    private com.raven.component.Menu menu1;
-    private com.raven.swing.PanelBorder panelBorder1;
+    private GUI.Admin.component.Menu menu1;
+    private GUI.Admin.swing.PanelBorder panelBorder1;
 }
 

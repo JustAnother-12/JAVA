@@ -1,33 +1,26 @@
 package GUI.Admin.customer;
 
-import com.raven.account.ButtonEditor;
-import com.raven.account.ButtonRenderer;
-import com.raven.account.customer;
-import com.raven.account.database.DatabaseConnection;
-import com.raven.account.staff;
-
-import GUI.Admin.component.Header;
-import java.awt.*;
-import java.sql.*;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Collections;
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableRowSorter;
-import BLL.KhachHang_BLL;
+import DAO.Customer_DAO;
+import BLL.Customer_BLL;
+import BLL.NutGiaoDien_BLL;
+import BLL.NutSuKien_BLL;
 import DTO.KhachHang_DTO;
 
-/**
- *
- * @author ADMIN
- */
-public class CustomerTable extends javax.swing.JPanel implements Header.searchListener{
+public class CustomerTable extends javax.swing.JPanel implements GUI.Admin.component.Header.searchListener{
     private DefaultTableModel tableModel;
     private JTable table;
-    private ArrayList<Object> customerList = new ArrayList<>();
-    private KhachHang_BLL khBLL = new KhachHang_BLL();
-
+    private ArrayList<KhachHang_DTO> customerList = new ArrayList<>();
     public CustomerTable() {
         initComponents();
         setLayout(null);
@@ -60,10 +53,11 @@ public class CustomerTable extends javax.swing.JPanel implements Header.searchLi
         }
 
         // Thêm dữ liệu mẫu
-        loadDataFormDatabase();
+        Customer_DAO customerDAO = new Customer_DAO();
+        customerDAO.loadDataFormDatabase(customerList, tableModel);
         // Cột "Tác vụ" có 2 nút "Chi tiết" và "Xóa"
-        table.getColumn("Tác vụ").setCellRenderer(new ButtonRenderer("customer"));
-        table.getColumn("Tác vụ").setCellEditor(new ButtonEditor(this));
+        table.getColumn("Tác vụ").setCellRenderer(new NutGiaoDien_BLL("customer"));
+        table.getColumn("Tác vụ").setCellEditor(new NutSuKien_BLL(this,tableModel));
 
         // ScrollPane chứa bảng
         JScrollPane scrollPane = new JScrollPane(table);
@@ -74,102 +68,32 @@ public class CustomerTable extends javax.swing.JPanel implements Header.searchLi
         btnSortAsc.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                sortTable(true); // Sắp xếp tăng
+                Customer_BLL customerBLL = new Customer_BLL();
+                customerBLL.sortTable(true,tableModel,table); // Sắp xếp tăng
             }
         });
 
         btnSortDesc.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                sortTable(false); // Sắp xếp giảm
+                Customer_BLL customerBLL = new Customer_BLL();
+                customerBLL.sortTable(false,tableModel,table); // Sắp xếp giảm
             }
         });
     }
-    public void searchById(String text) {
-        TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(tableModel);
-        table.setRowSorter(sorter);
-        if (text.trim().isEmpty()) {
-            sorter.setRowFilter(null); // Hiện toàn bộ
-        } else {
-            sorter.setRowFilter(RowFilter.regexFilter("(?i)" + text.trim(), 0)); // Theo cột ID
-        }
+    public ArrayList<KhachHang_DTO> getCustomerList() {
+        return this.customerList;
     }
     @Override
     public void onSearch(String text) {
-        searchById(text);
+        Customer_BLL customerBLL = new Customer_BLL();
+        customerBLL.searchById(text,tableModel,table);
     }
     @Override
     public void onFilterByRole(String role) {
         
     }
-    @Override
-    public void setName(String name) {
-        super.setName(name); 
-    }
-
-    @Override
-    public String getName() {
-        return super.getName(); 
-    }
-    
-    public ArrayList<Object> getCustomerList() {
-        return this.customerList;
-    }
-    private void loadDataFormDatabase() {
-        // try (Connection conn = DatabaseConnection.getConnection()) {
-        //         String queryforcs = "SELECT * FROM KHACHHANG";
-        //         PreparedStatement pstmt = conn.prepareStatement(queryforcs);
-        //         ResultSet rs = pstmt.executeQuery();
-                
-        //         while (rs.next()) {
-        //             String id = rs.getString("makh");
-        //             String name = rs.getString("tenkh");
-        //             String username = rs.getString("username");
-        //             String phone = rs.getString("sdt");
-        //             customer kh = new customer(id, name, username, phone);
-        //             customerList.add(kh);
-        //             tableModel.addRow(new Object[]{id, name, username, phone,"Chi tiết" + "Xóa"});
-        //         }
-        // } catch (Exception e) {}
-        for(KhachHang_DTO kh : khBLL.getAllKhachHang()){
-            customerList.add(kh);
-            tableModel.addRow(new Object[]{kh.getId_KhachHang(), kh.getTen_KhachHang(), kh.getUsername(), kh.getSdt_KhachHang(),"Chi tiết" + "Xóa"});
-        }
-
-    }
-    private void sortTable(boolean ascending) {
-        TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(tableModel);
-        table.setRowSorter(sorter);
-        if (ascending) {
-            sorter.setSortKeys(Collections.singletonList(new RowSorter.SortKey(0, SortOrder.ASCENDING)));
-        }
-        else {
-            sorter.setSortKeys(Collections.singletonList(new RowSorter.SortKey(0 , SortOrder.DESCENDING)));
-        }
-        sorter.sort();
-    }
-    // public void deleteCustomer(String id) {
-    //     try (Connection conn = DatabaseConnection.getConnection()) {
-    //         String checkQuery = "SELECT COUNT(*) FROM KHACHHANG WHERE makh = ?";
-    //         PreparedStatement checkStmt = conn.prepareStatement(checkQuery);
-    //         checkStmt.setString(1, id);
-    //         ResultSet rs = checkStmt.executeQuery();
-    //         if (rs.next() && rs.getInt(1) > 0) {
-    //             String deleteQuery = "DELETE FROM KHACHHANG WHERE makh = ?";
-    //             PreparedStatement pstmt = conn.prepareStatement(deleteQuery);
-    //             pstmt.setString(1, id);
-    //             pstmt.executeUpdate();
-    //             JOptionPane.showMessageDialog(this, "Xóa tài khoản khách hàng thành công!");
-    //         }
-    //         // Cập nhật lại bảng
-    //         loadDataFormDatabase();
-    //     } catch (SQLException e) {
-    //         e.printStackTrace();
-    //         JOptionPane.showMessageDialog(this, "Lỗi khi xóa khách hàng: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
-    //     }
-    // }
     private void initComponents() {//GEN-BEGIN:initComponents
         setLayout(new java.awt.BorderLayout());
-
     }
 }
