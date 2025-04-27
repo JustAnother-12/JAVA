@@ -1,0 +1,402 @@
+/* RESPONSIVE FOR index.html */
+/* Mobile and Tablet */
+@media (max-width: 63.9375em) {
+     :root { 
+          --header-height: 6.5em;
+     }
+
+     .s-m-hidden {
+          display: none !important;
+     }
+
+     .s-m-content {
+          display: inherit;
+     }
+
+     /* global CSS*/
+     .web-content {
+          padding-top: var(--header-height);
+     }
+
+     /* CSS header for mobile and tablet */
+     #header-container {
+          max-height: var(--header-height);
+     }
+
+     #header-container .s-m-header {
+          max-width: 45.25em;
+          max-height: 3em;
+     }
+     
+     .s-m-header .header-items.s-m-nav-btn {
+          order: 1;
+          cursor: pointer;
+     }
+
+     .s-m-nav-content .s-m-nav-btn button {
+          line-height: 1.6;
+          border: none;
+          background: unset;
+          position: relative;
+          display: none;
+
+     }
+
+     .s-m-nav-btn button + button:not(:last-child):before {
+          left: -16%;
+          content: "|";
+          font-weight: bold;
+          position: absolute;
+          transform: translateY(6%);
+     }
+
+     .s-m-nav-btn button > div {
+          transform: translateY(10%);
+     }
+
+     .s-m-nav-content .s-m-nav-list {
+          cursor: pointer;
+     }
+
+     .s-m-nav-content .s-m-nav-list > li {
+          font-weight: 600;
+          padding-left: 1.5em;
+          display: flex;
+          position: relative;
+     } 
+     
+     .s-m-nav-list > li:before {
+          content: "";
+          position: absolute;
+          left: 0;
+          top: 40%;
+          padding: 0.25em;
+          border-radius: 50%;
+          background: var(--main-color);
+     }
+
+     .s-m-header .web-logo {
+          order: 2;
+          margin: auto;
+     }
+     .s-m-header .web-logo img {
+          max-height: 3em;
+     }
+
+     .s-m-header .header-items {
+          order: 3;
+     }
+
+     #header-container .search-container {
+          order: 4;
+          padding: 0.5em 0;
+     }
+
+     .header-items .cart-btn .cart-count.item-count {
+          left: 50%;
+     }
+
+     /* CSS for main content */     
+     .nav-btn {
+     left: 0.6%;
+     right: 0.6%;
+     }
+
+     #main-content .services-container .service-content {
+          padding-inline: 0.2em;
+     }
+
+     .services-container .service-content > img {
+          margin: 0;
+          max-width: 2em;
+     }
+
+     #fs-container .heading #fs-label {
+          padding: 0.8em 4em;
+          background-size: contain;
+     }
+
+     #main-content .category-tab .product-container {
+          overflow-x: auto;
+          flex-wrap: nowrap;
+     }
+
+     #main-content .category-tab .product-container::-webkit-scrollbar {
+          display: none;
+     }
+
+     #main-content .category-tab {
+          overflow-x: hidden;
+     }
+
+     .category-tab .block-product:hover .action {
+          display: none;
+     }
+
+     /* CSS for footer */
+     #footer-container {
+          padding-inline: 0.75em;
+     }
+}
+
+/* Mobile */
+@media (max-width: 46.1875em) {
+     /* set order for items in header bar */
+     .s-content {
+          display: inherit;
+     }
+
+     .s-hidden {
+          display: none !important;
+     }
+
+     #header-container .header-items {
+          padding-inline: 1em;
+     }
+
+     #header-container .search-container .search-form-container {
+          margin-inline: 0.5em;
+     }
+     
+     /* css for main content */
+     #main-content .ad-banner .banner-item {
+          width: calc(50% - 0.25em);
+     }
+
+     #main-content .service-container{
+          display: none;
+     }
+
+     #main-content .category-tab {
+          margin: 1.5em 0;
+     }
+
+     .search-container .search-form-container input {
+          max-width: 100%;
+     }
+
+     .news-blogs-container .news-blogs-inner .tab-content {
+          margin: 1.25em 0.75em 0;
+          overflow-x: auto;
+     }
+     
+     .news-blogs-container .news-blogs-inner .tab-content::-webkit-scrollbar {
+          display: none;
+     }
+     
+
+     .news-blogs-container .news-blogs-inner .news-blogs-item {
+          width: 100%;
+     }
+
+     .news-blogs-items > .news-item  {
+          min-height: 44em;
+     }
+
+     /* CSS for footer */
+     #footer-container .footer-col-container + .footer-col-container {
+          border: none;
+          margin-top: 2em;
+     }
+}
+
+/* Tablet */
+@media (min-width: 46.25em) and (max-width: 63.9375em) {
+     /* CSS for header content */
+
+     /* CSS for main content */
+     #main-content .homepage::before {
+          margin-inline: 0.5em;
+     }
+
+     #main-content .homepage::after {
+          margin-inline: 0.5em;
+     }
+
+     .s-m-header .s-m-nav-content {
+          width: 46%;
+     }
+
+     #main-content .services-container .service-content {
+          justify-content: center;
+     }
+
+     .service-container .service-content > img {
+          margin-left: 1em;
+     }
+
+     /* CSS for footer content */
+     #footer-container .footer-col-container:last-child {
+          margin-top: 1.5em;
+          border: none;
+     }
+
+     #footer-container .footer-col-container .footer-icon {
+          max-width: 40%;
+     }
+}
+
+/* RESPONSIVE FOR ANOTHER WEB */
+/* RESPONSIVE FOR detail_product.html */
+@media (max-width: 63.9375em) {
+     .detail-block .product-image img {
+          width: 60%;
+     }
+
+     .product-info > div strong {
+          width: 34%;
+     }
+
+     .detail-block .product-title {
+          margin-top: 1em;
+     }
+
+     .product-selector .buy-btn{
+          position: fixed;
+          right: 0;
+          margin: 0;
+          bottom: 0;
+          left: 60%;
+          z-index: 10;
+          border-radius: 0;
+          text-align: center;
+          border-top-left-radius: var(--normal-radius);
+          box-shadow: 0 0 1px var(--primary-dark);
+     }
+     
+     .product-selector .add-to-cart {
+          width: 60%;
+          text-align: center;
+     }
+
+}
+
+@media (max-width: 46.1875em) {
+     .nav-btn .prev-btn,
+     .nav-btn .next-btn {
+          font-size: 0.75em;
+     }
+
+     .detail-block .nav-btn {
+          left: 1%;
+          right: 1%;
+     }
+
+     .same-author .nav-btn,
+     .product-like .nav-btn {
+          left: 4%;
+          right: 4%;
+     }
+}
+
+@media (min-width: 46.25em) and (max-width: 63.9375em) {
+
+     /* main container */
+     .detail-block .block-product .sale-label {
+          top: 0;
+          right: 1.4%;
+          font-size: 1.25rem;
+     }
+
+     .block-product .nav-btn .next-btn,
+     .block-product .nav-btn .prev-btn {
+          font-size: 1.25rem;
+     }
+
+     .detail-block .nav-btn {
+          left: 2%;
+          right: 2%;
+     }
+
+     .same-author .nav-btn,
+     .product-like .nav-btn {
+          left: 2%;
+          right: 2%;
+     }
+}
+
+/* RESPONSIVE FOR cart.html */
+@media (max-width: 63.9375em) {
+     .block-product .info-product-cart {
+          margin-bottom: 1em;
+     }
+
+     #cart .number-product-cart {
+          padding-left: 0.5em;
+     }
+
+     #cart .number-product-cart .quantity-cart {
+          transform: translateX(0);
+     }
+
+     .block-product .rm-cart-btn {
+          justify-content: end;
+     }
+
+     .cart-ui-content #cart > div:last-child {
+          padding: 1.5em 0 0;
+     }
+
+     #cart .payment-methods img {
+          width: 5%;
+     }
+
+     .payment-methods li + li {
+          padding-top: 1em;
+     }
+}
+
+@media (max-width: 46.1875em) {
+     #cart .number-product-cart .quantity-cart {
+          padding-left: 0;
+     }
+}
+
+@media (min-width: 46.25em) and (max-width: 63.9375em) {
+
+}
+
+/* RESPONSIVE FOR detail_product.html */
+@media (max-width: 63.9375em) {
+     #customer-order .order-info .block-order-info {
+          text-align: center;
+     }
+
+     .order-info .block-order-info h4 {
+          font-size: 0.75rem;
+     }
+
+     .order-info .block-order-info span {
+          text-align: center;
+          font-size: 1rem;
+     }
+}
+
+@media (max-width: 46.1875em) {
+     .order-status-container .order-info .tracking-bar {
+          display: none;
+     }
+
+     .order-info .delivery-state {
+          font-size: var(--font-size-14);
+     }
+
+     .tracking-block .tracking-time,
+     .tracking-block .delivery-state {
+          font-size: 0.75em;
+     }
+
+     .order-status-container #customer-order .history-order-link {
+          max-width: 70%;
+     }
+
+     .history-order-table .block-product {
+          flex-basis: unset;
+     }
+}
+
+@media (min-width: 46.25em) and (max-width: 63.9375em) {
+     .order-status-container #customer-order .history-order-link {
+          max-width: 30%;
+     }
+}
