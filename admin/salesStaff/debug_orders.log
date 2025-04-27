@@ -1,0 +1,16 @@
+[2025-04-05 14:23:32] Bắt đầu duyệt tất cả sản phẩm - SalesID: S001
+[2025-04-05 14:23:32] Kết quả duyệt tất cả - Số sản phẩm đã duyệt: 1
+[2025-04-05 14:23:38] Bắt đầu duyệt tất cả sản phẩm - SalesID: S002
+[2025-04-05 14:23:38] Kết quả duyệt tất cả - Số sản phẩm đã duyệt: 1
+[2025-04-05 14:27:07] Bắt đầu duyệt tất cả sản phẩm - SalesID: S001
+[2025-04-05 14:27:07] Kết quả duyệt tất cả - Số sản phẩm đã duyệt: 1
+[2025-04-05 14:33:43] Bắt đầu duyệt tất cả sản phẩm - SalesID: S001
+[2025-04-05 14:33:43] Kết quả duyệt tất cả - Số sản phẩm đã duyệt: 1
+[2025-04-05 14:33:47] Bắt đầu hủy tất cả sản phẩm - SalesID: S002
+[2025-04-05 14:33:47] Cập nhật số lượng cho sản phẩm ID: GAME002, Số lượng: 3
+[2025-04-05 14:33:47] Kết quả hủy tất cả - Số sản phẩm đã hủy: 1, Sản phẩm đã cập nhật số lượng: 40
+[2025-04-05 14:36:40] Bắt đầu duyệt tất cả sản phẩm - SalesID: S002
+[2025-04-05 14:36:40] Kết quả duyệt tất cả - Số sản phẩm đã duyệt: 1
+[2025-04-05 14:36:46] Bắt đầu hủy tất cả sản phẩm - SalesID: S001
+[2025-04-05 14:36:46] Cập nhật số lượng cho sản phẩm ID: GAME001, Số lượng: 2
+[2025-04-05 14:36:46] Kết quả hủy tất cả - Số sản phẩm đã hủy: 1, Sản phẩm đã cập nhật số lượng: 40

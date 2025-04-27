@@ -1,0 +1,61 @@
+        body {
+            background-color: #f4f6f9;
+            width: 100%;
+        }
+
+        .container {
+            margin-top: 10px;
+        }
+
+        .card {
+            transition: 0.3s;
+  
+            border-radius: 0px;
+            padding: 20px;
+            /* Giảm padding để làm ô nhỏ hơn */
+            font-size: 14px;
+            /* Giảm kích thước chữ */
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .card.active {
+            background-color: #0056b3; /* Màu nền xanh dương */
+            color: white; /* Màu chữ trắng */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Hiệu ứng bóng */
+            transform: scale(1.02); /* Phóng to nhẹ */
+            transition: all 0.3s ease;
+        }
+
+        .card.active .icon {
+            font-size: 2rem; /* Tăng kích thước icon */
+        }
+
+        .card.active h5 {
+            font-weight: bold;
+        }
+
+        .header-text {
+            background-color: #0056b3;
+            color: white;
+            padding: 15px;
+            border-radius: 10px 10px 0 0;
+            text-align: center;
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .icon {
+            font-size: 30px;
+            /* Giảm kích thước icon */
+            color: #074b80;
+        }
+
+        @media print {
+            .non-printable {
+                display: none !important; /* Ẩn hoàn toàn các phần không cần in */
+            }
+        }

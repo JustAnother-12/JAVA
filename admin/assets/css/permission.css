@@ -1,0 +1,178 @@
+            :root {
+                --primary-color: #4568dc;
+                --primary-light: #6384ff;
+                --primary-dark: #2a4cb8;
+                --secondary-color: #f5f7ff;
+                --text-light: #ffffff;
+                --text-dark: #333333;
+            }
+
+            body {
+                background-color: #f8f9fa;
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            }
+
+            .container {
+                background-color: white;
+                border-radius: 10px;
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+                padding: 30px;
+                margin-top: 20px;
+                margin-bottom: 20px;
+            }
+
+            .btn-primary {
+                background-color: var(--primary-color);
+                border-color: var(--primary-color);
+            }
+
+            .btn-primary:hover {
+                background-color: var(--primary-dark);
+                border-color: var(--primary-dark);
+            }
+
+            .btn-warning {
+                background-color: #ffb84d;
+                border-color: #ffb84d;
+                color: white;
+            }
+
+            .btn-warning:hover {
+                background-color: #ffa826;
+                border-color: #ffa826;
+                color: white;
+            }
+
+            .btn-danger {
+                background-color: #ff6b6b;
+                border-color: #ff6b6b;
+            }
+
+            .btn-danger:hover {
+                background-color: #ff4444;
+                border-color: #ff4444;
+            }
+
+            .table-dark {
+                background-color: #4568dc;
+            }
+
+            .table-dark {
+                background-color: #4568dc;
+            }
+
+            .table thead th {
+                background-color: #4568dc;
+                color: white;
+                border-bottom: none;
+                font-weight: 600;
+                text-align: center;
+                /* Center the header text */
+                vertical-align: middle;
+            }
+
+            .table tbody td {
+                text-align: center;
+                /* Center all cell content */
+                vertical-align: middle;
+            }
+
+            .table tbody tr:hover {
+                background-color: var(--secondary-color);
+            }
+
+            /* Additional style to ensure buttons remain centered */
+            .btn-action {
+                margin: 2px;
+                white-space: nowrap;
+                display: inline-block;
+            }
+
+            /* Ensures icons like lock icons are centered */
+            td.text-center {
+                text-align: center !important;
+            }
+
+            .table {
+                box-shadow: #4568dc;
+            }
+
+            .table thead th {
+                border-bottom: none;
+                font-weight: 600;
+            }
+
+            .table tbody tr:hover {
+                background-color: var(--secondary-color);
+            }
+
+            .modal-header {
+                background-color: var(--primary-color);
+                color: var(--text-light);
+                border-radius: 5px 5px 0 0;
+            }
+
+            .modal-footer {
+                border-top: none;
+            }
+
+            .form-control:focus,
+            .form-select:focus {
+                border-color: var(--primary-light);
+                box-shadow: 0 0 0 0.25rem rgba(69, 104, 220, 0.25);
+            }
+
+            .lock-icon {
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+
+            .lock-icon:hover {
+                transform: scale(1.1);
+            }
+
+            .btn-action {
+                margin: 2px;
+                white-space: nowrap;
+            }
+
+            .password-container {
+                position: relative;
+            }
+
+            .password-toggle {
+                position: absolute;
+                right: 10px;
+                top: 50%;
+                transform: translateY(-50%);
+                cursor: pointer;
+                color: var(--primary-color);
+            }
+
+            .status-badge {
+                font-size: 0.8rem;
+                padding: 5px 10px;
+                border-radius: 20px;
+            }
+
+            .status-active {
+                background-color: #28a745;
+                color: white;
+            }
+
+            .status-inactive {
+                background-color: #dc3545;
+                color: white;
+            }
+
+            /* Header styling */
+            .page-header {
+                padding: 20px 0;
+                margin-bottom: 30px;
+                border-bottom: 2px solid var(--primary-color);
+                color: var(--primary-color);
+            }
+
+            .action-column-header {
+                min-width: 100px;
+            }

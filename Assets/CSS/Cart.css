@@ -64,7 +64,7 @@
 }
 
 .block-product .price-per-item {
-     color: var(--bg-red);
+     color: rgb(227, 42, 42);
 }
 
 .block-product .product-cart {

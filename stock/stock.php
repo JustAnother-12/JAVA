@@ -1,4 +1,5 @@
 <?php
+session_start();
 $activeSection = 'home'; // mặc định là Trang chủ
 
 // Nếu có POST (submit form), thì lấy theo form ẩn
@@ -18,7 +19,7 @@ if (isset($_GET['section'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quản lý kho hàng</title>
-    <link rel="stylesheet" href="Assets/style.css">
+    <link rel="stylesheet" href="/Assets/CSS/stockstyle.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
         * { box-sizing: border-box; }
@@ -69,7 +70,7 @@ if (isset($_GET['section'])) {
     <li><a href="?section=import">Lập phiếu nhập</a></li>
     <li><a href="?section=history">Lịch sử nhập</a></li>
     <br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-    <li class="logout"><a href="logout.php"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a></li>
+    <li class="logout"><a href="/gui/account/logout.php"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a></li>
     
 </ul>
 </div>

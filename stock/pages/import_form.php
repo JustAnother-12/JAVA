@@ -2,7 +2,7 @@
 include_once __DIR__ . '/../functions/db.php';
 
 $importID = 'IMP' . date('YmdHis');
-$employeeID = 'EMP999';
+$employeeID = $_SESSION['employeeID'];
 $date = date('Y-m-d');
 
 $supplier_query = mysqli_query($conn, "SELECT SupplierID, SupplierName FROM supplier");

@@ -10,9 +10,9 @@
   --bg-red: #e94f52;
   --bg-flash-sale: linear-gradient(rgba(255, 136, 136, 0.4), rgb(255, 87, 87));
   --body-theme: #232627;
-  --btn-hover: #689af2;
+  --btn-hover: #fc5a5a;
   --border: rgba(113, 156, 227, 0.3);
-  --price-color: #7fc8f5;
+  --price-color: #f57f7f;
   --overlay: rgba(0, 0, 0, 0.5);
   --filter: linear-gradient(rgba(174, 241, 255, 0.5), rgba(255, 255, 255, 0));
   --filter-reverse: linear-gradient(
@@ -46,7 +46,6 @@
 
 @font-face {
   font-family: "Open Sans";
-  src: url(../Font/GFont/Open_Sans/OpenSans-VariableFont_wdth,wght.ttf);
   /* src: url(../Font/GFont/Open_Sans/OpenSans-Italic-VariableFont_wdth\,wght.ttf); */
 }
 
@@ -93,13 +92,13 @@ input[type="text"] {
   -webkit-box-orient: vertical;
 }
 
-input[type = text] {
-     display: -webkit-box;
-     line-clamp: 2;
-     overflow: hidden;
-     -webkit-line-clamp: 2;
-     text-overflow: ellipsis;
-     -webkit-box-orient: vertical;
+input[type="text"] {
+  display: -webkit-box;
+  line-clamp: 2;
+  overflow: hidden;
+  -webkit-line-clamp: 2;
+  text-overflow: ellipsis;
+  -webkit-box-orient: vertical;
 }
 
 /* CSS global */
@@ -596,35 +595,35 @@ input[type = text] {
 }
 
 .menu {
-     animation: menu 0.2s linear;
+  animation: menu 0.2s linear;
 }
 
 @keyframes menu {
-     0% {
-          transform: translateX(-100%);
-     }
+  0% {
+    transform: translateX(-100%);
+  }
 
-     100% {
-          transform: translateX(0%);
-     }
+  100% {
+    transform: translateX(0%);
+  }
 }
 
 .menu {
-     animation: menu 0.2s linear;
+  animation: menu 0.2s linear;
 }
 
 @keyframes menu {
-     0% {
-          transform: translateX(-100%);
-     }
+  0% {
+    transform: translateX(-100%);
+  }
 
-     100% {
-          transform: translateX(0%);
-     }
+  100% {
+    transform: translateX(0%);
+  }
 }
 
 .overflowText {
-     animation: overflowText 0.2s linear;
+  animation: overflowText 0.2s linear;
 }
 
 @keyframes overflowText {
@@ -674,7 +673,7 @@ input[type = text] {
 
 /* other */
 .container {
-     position: relative;
+  position: relative;
 }
 
 .text-content {
@@ -728,19 +727,19 @@ input[type = text] {
 }
 
 .hidden {
-     visibility: hidden;
+  visibility: hidden;
 }
 
 .show {
-     visibility: visible;
+  visibility: visible;
 }
 
 .hidden {
-     visibility: hidden;
+  visibility: hidden;
 }
 
 .show {
-     visibility: visible;
+  visibility: visible;
 }
 
 .success-color {
@@ -753,7 +752,8 @@ input[type = text] {
 
 .error-color,
 .exit-color {
-  color: var(--bg-red);
+  font-weight: bold;
+  color: rgb(255, 255, 255);
 }
 
 /* dots */
@@ -809,24 +809,4 @@ input[type = text] {
   padding-bottom: 1em;
   border-radius: var(--normal-radius);
   color: var(--bg-red);
-}
-
-.pagination {
-  display: flex;
-  gap: 8px;
-  justify-content: center;
-  margin-top: 16px;
-}
-
-.pagination-btn {
-  padding: 8px 12px;
-  border: 1px solid #ccc;
-  background-color: #fff;
-  cursor: pointer;
-}
-
-.pagination-btn.active {
-  background-color: var(--main-color);
-  color: white;
-  border-color: var(--main-color);
 }

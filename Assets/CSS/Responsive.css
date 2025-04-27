@@ -120,11 +120,24 @@
           overflow-x: auto;
           flex-wrap: nowrap;
      }
+     #main-content .category-tab .product-containerr {
+          overflow-x: auto;
+          flex-wrap: nowrap;
+     }
+     #main-content .category-tab .product-containerrr {
+          overflow-x: auto;
+          flex-wrap: nowrap;
+     }
 
      #main-content .category-tab .product-container::-webkit-scrollbar {
           display: none;
      }
-
+     #main-content .category-tab .product-containerr::-webkit-scrollbar {
+          display: none;
+     }
+     #main-content .category-tab .product-containerrr::-webkit-scrollbar {
+          display: none;
+     }
      #main-content .category-tab {
           overflow-x: hidden;
      }

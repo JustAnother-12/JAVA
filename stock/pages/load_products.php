@@ -81,7 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['action'] === 'edit') {
 
 // Phân trang + Tìm kiếm
 $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
-$limit = 6;
+$limit = 5;
 $offset = ($page - 1) * $limit;
 $keyword = isset($_GET['keyword']) ? trim($_GET['keyword']) : '';
 $keywordLike = '%' . $conn->real_escape_string($keyword) . '%';
@@ -99,8 +99,8 @@ if (in_array($sortField, $validFields) && in_array($sortOrder, $validOrders)) {
 
 
 if (!empty($keyword)) {
-    $countStmt = $conn->prepare("SELECT COUNT(*) AS total FROM product WHERE ProductID LIKE ?");
-    $countStmt->bind_param("s", $keywordLike);
+    $countStmt = $conn->prepare("SELECT COUNT(*) AS total FROM product WHERE ProductID LIKE ? OR ProductName LIKE ?");
+    $countStmt->bind_param("ss", $keywordLike,$keywordLike);
     $countStmt->execute();
     $totalResult = $countStmt->get_result();
 } else {
@@ -115,11 +115,11 @@ if (!empty($keyword)) {
         SELECT p.*, tp.TypeID
         FROM product p
         LEFT JOIN type_product tp ON p.ProductID = tp.ProductID
-        WHERE p.ProductID LIKE ?
+        WHERE p.ProductID LIKE ? OR p.ProductName LIKE ?
         $orderClause
         LIMIT ? OFFSET ?
     ");
-    $stmt->bind_param("sii", $keywordLike, $limit, $offset);
+    $stmt->bind_param("ssii", $keywordLike,$keywordLike, $limit, $offset);
     $stmt->execute();
     $result = $stmt->get_result();
 } else {
@@ -163,7 +163,9 @@ if (!empty($keyword)) {
         <td><?= $row['Price'] ?></td>
         <td><?= htmlspecialchars($row['Description']) ?></td>
         <td><?= htmlspecialchars($row['SupplierID']) ?></td>
-        <td><?= htmlspecialchars($row['Status']) ?></td>
+        <td>
+        <?= ($row['Status'] == 1) ? 'Hoạt động' : 'Ngừng hoạt động'; ?>
+        </td>
         <td style="text-align: center;">
             <a href="#" class="edit-btn" data-id="<?= $row['ProductID'] ?>" title="Chỉnh sửa">✏️</a>
             &nbsp;
@@ -198,6 +200,7 @@ if (!empty($keyword)) {
         <a href="#" class="page-link" data-page="<?= $totalPages ?>" data-keyword="<?= htmlspecialchars($keyword) ?>">»</a>
     <?php endif; ?>
 </div>
+<input type="hidden" id="totalPages" value="<?= $totalPages ?>">
 <?php endif; ?>
 
 

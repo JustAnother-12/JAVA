@@ -10,6 +10,9 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
+$(document).on('input', '.only-number', function () {
+    this.value = this.value.replace(/[^0-9]/g, '');
+});    
 function loadSuppliers(page = 1) {
     $.get("pages/supplier_load.php", { page }, function (data) {
         $("#supplierTable").html(data);
@@ -27,7 +30,7 @@ function loadSuppliers(page = 1) {
     <td><input type="text" name="SupplierID" placeholder="Mã NCC"></td>
     <td><input type="text" name="SupplierName" placeholder="Tên nhà cung cấp"></td>
     <td><input type="text" name="Address" placeholder="Địa chỉ"></td>
-    <td><input type="text" name="Phone" placeholder="SĐT"></td>
+    <td><input type="text" name="Phone" placeholder="SĐT" class="only-number"></td>
     <td><input type="text" name="Email" placeholder="Email"></td>
     <td>
         <button class="save-supplier">💾</button>
@@ -89,7 +92,7 @@ function loadSuppliers(page = 1) {
         <td>${data.SupplierID}</td>
         <td><input type="text" name="SupplierName" value="${data.SupplierName}"></td>
         <td><input type="text" name="Address" value="${data.Address}"></td>
-        <td><input type="text" name="Phone" value="${data.Phone}"></td>
+        <td><input type="text" name="Phone" value="${data.Phone}" class="only-number"></td>
         <td><input type="text" name="Email" value="${data.Email}"></td>
         <td>
             <button class="save-edit">💾</button>

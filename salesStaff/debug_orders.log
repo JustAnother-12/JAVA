@@ -1,0 +1,40 @@
+[2025-04-05 14:23:32] Bắt đầu duyệt tất cả sản phẩm - SalesID: S001
+[2025-04-05 14:23:32] Kết quả duyệt tất cả - Số sản phẩm đã duyệt: 1
+[2025-04-05 14:23:38] Bắt đầu duyệt tất cả sản phẩm - SalesID: S002
+[2025-04-05 14:23:38] Kết quả duyệt tất cả - Số sản phẩm đã duyệt: 1
+[2025-04-05 14:27:07] Bắt đầu duyệt tất cả sản phẩm - SalesID: S001
+[2025-04-05 14:27:07] Kết quả duyệt tất cả - Số sản phẩm đã duyệt: 1
+[2025-04-05 14:33:43] Bắt đầu duyệt tất cả sản phẩm - SalesID: S001
+[2025-04-05 14:33:43] Kết quả duyệt tất cả - Số sản phẩm đã duyệt: 1
+[2025-04-05 14:33:47] Bắt đầu hủy tất cả sản phẩm - SalesID: S002
+[2025-04-05 14:33:47] Cập nhật số lượng cho sản phẩm ID: GAME002, Số lượng: 3
+[2025-04-05 14:33:47] Kết quả hủy tất cả - Số sản phẩm đã hủy: 1, Sản phẩm đã cập nhật số lượng: 40
+[2025-04-05 14:36:40] Bắt đầu duyệt tất cả sản phẩm - SalesID: S002
+[2025-04-05 14:36:40] Kết quả duyệt tất cả - Số sản phẩm đã duyệt: 1
+[2025-04-05 14:36:46] Bắt đầu hủy tất cả sản phẩm - SalesID: S001
+[2025-04-05 14:36:46] Cập nhật số lượng cho sản phẩm ID: GAME001, Số lượng: 2
+[2025-04-05 14:36:46] Kết quả hủy tất cả - Số sản phẩm đã hủy: 1, Sản phẩm đã cập nhật số lượng: 40
+[2025-04-19 14:25:48] Bắt đầu duyệt tất cả sản phẩm - SalesID: 8
+[2025-04-19 14:25:48] Kết quả duyệt tất cả - Số sản phẩm đã duyệt: 3
+[2025-04-20 09:51:00] Bắt đầu hủy tất cả sản phẩm - SalesID: 7
+[2025-04-20 09:51:00] Cập nhật số lượng cho sản phẩm ID: GAME028, Số lượng: 1
+[2025-04-20 09:51:00] Cập nhật số lượng cho sản phẩm ID: GAME031, Số lượng: 1
+[2025-04-20 09:51:00] Cập nhật số lượng cho sản phẩm ID: GAME010, Số lượng: 1
+[2025-04-20 09:51:00] Cập nhật số lượng cho sản phẩm ID: GAME015, Số lượng: 2
+[2025-04-20 09:51:00] Kết quả hủy tất cả - Số sản phẩm đã hủy: 4, Sản phẩm đã cập nhật số lượng: 160
+[2025-04-20 09:55:30] Bắt đầu duyệt tất cả sản phẩm - SalesID: 8
+[2025-04-20 09:55:30] Kết quả duyệt tất cả - Số sản phẩm đã duyệt: 5
+[2025-04-20 09:55:35] Bắt đầu duyệt tất cả sản phẩm - SalesID: 7
+[2025-04-20 09:55:35] Kết quả duyệt tất cả - Số sản phẩm đã duyệt: 4
+[2025-04-21 17:29:32] Bắt đầu duyệt tất cả sản phẩm - SalesID: 14
+[2025-04-21 17:29:32] Kết quả duyệt tất cả - Số sản phẩm đã duyệt: 2
+[2025-04-21 17:29:35] Bắt đầu duyệt tất cả sản phẩm - SalesID: 13
+[2025-04-21 17:29:35] Kết quả duyệt tất cả - Số sản phẩm đã duyệt: 2
+[2025-04-21 17:29:38] Bắt đầu duyệt tất cả sản phẩm - SalesID: 11
+[2025-04-21 17:29:38] Kết quả duyệt tất cả - Số sản phẩm đã duyệt: 3
+[2025-04-21 17:29:41] Bắt đầu duyệt tất cả sản phẩm - SalesID: 9
+[2025-04-21 17:29:41] Kết quả duyệt tất cả - Số sản phẩm đã duyệt: 6
+[2025-04-21 17:29:44] Bắt đầu duyệt tất cả sản phẩm - SalesID: 8
+[2025-04-21 17:29:44] Kết quả duyệt tất cả - Số sản phẩm đã duyệt: 5
+[2025-04-21 17:29:47] Bắt đầu duyệt tất cả sản phẩm - SalesID: 12
+[2025-04-21 17:29:47] Kết quả duyệt tất cả - Số sản phẩm đã duyệt: 4

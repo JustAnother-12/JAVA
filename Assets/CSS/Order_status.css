@@ -126,18 +126,23 @@
 
 .history-order-table .block-product {
      margin-bottom: 1em;
-     flex-basis: calc(50% - 0.5em);
+     flex-basis: calc(33.33% - 1em);
      display: flex;
-     flex-flow: column;
+     flex-flow: row wrap;
      justify-content: space-between;
 }
 
 .history-order-table .block-product .cart-content {
      height: 100%;
-     padding: 0.5em;
-     border-radius: var(--normal-radius);
-     border: 1px solid var(--main-color);
-     box-shadow: 0 0 1px var(--primary-dark);
+     background-color: #fff;
+     border-radius: 8px;
+     border: 3px solid var(--main-color);
+     padding: 10px;
+     width: 300px;
+     display: flex;
+     flex-direction: column;
+     justify-content: space-between;
+     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.05);
 }
 
 #history-order-container .block-product img {
