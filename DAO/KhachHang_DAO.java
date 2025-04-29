@@ -60,14 +60,14 @@ public class KhachHang_DAO {
     public KhachHang_DTO getKhachHangfromID(String id){
         if (OpenConnection()) {
             try {            
-                String sql = "SELECT * FROM KHACHHANG WHERE KHACHHANG.makh="+id;
+                String sql = "SELECT * FROM KHACHHANG WHERE KHACHHANG.makh='"+id+"'";
                 Statement stmt = con.createStatement();
                 ResultSet rs = stmt.executeQuery(sql);
                 if (rs.next()){
                     String idkh = rs.getString("makh");
                     String ten = rs.getString("tenkh");
                     String sdt = rs.getString("sdt");
-                    String gioitinh = rs.getString("gioitinh");
+                    String gioitinh = rs.getString("gioi");
                     String emailkh = rs.getString("email");
                     String date = rs.getString("ngaysinh");
                     String diachi = rs.getString("diachikh");

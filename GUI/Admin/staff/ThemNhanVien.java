@@ -3,13 +3,14 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import java.util.HashSet;
 import javax.swing.table.DefaultTableModel;
-import DAO.ThemNhanVien_DAO;
+
+import BLL.NhanVien_BLL;
 public class ThemNhanVien extends javax.swing.JDialog{
-        private JTextField txtName, txtPosition, txtPhone, txtUsername, txtPassword, txtAddress, txtCCCD, txtBirthday;
+        private JTextField txtName, txtPhone, txtUsername, txtPassword, txtAddress, txtCCCD, txtBirthday;
         private JButton btnSave, btnCancel;
+        private JComboBox<String> cbPosition;
         private JComboBox<String> cbGender;
         private DefaultTableModel tableModel;
         
@@ -28,26 +29,8 @@ public class ThemNhanVien extends javax.swing.JDialog{
             add(txtName);
     
             add(new JLabel("Chức vụ:"));
-            txtPosition = new JTextField();
-            txtPosition.setText("Chọn chức vụ");
-            txtPosition.setEditable(false);
-            JPopupMenu popupMenu = new JPopupMenu();
-            String[] positions = {
-                "Quản lý kho", "Quản lý khách hàng", "Quản lý nhân viên", "Quản lý đơn hàng"
-            };
-    
-            for (String pos : positions) {
-                JMenuItem item = new JMenuItem(pos);
-                item.addActionListener(e -> txtPosition.setText(pos));
-                popupMenu.add(item);
-            }
-            txtPosition.addMouseListener(new java.awt.event.MouseAdapter() {
-                @Override
-                public void mouseClicked(java.awt.event.MouseEvent evt) {
-                    popupMenu.show(txtPosition, 0, txtPosition.getHeight());
-                }
-            });
-            add(txtPosition);
+            cbPosition = new JComboBox<>(new String[]{"Quản lý kho", "Quản lý khách hàng", "Quản lý nhân viên", "Quản lý đơn hàng"});
+            add(cbPosition);
     
             add(new JLabel("Số Điện thoại:"));
             txtPhone = new JTextField();
@@ -87,8 +70,10 @@ public class ThemNhanVien extends javax.swing.JDialog{
             btnSave.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    ThemNhanVien_DAO addStaff = new ThemNhanVien_DAO();
-                    addStaff.addStaff(txtName, txtPosition, txtPhone, txtUsername, txtPassword, txtAddress, txtCCCD, txtBirthday,cbGender,tableModel,existingIDs);
+                    NhanVien_BLL NhanVien_BLL = new NhanVien_BLL();
+                    boolean nhanvien = NhanVien_BLL.addStaff(txtName, txtPhone, txtUsername, txtAddress, txtBirthday, cbPosition, cbGender, txtCCCD, txtPassword, tableModel, existingIDs);
+                    if (nhanvien == true)
+                        dispose();
                 }
             });
     

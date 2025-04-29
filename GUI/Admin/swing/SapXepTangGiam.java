@@ -1,4 +1,4 @@
-package BLL;
+package GUI.Admin.swing;
 
 import java.util.Collections;
 import javax.swing.*;

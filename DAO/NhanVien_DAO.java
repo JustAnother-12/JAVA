@@ -94,7 +94,7 @@ public class NhanVien_DAO extends javax.swing.JPanel {
                     rs.getString("chucvu"),
                     rs.getString("sdt"),
                     rs.getString("username"),
-                    rs.getString("password"),
+                    rs.getString("passwordnv"),
                     rs.getString("diachinv"),
                     rs.getString("CCCD"),
                     rs.getString("gioitinh"),

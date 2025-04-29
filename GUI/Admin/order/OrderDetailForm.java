@@ -9,8 +9,6 @@ import javax.swing.*;
 import DTO.Order_DTO;
 import DTO.OrderDetail_DTO;
 
-import java.util.*;
-
 
 public class OrderDetailForm extends javax.swing.JDialog {
     private JTextArea txtOrderInfo,txtOrderDetailInfo;

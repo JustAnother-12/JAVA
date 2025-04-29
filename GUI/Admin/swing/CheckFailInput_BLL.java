@@ -1,8 +1,9 @@
-package BLL;
+package GUI.Admin.swing;
 
 
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+import javax.swing.JComboBox;
 import javax.swing.table.DefaultTableModel;
 import java.util.*;
 public class CheckFailInput_BLL extends javax.swing.JDialog {
@@ -12,8 +13,8 @@ public class CheckFailInput_BLL extends javax.swing.JDialog {
             }
         }
         
-        public boolean validateFields(boolean isCustomer,JTextField txtName,JTextField txtPhone,JTextField txtUsername,JTextField txtAddress, JTextField txtBirthday ,JTextField txtEmail,JTextField txtPosition,JTextField txtCCCD) {
-        if (!isValidName(txtName.getText())) {
+        public boolean validateFields(boolean isCustomer,JTextField txtName,JTextField txtPhone,JTextField txtUsername,JTextField txtAddress, JTextField txtBirthday ,JTextField txtEmail,JComboBox<String> cbPosition,JTextField txtCCCD) {
+        if (isValidName(txtName.getText())) {
             JOptionPane.showMessageDialog(this, "Họ tên phải là chữ!", "Lỗi", JOptionPane.ERROR_MESSAGE);
             return false;
         }
@@ -30,10 +31,10 @@ public class CheckFailInput_BLL extends javax.swing.JDialog {
             return false;
         }
         if (!isCustomer) {
-            if (!isValidName(txtPosition.getText())) {
-                JOptionPane.showMessageDialog(this, "Chức vụ phải là chữ!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-                return false;
-            }
+            // if (!isValidName(txtPosition.getText())) {
+            //     JOptionPane.showMessageDialog(this, "Chức vụ phải là chữ!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            //     return false;
+            // }
             if (!isNumeric(txtCCCD.getText()) || txtCCCD.getText().length() != 12) {
                 JOptionPane.showMessageDialog(this, "Căn cước phải là 12 số!", "Lỗi", JOptionPane.ERROR_MESSAGE);
                 return false;
@@ -43,7 +44,7 @@ public class CheckFailInput_BLL extends javax.swing.JDialog {
     }
     
     public boolean isValidName(String name) {
-        return name.matches("[a-zA-Z\\s]+"); // Kiểm tra chỉ chứa chữ và khoảng trắng
+        return isNumeric(name); // Kiểm tra chỉ chứa chữ và khoảng trắng
     }
 
     public boolean isNumeric(String str) {

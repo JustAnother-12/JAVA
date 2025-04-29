@@ -6,13 +6,10 @@ import GUI.Admin.staff.NhanVienTable;
 
 import javax.swing.*;
 import java.awt.Color;
-import java.awt.event.ActionEvent;  
-import java.awt.event.ActionListener;
 import GUI.Admin.customer.CustomerTable;
 import GUI.Admin.order.OrderTable;
 // import GUI.Admin.product.ProdmaFrame;
 import GUI.Admin.swing.*;
-import java.awt.event.InputMethodEvent;
 
 public class Main extends JFrame {
     NhanVienTable accountForm;
@@ -153,8 +150,6 @@ public class Main extends JFrame {
 
         setLocationRelativeTo(null);
     }
-
-
 
     public static void main(String args[]) {
         new Main().setVisible(true);

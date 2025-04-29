@@ -6,9 +6,9 @@ import java.util.ArrayList;
 public class Order_BLL {
     Order_DAO orderDao = new Order_DAO();
 
-    public ArrayList<Order_DTO> getAllOrder(){
-        return orderDao.getAllOrder();
-    }
+    // public ArrayList<Order_DTO> getAllOrder(){
+    //     return orderDao.getAllOrder();
+    // }
 
     public OrderDetail_DTO getDetails(String id){
         return orderDao.getDetailForOrder(id);

@@ -10,16 +10,16 @@ import java.util.Date;
 import java.util.HashSet;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.*;
-import BLL.CheckFailInput_BLL;
+import GUI.Admin.swing.CheckFailInput_BLL;
 
 public class ThemNhanVien_DAO extends javax.swing.JDialog {
-    public void addStaff(JTextField txtName,JTextField txtPosition,JTextField txtPhone,JTextField txtUsername,JTextField txtPassword,JTextField txtAddress,JTextField txtCCCD,JTextField txtBirthday,JComboBox<String> cbGender,DefaultTableModel tableModel,HashSet<String> existingIDs) {
+    public void addStaff(JTextField txtName,JComboBox<String> txtPosition,JTextField txtPhone,JTextField txtUsername,JTextField txtPassword,JTextField txtAddress,JTextField txtCCCD,JTextField txtBirthday,JComboBox<String> cbGender,DefaultTableModel tableModel,HashSet<String> existingIDs) {
             String name = txtName.getText();
-            String position = txtPosition.getText();
-            if (position.equals("Chọn chức vụ")) {
-                JOptionPane.showMessageDialog(this, "Vui lòng chọn chức vụ!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
+            String position = (String) txtPosition.getSelectedItem();
+            // if (position.equals("Chọn chức vụ")) {
+            //     JOptionPane.showMessageDialog(this, "Vui lòng chọn chức vụ!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            //     return;
+            // }
             String phone = txtPhone.getText();
             String username = txtUsername.getText();
             String password = txtPassword.getText();
@@ -39,12 +39,8 @@ public class ThemNhanVien_DAO extends javax.swing.JDialog {
             }
             String formattedDate = outputFormat.format(date);
             // Kiểm tra ràng buộc
-            if (!themnv.isValidName(name)) {
+            if (themnv.isValidName(name)) {
                 JOptionPane.showMessageDialog(this, "Họ tên phải là chữ!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-            if (!themnv.isValidName(position)) {
-                JOptionPane.showMessageDialog(this, "Chức vụ phải là chữ!", "Lỗi", JOptionPane.ERROR_MESSAGE);
                 return;
             }
             if (gender == null) {
@@ -68,8 +64,21 @@ public class ThemNhanVien_DAO extends javax.swing.JDialog {
             do {
                 id = themnv.generateRandomID();
             } while (isIDExists(id));
+            if (isSDTExists(phone)) {
+                JOptionPane.showMessageDialog(this, "Số điện thoại đã tòn tại. Vui lòng nhập lại", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            if (isCCCDExists(cccd)) {
+                JOptionPane.showMessageDialog(this, "CCCD đã tòn tại. Vui lòng nhập lại", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            if (isUserNameExists(username)) {
+                JOptionPane.showMessageDialog(this, "Username đã tòn tại. Vui lòng nhập lại", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
             try (Connection conn = DatabaseConnection.getConnection()) {
-                String insertQuery = "INSERT INTO NHANVIEN (manv,tennv, chucvu, sdt, username, password, diachinv, CCCD, gioitinh, ngaysinh) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                String insertQuery = "INSERT INTO NHANVIEN (manv,tennv, chucvu, sdt, username, passwordnv, diachinv, CCCD, gioitinh, ngaysinh) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
                 PreparedStatement pstmt = conn.prepareStatement(insertQuery);
                 pstmt.setString(1, id); // Thêm ID ngẫu nhiên vào cơ sở dữ liệu
                 pstmt.setString(2, name);
@@ -101,6 +110,48 @@ public class ThemNhanVien_DAO extends javax.swing.JDialog {
                 String checkQuery = "SELECT COUNT(*) FROM NHANVIEN WHERE manv = ?";
                 PreparedStatement pstmt = conn.prepareStatement(checkQuery);
                 pstmt.setString(1, id);
+                ResultSet rs = pstmt.executeQuery();
+                if (rs.next()) {
+                    return rs.getInt(1) > 0; // Nếu có ít nhất 1 bản ghi thì ID đã tồn tại
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            return false; // ID không tồn tại
+        }
+        public boolean isSDTExists(String sdt) {
+            try (Connection conn = DatabaseConnection.getConnection()) {
+                String checkQuery = "SELECT COUNT(*) FROM NHANVIEN WHERE sdt = ?";
+                PreparedStatement pstmt = conn.prepareStatement(checkQuery);
+                pstmt.setString(1, sdt);
+                ResultSet rs = pstmt.executeQuery();
+                if (rs.next()) {
+                    return rs.getInt(1) > 0; // Nếu có ít nhất 1 bản ghi thì ID đã tồn tại
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            return false; // ID không tồn tại
+        }
+        public boolean isUserNameExists(String username) {
+            try (Connection conn = DatabaseConnection.getConnection()) {
+                String checkQuery = "SELECT COUNT(*) FROM NHANVIEN WHERE username = ?";
+                PreparedStatement pstmt = conn.prepareStatement(checkQuery);
+                pstmt.setString(1, username);
+                ResultSet rs = pstmt.executeQuery();
+                if (rs.next()) {
+                    return rs.getInt(1) > 0; // Nếu có ít nhất 1 bản ghi thì ID đã tồn tại
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            return false; // ID không tồn tại
+        }
+        public boolean isCCCDExists(String cccd) {
+            try (Connection conn = DatabaseConnection.getConnection()) {
+                String checkQuery = "SELECT COUNT(*) FROM NHANVIEN WHERE CCCD = ?";
+                PreparedStatement pstmt = conn.prepareStatement(checkQuery);
+                pstmt.setString(1, cccd);
                 ResultSet rs = pstmt.executeQuery();
                 if (rs.next()) {
                     return rs.getInt(1) > 0; // Nếu có ít nhất 1 bản ghi thì ID đã tồn tại

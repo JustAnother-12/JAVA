@@ -30,6 +30,13 @@
             "name": "Main",
             "request": "launch",
             "mainClass": "GUI.Admin.Main",
+            "projectName": "JAVA_136c8796"
+        },
+        {
+            "type": "java",
+            "name": "Main",
+            "request": "launch",
+            "mainClass": "GUI.Admin.Main",
             "projectName": "JAVA_1c7fabf8"
         },
         {
