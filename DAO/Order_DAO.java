@@ -4,6 +4,10 @@ import DTO.*;
 import java.sql.*;
 import java.util.ArrayList;
 
+import javax.swing.table.DefaultTableModel;
+
+import GUI.Admin.swing.FormatDate_BLL;
+
 public class Order_DAO {
     private Connection con;
 
@@ -27,49 +31,100 @@ public class Order_DAO {
             System.out.println(e.getMessage());
         }
     }
-    
+    public void loadDataFormDatabase(DefaultTableModel tableModel,ArrayList<Order_DTO> orderList,ArrayList<OrderDetail_DTO> orderDetailList) {
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            String query = "SELECT d.madonhang, d.diachidat, d.ngaydat, d.tinhtrang, d.tongtien, d.manv, d.makh, ct.masp, ct.soluong, ct.dongia, ct.thanhtien FROM DONHANG d JOIN CHITIETDONHANG ct ON d.madonhang = ct.madonhang";
+            PreparedStatement pstmt = conn.prepareStatement(query);
+            ResultSet rs = pstmt.executeQuery();
 
-    public ArrayList<Order_DTO> getAllOrder(){
-        ArrayList<Order_DTO> arr = new  ArrayList<>();
-        if (OpenConnection()){
-            try{
-                String query = "SELECT * FROM DONHANG";
-        
-                PreparedStatement pstmt = con.prepareStatement(query);
-                ResultSet rs = pstmt.executeQuery();
-                while (rs.next()) {
-                    // Lấy dữ liệu đơn hàng
-                    String madonhang = rs.getString("madonhang");
-                    String diachidat = rs.getString("diachidat");
-                    String ngaydat = rs.getString("ngaydat");
-                    String tinhtrang = rs.getString("tinhtrang");
-                    double tongtien = rs.getDouble("tongtien");
-                    String manv = rs.getString("manv");
-                    String makh = rs.getString("makh");
-                    // String tenkh = "";
-
-                    // // Tìm tên khách hanngf trong csdl
-                    // String queryFindUser = "SELECT tenkh FROM KHACHHANG WHERE makh = ?";
-                    // try (PreparedStatement findName = con.prepareStatement(queryFindUser)) {
-                    //     findName.setString(1, makh);
-                    //     ResultSet rsTenKH = findName.executeQuery();
-                    //     if (rsTenKH.next()) {
-                    //         tenkh = rsTenKH.getString("tenkh");
-                    //     }
-                    // }
-
-                    // Tạo đối tượng Order
-                    Order_DTO order = new Order_DTO(madonhang, diachidat, ngaydat, tinhtrang, tongtien, manv, makh);
-                    arr.add(order);
+            while (rs.next()) {
+                // Lấy dữ liệu đơn hàng
+                String madonhang = rs.getString("madonhang");
+                String diachidat = rs.getString("diachidat");
+                String ngaydat = rs.getString("ngaydat");
+                String tinhtrang = rs.getString("tinhtrang");
+                double tongtien = rs.getDouble("tongtien");
+                String manv = rs.getString("manv");
+                String makh = rs.getString("makh");
+                String tenkh = "";
+                String queryFindUser = "SELECT tenkh FROM KHACHHANG WHERE makh = ?";
+                try (PreparedStatement findName = conn.prepareStatement(queryFindUser)) {
+                    findName.setString(1, makh);
+                    ResultSet rsTenKH = findName.executeQuery();
+                    if (rsTenKH.next()) {
+                        tenkh = rsTenKH.getString("tenkh");
+                    }
                 }
-            } catch (SQLException e) {
-                System.out.println(e.getMessage());
-            } finally{
-                closeConnection();
+                // Tạo đối tượng Order
+                Order_DTO order = new Order_DTO(madonhang, diachidat, ngaydat, tinhtrang, tongtien, manv, makh);
+                orderList.add(order);
+                FormatDate_BLL temp = new FormatDate_BLL();
+                String Date = temp.convertDateFormat(ngaydat);
+                tableModel.addRow(new Object[] {
+                madonhang,tenkh,tinhtrang,Date,tongtien,"Tác vụ"
+                //Hiển thị lên bảng (JTable)
+            });
+            // Lấy dữ liệu chi tiết đơn hàng
+            String masp = rs.getString("masp");
+            int soluong = rs.getInt("soluong");
+            double dongia = rs.getDouble("dongia");
+            double thanhtien = rs.getDouble("thanhtien");
+
+            // Tạo đối tượng OrderDetail
+            OrderDetail_DTO detail = new OrderDetail_DTO(madonhang, masp, soluong, dongia, thanhtien);
+            orderDetailList.add(detail);
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        return arr;
+        // orderList = orderbll.getAllOrder();
+        // for(Order_DTO order : orderList){
+        //     OrderDetail_DTO detail = orderbll.getDetails(order.getMadonhang());
+        //     orderDetailList.add(detail);
+        // }
     }
+
+    // public ArrayList<Order_DTO> getAllOrder(){
+    //     ArrayList<Order_DTO> arr = new  ArrayList<>();
+    //     if (OpenConnection()){
+    //         try{
+    //             String query = "SELECT * FROM DONHANG";
+        
+    //             PreparedStatement pstmt = con.prepareStatement(query);
+    //             ResultSet rs = pstmt.executeQuery();
+    //             while (rs.next()) {
+    //                 // Lấy dữ liệu đơn hàng
+    //                 String madonhang = rs.getString("madonhang");
+    //                 String diachidat = rs.getString("diachidat");
+    //                 String ngaydat = rs.getString("ngaydat");
+    //                 String tinhtrang = rs.getString("tinhtrang");
+    //                 double tongtien = rs.getDouble("tongtien");
+    //                 String manv = rs.getString("manv");
+    //                 String makh = rs.getString("makh");
+    //                 // String tenkh = "";
+
+    //                 // // Tìm tên khách hanngf trong csdl
+    //                 // String queryFindUser = "SELECT tenkh FROM KHACHHANG WHERE makh = ?";
+    //                 // try (PreparedStatement findName = con.prepareStatement(queryFindUser)) {
+    //                 //     findName.setString(1, makh);
+    //                 //     ResultSet rsTenKH = findName.executeQuery();
+    //                 //     if (rsTenKH.next()) {
+    //                 //         tenkh = rsTenKH.getString("tenkh");
+    //                 //     }
+    //                 // }
+
+    //                 // Tạo đối tượng Order
+    //                 Order_DTO order = new Order_DTO(madonhang, diachidat, ngaydat, tinhtrang, tongtien, manv, makh);
+    //                 arr.add(order);
+    //             }
+    //         } catch (SQLException e) {
+    //             System.out.println(e.getMessage());
+    //         } finally{
+    //             closeConnection();
+    //         }
+    //     }
+    //     return arr;
+    // }
 
     public OrderDetail_DTO getDetailForOrder(String id){
         if (OpenConnection()){

@@ -1,4 +1,4 @@
-package BLL;
+package GUI.Admin.swing;
 
 import javax.swing.*;
 import javax.swing.table.TableCellRenderer;

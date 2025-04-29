@@ -1,6 +1,7 @@
 package GUI.Admin.order;
 
 import DAO.DatabaseConnection;
+import DAO.Order_DAO;
 import DTO.Order_DTO;
 import DTO.OrderDetail_DTO;
 import GUI.Admin.component.Header;
@@ -11,9 +12,9 @@ import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import javax.swing.table.*;
-import BLL.NutGiaoDien_BLL;
-import BLL.NutSuKien_BLL;
-import BLL.Order_BLL;
+import GUI.Admin.swing.NutGiaoDien_BLL;
+import GUI.Admin.swing.NutSuKien_BLL;
+import BLL.DonHang_BLL;
 
 
 public class OrderTable extends javax.swing.JPanel implements Header.searchListener{
@@ -21,7 +22,7 @@ public class OrderTable extends javax.swing.JPanel implements Header.searchListe
     private JTable table;
     private ArrayList<Order_DTO> orderList = new ArrayList<>();
     private ArrayList<OrderDetail_DTO> orderDetailList = new ArrayList<>();
-    private Order_BLL orderbll = new Order_BLL();
+    private DonHang_BLL DonHang_BLL = new DonHang_BLL();
 
     public OrderTable() {
         initComponents();
@@ -74,16 +75,16 @@ public class OrderTable extends javax.swing.JPanel implements Header.searchListe
         }
 
         // Thêm dữ liệu mẫu
-        loadDataFormDatabase();
+        DonHang_BLL.LoadDataToTabel(tableModel, orderList, orderDetailList);
         // Cột "Tác vụ" có 3 nút "Xác nhận" "Chi tiết" và "Xóa"
-        table.getColumn("Tác vụ").setCellRenderer(new NutGiaoDien_BLL("order"));
+        table.getColumn("Tác vụ").setCellRenderer(new NutGiaoDien_BLL("order",orderList));
         table.getColumn("Tác vụ").setCellEditor(new NutSuKien_BLL(this, tableModel));
         table.getColumnModel().getColumn(0).setPreferredWidth(100); // Mã đơn hàng
         table.getColumnModel().getColumn(1).setPreferredWidth(150); // Tên khách hàng
         table.getColumnModel().getColumn(2).setPreferredWidth(100); // Tình trạng
         table.getColumnModel().getColumn(3).setPreferredWidth(100); // Ngày đặt
         table.getColumnModel().getColumn(4).setPreferredWidth(100); // Tổng tiền
-        table.getColumnModel().getColumn(5).setPreferredWidth(230); // Tác vụ 
+        table.getColumnModel().getColumn(5).setPreferredWidth(250); // Tác vụ 
         // ScrollPane chứa bảng
         JScrollPane scrollPane = new JScrollPane(table);
         scrollPane.setBounds(2, 40 , 770, 570);
@@ -126,64 +127,6 @@ public class OrderTable extends javax.swing.JPanel implements Header.searchListe
 
 
 
-    private void loadDataFormDatabase() {
-//         try (Connection conn = DatabaseConnection.getConnection()) {
-//         String query = "SELECT d.madonhang, d.diachidat, d.ngaydat, d.tinhtrang, d.tongtien, d.manv, d.makh, ct.masp, ct.soluong, ct.dongia, ct.thanhtien FROM DONHANG d JOIN CHITIETDONHANG ct ON d.madonhang = ct.madonhang";
-//         PreparedStatement pstmt = conn.prepareStatement(query);
-//         ResultSet rs = pstmt.executeQuery();
-
-//         while (rs.next()) {
-//             // Lấy dữ liệu đơn hàng
-//             String madonhang = rs.getString("madonhang");
-//             String diachidat = rs.getString("diachidat");
-//             String ngaydat = rs.getString("ngaydat");
-//             String tinhtrang = rs.getString("tinhtrang");
-//             double tongtien = rs.getDouble("tongtien");
-//             String manv = rs.getString("manv");
-//             String makh = rs.getString("makh");
-//             String tenkh = "";
-//             String queryFindUser = "SELECT tenkh FROM KHACHHANG WHERE makh = ?";
-//             try (PreparedStatement findName = conn.prepareStatement(queryFindUser)) {
-//                 findName.setString(1, makh);
-//                 ResultSet rsTenKH = findName.executeQuery();
-//                 if (rsTenKH.next()) {
-//                     tenkh = rsTenKH.getString("tenkh");
-//                 }
-//             }
-//             // Tạo đối tượng Order
-//             Order_DTO order = new Order_DTO(madonhang, diachidat, ngaydat, tinhtrang, tongtien, manv, makh);
-//             orderList.add(order);
-//             String Date = convertDateFormat(ngaydat);
-//             tableModel.addRow(new Object[] {
-//                 madonhang,tenkh,tinhtrang,Date,tongtien,"Xác nhận" + "Chi tiết" + "Xoá"
-//             });
-//             // Lấy dữ liệu chi tiết đơn hàng
-//             String masp = rs.getString("masp");
-//             int soluong = rs.getInt("soluong");
-//             double dongia = rs.getDouble("dongia");
-//             double thanhtien = rs.getDouble("thanhtien");
-
-//             // Tạo đối tượng OrderDetail
-//             OrderDetail_DTO detail = new OrderDetail_DTO(madonhang, masp, soluong, dongia, thanhtien);
-//             orderDetailList.add(detail);
-
-//             // Hiển thị lên bảng (JTable)
-// //            tableModel.addRow(new Object[]{
-// //                madonhang, ngaydat, tinhtrang, masp, soluong, dongia, thanhtien, "Xóa"
-// //            });
-//         }
-//     } catch (Exception e) {
-//         e.printStackTrace();
-//     }
-        orderList = orderbll.getAllOrder();
-        for(Order_DTO order : orderList){
-            OrderDetail_DTO detail = orderbll.getDetails(order.getMadonhang());
-            orderDetailList.add(detail);
-        }
-    }
-
-
-
     public Order_DTO getOrderAt(int rowIndex) {
         Order_DTO temp = this.orderList.get(rowIndex);
         return temp;
@@ -192,54 +135,44 @@ public class OrderTable extends javax.swing.JPanel implements Header.searchListe
     public ArrayList<OrderDetail_DTO> getOrderDetailList() {
         return orderDetailList;
     }
-    
-    public static String convertDateFormat(String inputDate) {
-        java.text.SimpleDateFormat inputFormat = new java.text.SimpleDateFormat("yyyy-MM-dd");
-        java.text.SimpleDateFormat outputFormat = new java.text.SimpleDateFormat("dd/MM/yyyy");
-        try {
-            java.util.Date date = inputFormat.parse(inputDate);
-            return outputFormat.format(date);
-        } catch (java.text.ParseException e) {
+
+
+    public void cofirmOrder(String id) {
+        String query = "Update donhang set tinhtrang=Đã xử lý where madonhang = ?";
+        try (Connection conn = DatabaseConnection.getConnection()){
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setString(1,id);
+            stmt.executeUpdate();
+            Order_DAO order_DAO = new Order_DAO();
+        order_DAO.loadDataFormDatabase(tableModel,orderList,orderDetailList);
+        } catch (SQLException e) {
             e.printStackTrace();
-            return inputDate; // Nếu xảy ra lỗi, trả về định dạng ban đầu.
         }
     }
 
 
-    // public void cofirmOrder(String id) {
-    //     String query = "Update donhang set tinhtrang=Đã xử lý where madonhang = ?";
-    //     try (Connection conn = DatabaseConnection.getConnection()){
-    //         PreparedStatement stmt = conn.prepareStatement(query);
-    //         stmt.setString(1,id);
-    //         stmt.executeUpdate();
-    //         loadDataFormDatabase();
-    //     } catch (SQLException e) {
-    //         e.printStackTrace();
-    //     }
-    // }
-
-
-    // public void deleteOrder(String id) {
-    //     String deleteChiTietSql = "DELETE FROM CHITETDONHANG WHERE madonhang = ?";
-    //     String deleteDonHangSql = "DELETE FROM DONHANG WHERE madonhang = ?";
+    public void deleteOrder(String id) {
+        String deleteChiTietSql = "DELETE FROM CHITETDONHANG WHERE madonhang = ?";
+        String deleteDonHangSql = "DELETE FROM DONHANG WHERE madonhang = ?";
         
-    //     try (Connection conn = DatabaseConnection.getConnection()) {
-    //          PreparedStatement deleteChiTietStmt = conn.prepareStatement(deleteChiTietSql);
-    //          PreparedStatement deleteDonHangStmt = conn.prepareStatement(deleteDonHangSql);
+        try (Connection conn = DatabaseConnection.getConnection()) {
+             PreparedStatement deleteChiTietStmt = conn.prepareStatement(deleteChiTietSql);
+             PreparedStatement deleteDonHangStmt = conn.prepareStatement(deleteDonHangSql);
              
-    //         // Xóa chi tiết đơn hàng
-    //         deleteChiTietStmt.setString(1, id);
-    //         deleteChiTietStmt.executeUpdate();
+            // Xóa chi tiết đơn hàng
+            deleteChiTietStmt.setString(1, id);
+            deleteChiTietStmt.executeUpdate();
 
-    //         // Xóa đơn hàng
-    //         deleteDonHangStmt.setString(1, id);
-    //         deleteDonHangStmt.executeUpdate();
-    //         loadDataFormDatabase();
-    //         System.out.println("Đơn hàng và chi tiết đơn hàng đã được xóa thành công.");
-    //     } catch (SQLException e) {
-    //         e.printStackTrace();
-    //     }
-    // }
+            // Xóa đơn hàng
+            deleteDonHangStmt.setString(1, id);
+            deleteDonHangStmt.executeUpdate();
+            Order_DAO order_DAO = new Order_DAO();
+        order_DAO.loadDataFormDatabase(tableModel,orderList,orderDetailList);
+            System.out.println("Đơn hàng và chi tiết đơn hàng đã được xóa thành công.");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
     
     
     private void initComponents() {//GEN-BEGIN:initComponents

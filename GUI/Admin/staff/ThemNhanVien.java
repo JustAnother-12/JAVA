@@ -3,10 +3,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import java.util.HashSet;
 import javax.swing.table.DefaultTableModel;
-import DAO.ThemNhanVien_DAO;
+
+import BLL.NhanVien_BLL;
 public class ThemNhanVien extends javax.swing.JDialog{
         private JTextField txtName, txtPosition, txtPhone, txtUsername, txtPassword, txtAddress, txtCCCD, txtBirthday;
         private JButton btnSave, btnCancel;
@@ -87,8 +87,8 @@ public class ThemNhanVien extends javax.swing.JDialog{
             btnSave.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    ThemNhanVien_DAO addStaff = new ThemNhanVien_DAO();
-                    addStaff.addStaff(txtName, txtPosition, txtPhone, txtUsername, txtPassword, txtAddress, txtCCCD, txtBirthday,cbGender,tableModel,existingIDs);
+                    NhanVien_BLL NhanVien_BLL = new NhanVien_BLL();
+                    NhanVien_BLL.addStaff(txtName, txtPhone, txtUsername, txtAddress, txtBirthday, txtPosition, cbGender, txtCCCD, txtPassword, tableModel, existingIDs);
                 }
             });
     

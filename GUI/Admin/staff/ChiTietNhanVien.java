@@ -1,20 +1,15 @@
 package GUI.Admin.staff;
 
-import DAO.ChiTietThongTinTaiKhoan_DAO;
-import DAO.DatabaseConnection;
 import DAO.KhachHang_DAO;
 import DAO.NhanVien_DAO;
-
 import javax.swing.*;
 
-import BLL.CheckFailInput_BLL;
+import BLL.NhanVien_BLL;
 
 import java.awt.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import DTO.KhachHang_DTO;
 import DTO.NhanVien_DTO;
 
@@ -27,13 +22,13 @@ public class ChiTietNhanVien extends JDialog {
     private JButton btnEdit, btnSave;
     private boolean isCustomer;
     public ChiTietNhanVien(KhachHang_DTO kh) throws ParseException {
+        initComponents();
         isCustomer = true;
         setTitle("Chi tiết Khách Hàng");
         setSize(400, 400);
         setLayout(new GridLayout(8, 2));
         KhachHang_DAO a = new KhachHang_DAO();
-        KhachHang_DTO b = new KhachHang_DTO();
-        b = a.getKhachHangfromID(kh.getId_KhachHang());
+        KhachHang_DTO b = a.getKhachHangfromID(kh.getId_KhachHang());
         // Tạo các trường nhập liệu cho khách hàng
         txtName = new JTextField(b.getTen_KhachHang());
         txtPhone = new JTextField(b.getSdt_KhachHang());
@@ -84,16 +79,7 @@ public class ChiTietNhanVien extends JDialog {
         // Thêm sự kiện cho nút Lưu
         btnSave.addActionListener(e -> {
             // Cập nhật thông tin
-            ChiTietThongTinTaiKhoan_DAO chiTietNhanVien_DAO = new ChiTietThongTinTaiKhoan_DAO();
-            CheckFailInput_BLL checkFailInput_BLL = new CheckFailInput_BLL();
-            if (checkFailInput_BLL.validateFields(isCustomer, txtName, txtPhone, txtUsername, txtAddress, txtBirthday, txtEmail, null, null)) {
-                try {
-                    chiTietNhanVien_DAO.updateCustomer(kh, txtName, txtPhone, txtUsername, txtAddress, txtBirthday,txtEmail);
-                    dispose();
-                } catch (ParseException ex) {
-                    Logger.getLogger(ChiTietNhanVien.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
+            
         });
 
         setLocationRelativeTo(null);
@@ -103,6 +89,7 @@ public class ChiTietNhanVien extends JDialog {
     }
     // Constructor cho nhân viên
     public ChiTietNhanVien(NhanVien_DTO nv) throws ParseException {
+        initComponents();
         isCustomer = false;
         setTitle("Chi tiết Nhân Viên");
         setSize(400, 400);
@@ -160,17 +147,8 @@ public class ChiTietNhanVien extends JDialog {
 
         // Thêm sự kiện cho nút Lưu
         btnSave.addActionListener(e -> {
-            ChiTietThongTinTaiKhoan_DAO chiTietNhanVien_DAO = new ChiTietThongTinTaiKhoan_DAO();
-            CheckFailInput_BLL checkFailInput_BLL = new CheckFailInput_BLL();
-            // Cập nhật thông tin
-            if (checkFailInput_BLL.validateFields(isCustomer, txtName, txtPhone, txtUsername, txtAddress, txtBirthday, null, txtPosition, txtCCCD)) {
-                try {
-                    chiTietNhanVien_DAO.updateStaff(nv, txtName, txtPhone, txtUsername, txtAddress, txtBirthday, txtPosition, txtCCCD, cbGender);;
-                    dispose();
-                } catch (ParseException ex) {
-                    Logger.getLogger(ChiTietNhanVien.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
+            NhanVien_BLL NhanVien_BLL = new NhanVien_BLL();
+            NhanVien_BLL.updateStaff(txtName, txtPhone, txtUsername, txtAddress, txtBirthday, txtPosition, cbGender, txtCCCD, isCustomer, nv);
         });
 
         setLocationRelativeTo(null);

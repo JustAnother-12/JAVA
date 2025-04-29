@@ -1,4 +1,4 @@
-package BLL;
+package GUI.Admin.swing;
 
 import javax.swing.*;
 import javax.swing.table.TableCellEditor;
@@ -84,7 +84,7 @@ public class NutSuKien_BLL implements TableCellEditor {
     @Override
     public boolean stopCellEditing() {
         if (table != null) {
-            table.getCellEditor().stopCellEditing();
+            table.getModel();
         }
         return true;
     }
@@ -137,7 +137,7 @@ public class NutSuKien_BLL implements TableCellEditor {
                 obj = findOrderById(id);
             }
             
-            if (obj instanceof NhanVien_DTO) {
+            if (obj instanceof KhachHang_DTO) {
                 new ChiTietNhanVien((KhachHang_DTO) obj); 
             } else if (obj instanceof NhanVien_DTO) {
                 new ChiTietNhanVien((NhanVien_DTO) obj); 

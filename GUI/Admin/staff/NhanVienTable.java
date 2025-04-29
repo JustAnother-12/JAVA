@@ -6,15 +6,17 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import java.awt.Color;
+import javax.swing.table.TableRowSorter;
+
 import java.awt.*;
 
 import BLL.NhanVien_BLL;
-import BLL.NutGiaoDien_BLL;
-import BLL.NutSuKien_BLL;
-import BLL.SapXepTangGiam;
+import GUI.Admin.swing.NutGiaoDien_BLL;
+import GUI.Admin.swing.NutSuKien_BLL;
+import GUI.Admin.swing.SapXepTangGiam;
 import DTO.NhanVien_DTO;
 import DAO.NhanVien_DAO;
 import java.awt.event.ActionListener;
@@ -84,8 +86,8 @@ public class NhanVienTable extends JPanel  implements GUI.Admin.component.Header
         }
 
         // Thêm dữ liệu mẫu
-        NhanVien_DAO nhanVien_DAO = new NhanVien_DAO(); 
-        nhanVien_DAO.loadDataFormDatabase(tableModel, staffList);
+        NhanVien_BLL NhanVien_BLL = new NhanVien_BLL();
+        NhanVien_BLL.loadDataToTable(tableModel, staffList);
         // Cột "Tác vụ" có 2 nút "Chi tiết" và "Xóa"
         table.getColumn("Tác vụ").setCellRenderer(new NutGiaoDien_BLL("staff"));
         table.getColumn("Tác vụ").setCellEditor(new NutSuKien_BLL(this,tableModel));
@@ -110,8 +112,7 @@ public class NhanVienTable extends JPanel  implements GUI.Admin.component.Header
 
     @Override
     public void onSearch(String text) {
-        NhanVien_BLL temp = new NhanVien_BLL();
-        temp.searchById(text, tableModel, table);
+        searchById(text, tableModel, table);
     }
 
     @Override
@@ -119,5 +120,13 @@ public class NhanVienTable extends JPanel  implements GUI.Admin.component.Header
         NhanVien_DAO temp = new NhanVien_DAO();
         temp.filterByRole(role, tableModel, staffList);
     }
-
+    public void searchById(String text,DefaultTableModel tableModel,JTable table) {
+        TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(tableModel);
+        table.setRowSorter(sorter);
+        if (text.trim().isEmpty()) {
+            sorter.setRowFilter(null); // Hiện toàn bộ
+        } else {
+            sorter.setRowFilter(RowFilter.regexFilter("(?i)" + text.trim(), 0)); // Theo cột ID
+        }
+    }
 }

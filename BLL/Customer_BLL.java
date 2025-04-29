@@ -1,41 +1,41 @@
 package BLL;
 
-import java.util.Collections;
-import javax.swing.JTable;
-import javax.swing.RowFilter;
-import javax.swing.RowSorter;
-import javax.swing.SortOrder;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import javax.swing.JComboBox;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableRowSorter;
+
+import DAO.ChiTietThongTinTaiKhoan_DAO;
+import DAO.Customer_DAO;
+import DTO.KhachHang_DTO;
+import GUI.Admin.staff.ChiTietNhanVien;
+import GUI.Admin.swing.CheckFailInput_BLL;
 
 public class Customer_BLL {
-    public void searchById(String text,DefaultTableModel tableModel,JTable table) {
-        TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(tableModel);
-        table.setRowSorter(sorter);
-        if (text.trim().isEmpty()) {
-            sorter.setRowFilter(null); // Hiện toàn bộ
-        } else {
-            sorter.setRowFilter(RowFilter.regexFilter("(?i)" + text.trim(), 0)); // Theo cột ID
-        }
-    }
-    // @Override
-    // public void setName(String name) {
-    //     super.setName(name); 
-    // }
+   public void LoadDataToTabel(DefaultTableModel tableModel, ArrayList<KhachHang_DTO> customerList) {
+    Customer_DAO customerDAO = new Customer_DAO();
+    customerDAO.loadDataFormDatabase(customerList, tableModel);
+   }
+   public void updateCustomer(JTextField txtName,JTextField txtPhone,JTextField txtUsername,JTextField txtAddress,JTextField txtBirthday, JTextField txtEmail,JComboBox<String> cbGender, boolean isCustomer, KhachHang_DTO kh) {
+    ChiTietThongTinTaiKhoan_DAO chiTietNhanVien_DAO = new ChiTietThongTinTaiKhoan_DAO();
+            CheckFailInput_BLL checkFailInput_BLL = new CheckFailInput_BLL();
+            if (checkFailInput_BLL.validateFields(isCustomer, txtName, txtPhone, txtUsername, txtAddress, txtBirthday, txtEmail, null, null)) {
+                try {
+                    chiTietNhanVien_DAO.updateCustomer(kh, txtName, txtPhone, txtUsername, txtAddress, txtBirthday,txtEmail);
+                    dispose();
+                } catch (ParseException ex) {
+                    Logger.getLogger(ChiTietNhanVien.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+   }
 
-    // @Override
-    // public String getName() {
-    //     return super.getName(); 
-    // }
-    public void sortTable(boolean ascending,DefaultTableModel tableModel,JTable table) {
-        TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(tableModel);
-        table.setRowSorter(sorter);
-        if (ascending) {
-            sorter.setSortKeys(Collections.singletonList(new RowSorter.SortKey(0, SortOrder.ASCENDING)));
-        }
-        else {
-            sorter.setSortKeys(Collections.singletonList(new RowSorter.SortKey(0 , SortOrder.DESCENDING)));
-        }
-        sorter.sort();
-    }
+   private void dispose() {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'dispose'");
+   }
+    
 }

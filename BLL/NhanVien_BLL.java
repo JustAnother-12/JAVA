@@ -1,31 +1,46 @@
 package BLL;
 
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import javax.swing.JTable;
-import javax.swing.RowFilter;
+import javax.swing.JComboBox;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableRowSorter;
-
+import DAO.ChiTietThongTinTaiKhoan_DAO;
+import DAO.NhanVien_DAO;
+import DAO.ThemNhanVien_DAO;
 import DTO.NhanVien_DTO;
+import GUI.Admin.staff.ChiTietNhanVien;
+import GUI.Admin.swing.CheckFailInput_BLL;
+import java.util.HashSet;
 
 public class NhanVien_BLL {
-    public void searchById(String text,DefaultTableModel tableModel,JTable table) {
-        TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(tableModel);
-        table.setRowSorter(sorter);
-        if (text.trim().isEmpty()) {
-            sorter.setRowFilter(null); // Hiện toàn bộ
-        } else {
-            sorter.setRowFilter(RowFilter.regexFilter("(?i)" + text.trim(), 0)); // Theo cột ID
+    public void loadDataToTable(DefaultTableModel tableModel,ArrayList<NhanVien_DTO> staffList){
+        NhanVien_DAO nhanVien_DAO = new NhanVien_DAO(); 
+        nhanVien_DAO.loadDataFormDatabase(tableModel, staffList);
+   }
+   public void updateStaff(JTextField txtName,JTextField txtPhone,JTextField txtUsername,JTextField txtAddress,JTextField txtBirthday, JTextField txtPosition, JComboBox<String> cbGender, JTextField txtCCCD, boolean isCustomer, NhanVien_DTO nv) {
+    ChiTietThongTinTaiKhoan_DAO chiTietNhanVien_DAO = new ChiTietThongTinTaiKhoan_DAO();
+    CheckFailInput_BLL checkFailInput_BLL = new CheckFailInput_BLL();
+    // Cập nhật thông tin
+    if (checkFailInput_BLL.validateFields(isCustomer, txtName, txtPhone, txtUsername, txtAddress, txtBirthday, null, txtPosition, txtCCCD)) {
+        try {
+            chiTietNhanVien_DAO.updateStaff(nv, txtName, txtPhone, txtUsername, txtAddress, txtBirthday, txtPosition, txtCCCD, cbGender);;
+            dispose();
+        } catch (ParseException ex) {
+            Logger.getLogger(ChiTietNhanVien.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    // @Override
-    // public void setName(String name) {
-    //     super.setName(name); 
-    // }
-
-    // @Override
-    // public String getName() {
-    //     return super.getName(); 
-    // }
+   }
+   public void addStaff(JTextField txtName,JTextField txtPhone,JTextField txtUsername,JTextField txtAddress,JTextField txtBirthday, JTextField txtPosition, JComboBox<String> cbGender, JTextField txtCCCD, JTextField txtPassword, DefaultTableModel tableModel, HashSet<String> existingIDs) {
+    ThemNhanVien_DAO addStaff = new ThemNhanVien_DAO();
+    addStaff.addStaff(txtName, txtPosition, txtPhone, txtUsername, txtPassword, txtAddress, txtCCCD, txtBirthday,cbGender,tableModel,existingIDs);
+   }
+   private void dispose() {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'dispose'");
+   }
+   
 }

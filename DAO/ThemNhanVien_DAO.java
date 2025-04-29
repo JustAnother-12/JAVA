@@ -10,7 +10,7 @@ import java.util.Date;
 import java.util.HashSet;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.*;
-import BLL.CheckFailInput_BLL;
+import GUI.Admin.swing.CheckFailInput_BLL;
 
 public class ThemNhanVien_DAO extends javax.swing.JDialog {
     public void addStaff(JTextField txtName,JTextField txtPosition,JTextField txtPhone,JTextField txtUsername,JTextField txtPassword,JTextField txtAddress,JTextField txtCCCD,JTextField txtBirthday,JComboBox<String> cbGender,DefaultTableModel tableModel,HashSet<String> existingIDs) {
