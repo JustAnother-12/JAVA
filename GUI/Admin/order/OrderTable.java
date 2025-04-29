@@ -85,6 +85,7 @@ public class OrderTable extends javax.swing.JPanel implements Header.searchListe
         table.getColumnModel().getColumn(3).setPreferredWidth(100); // Ngày đặt
         table.getColumnModel().getColumn(4).setPreferredWidth(100); // Tổng tiền
         table.getColumnModel().getColumn(5).setPreferredWidth(250); // Tác vụ 
+        table.setDefaultEditor(Object.class, null);
         // ScrollPane chứa bảng
         JScrollPane scrollPane = new JScrollPane(table);
         scrollPane.setBounds(2, 40 , 770, 570);

@@ -20,22 +20,18 @@ public class Customer_BLL {
     Customer_DAO customerDAO = new Customer_DAO();
     customerDAO.loadDataFormDatabase(customerList, tableModel);
    }
-   public void updateCustomer(JTextField txtName,JTextField txtPhone,JTextField txtUsername,JTextField txtAddress,JTextField txtBirthday, JTextField txtEmail,JComboBox<String> cbGender, boolean isCustomer, KhachHang_DTO kh) {
+   public boolean updateCustomer(JTextField txtName,JTextField txtPhone,JTextField txtUsername,JTextField txtAddress,JTextField txtBirthday, JTextField txtEmail,JComboBox<String> cbGender, boolean isCustomer, KhachHang_DTO kh) {
     ChiTietThongTinTaiKhoan_DAO chiTietNhanVien_DAO = new ChiTietThongTinTaiKhoan_DAO();
             CheckFailInput_BLL checkFailInput_BLL = new CheckFailInput_BLL();
             if (checkFailInput_BLL.validateFields(isCustomer, txtName, txtPhone, txtUsername, txtAddress, txtBirthday, txtEmail, null, null)) {
                 try {
                     chiTietNhanVien_DAO.updateCustomer(kh, txtName, txtPhone, txtUsername, txtAddress, txtBirthday,txtEmail);
-                    dispose();
+                    return true;
                 } catch (ParseException ex) {
                     Logger.getLogger(ChiTietNhanVien.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-   }
-
-   private void dispose() {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'dispose'");
+            return false;
    }
     
 }

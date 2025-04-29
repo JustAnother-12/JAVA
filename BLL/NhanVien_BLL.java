@@ -21,26 +21,28 @@ public class NhanVien_BLL {
         NhanVien_DAO nhanVien_DAO = new NhanVien_DAO(); 
         nhanVien_DAO.loadDataFormDatabase(tableModel, staffList);
    }
-   public void updateStaff(JTextField txtName,JTextField txtPhone,JTextField txtUsername,JTextField txtAddress,JTextField txtBirthday, JTextField txtPosition, JComboBox<String> cbGender, JTextField txtCCCD, boolean isCustomer, NhanVien_DTO nv) {
+   public boolean updateStaff(JTextField txtName,JTextField txtPhone,JTextField txtUsername,JTextField txtAddress,JTextField txtBirthday, JComboBox<String> txtPosition, JComboBox<String> cbGender, JTextField txtCCCD, boolean isCustomer, NhanVien_DTO nv) {
     ChiTietThongTinTaiKhoan_DAO chiTietNhanVien_DAO = new ChiTietThongTinTaiKhoan_DAO();
     CheckFailInput_BLL checkFailInput_BLL = new CheckFailInput_BLL();
     // Cập nhật thông tin
     if (checkFailInput_BLL.validateFields(isCustomer, txtName, txtPhone, txtUsername, txtAddress, txtBirthday, null, txtPosition, txtCCCD)) {
         try {
             chiTietNhanVien_DAO.updateStaff(nv, txtName, txtPhone, txtUsername, txtAddress, txtBirthday, txtPosition, txtCCCD, cbGender);;
-            dispose();
-        } catch (ParseException ex) {
+            return true;
+        } catch (Exception ex) {
             Logger.getLogger(ChiTietNhanVien.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    return false;
    }
-   public void addStaff(JTextField txtName,JTextField txtPhone,JTextField txtUsername,JTextField txtAddress,JTextField txtBirthday, JTextField txtPosition, JComboBox<String> cbGender, JTextField txtCCCD, JTextField txtPassword, DefaultTableModel tableModel, HashSet<String> existingIDs) {
-    ThemNhanVien_DAO addStaff = new ThemNhanVien_DAO();
-    addStaff.addStaff(txtName, txtPosition, txtPhone, txtUsername, txtPassword, txtAddress, txtCCCD, txtBirthday,cbGender,tableModel,existingIDs);
+   public boolean addStaff(JTextField txtName,JTextField txtPhone,JTextField txtUsername,JTextField txtAddress,JTextField txtBirthday, JComboBox<String> txtPosition, JComboBox<String> cbGender, JTextField txtCCCD, JTextField txtPassword, DefaultTableModel tableModel, HashSet<String> existingIDs) {
+    try {
+        ThemNhanVien_DAO addStaff = new ThemNhanVien_DAO();
+        addStaff.addStaff(txtName, txtPosition, txtPhone, txtUsername, txtPassword, txtAddress, txtCCCD, txtBirthday,cbGender,tableModel,existingIDs);
+        return true;
+    } catch (Exception ex) {
+        Logger.getLogger(ChiTietNhanVien.class.getName()).log(Level.SEVERE, null, ex);
+    }
+    return false;
    }
-   private void dispose() {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'dispose'");
-   }
-   
 }

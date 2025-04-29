@@ -38,7 +38,7 @@ public class ChiTietThongTinTaiKhoan_DAO extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(this, "Lỗi khi cập nhật thông tin: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
     }
-    public void updateStaff(NhanVien_DTO nv,JTextField txtName,JTextField txtPhone,JTextField txtUsername,JTextField txtAddress,JTextField txtBirthday,JTextField txtPosition,JTextField txtCCCD,JComboBox<String> cbGender) throws ParseException {
+    public void updateStaff(NhanVien_DTO nv,JTextField txtName,JTextField txtPhone,JTextField txtUsername,JTextField txtAddress,JTextField txtBirthday,JComboBox<String> cbPosition,JTextField txtCCCD,JComboBox<String> cbGender) throws ParseException {
         try (Connection conn = DatabaseConnection.getConnection()) {
             String query = "UPDATE NHANVIEN SET tennv = ?, sdt = ?, username = ?, diachinv = ?,gioitinh = ?, ngaysinh = ?, chucvu = ?, CCCD = ? WHERE username = ?";
             PreparedStatement pstmt = conn.prepareStatement(query);
@@ -51,9 +51,9 @@ public class ChiTietThongTinTaiKhoan_DAO extends javax.swing.JDialog {
             String birthday = txtBirthday.getText();
             Date date = inputFormat.parse(birthday);
             String formattedDate = outputFormat.format(date);
-            pstmt.setString(5, formattedDate);
-            pstmt.setString(6, (String) cbGender.getSelectedItem());
-            pstmt.setString(7, txtPosition.getText());
+            pstmt.setString(5, (String) cbGender.getSelectedItem());
+            pstmt.setString(6, formattedDate);
+            pstmt.setString(7, (String) cbPosition.getSelectedItem());
             pstmt.setString(8, txtCCCD.getText());
             pstmt.setString(9, nv.getUsername()); // Sử dụng username để xác định bản ghi
             pstmt.executeUpdate();

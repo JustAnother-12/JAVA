@@ -4,6 +4,7 @@ import DAO.KhachHang_DAO;
 import DAO.NhanVien_DAO;
 import javax.swing.*;
 
+import BLL.Customer_BLL;
 import BLL.NhanVien_BLL;
 
 import java.awt.*;
@@ -16,7 +17,7 @@ import DTO.NhanVien_DTO;
 public class ChiTietNhanVien extends JDialog {
     private JTextField txtName, txtPhone, txtUsername, txtAddress, txtBirthday;
     private JTextField txtEmail; // Chỉ dành cho customer
-    private JTextField txtPosition; // Chỉ dành cho staff
+    private JComboBox<String> cbPosition; // Chỉ dành cho staff
     private JComboBox<String> cbGender;
     private JTextField txtCCCD; // Chỉ dành cho staff
     private JButton btnEdit, btnSave;
@@ -79,7 +80,10 @@ public class ChiTietNhanVien extends JDialog {
         // Thêm sự kiện cho nút Lưu
         btnSave.addActionListener(e -> {
             // Cập nhật thông tin
-            
+            Customer_BLL Customer_BLL = new Customer_BLL();
+            boolean khachhang = Customer_BLL.updateCustomer(txtName, txtPhone, txtUsername, txtAddress, txtBirthday, txtEmail, cbGender, isCustomer, kh);
+            if (khachhang == true) 
+                dispose();
         });
 
         setLocationRelativeTo(null);
@@ -108,7 +112,8 @@ public class ChiTietNhanVien extends JDialog {
         Date date = inputFormat.parse(birthday);
         String formattedDate = outputFormat.format(date);
         txtBirthday.setText(formattedDate);
-        txtPosition = new JTextField(b.getChucvu()); // Thêm trường chức vụ
+        cbPosition = new JComboBox<>(new String[]{"Quản lý kho", "Quản lý khách hàng", "Quản lý nhân viên", "Quản lý đơn hàng"});
+        cbPosition.setSelectedItem(b.getChucvu()); // Thêm trường chức vụ
         txtCCCD = new JTextField(b.getCCCD()); // Thêm trường CCCD
         cbGender = new JComboBox<>(new String[]{"Nam", "Nữ"}); // Các giá trị có thể có
         cbGender.setSelectedItem(b.getGioitinh());
@@ -125,7 +130,7 @@ public class ChiTietNhanVien extends JDialog {
         add(new JLabel("Ngày sinh:"));
         add(txtBirthday);
         add(new JLabel("Chức vụ:")); // Thêm nhãn cho chức vụ
-        add(txtPosition); // Thêm trường chức vụ
+        add(cbPosition); // Thêm trường chức vụ
         add(new JLabel("CCCD:")); // Thêm nhãn cho CCCD
         add(txtCCCD); // Thêm trường CCCD
         add(new JLabel("Giới tính:")); // Thêm nhãn cho CCCD
@@ -148,7 +153,9 @@ public class ChiTietNhanVien extends JDialog {
         // Thêm sự kiện cho nút Lưu
         btnSave.addActionListener(e -> {
             NhanVien_BLL NhanVien_BLL = new NhanVien_BLL();
-            NhanVien_BLL.updateStaff(txtName, txtPhone, txtUsername, txtAddress, txtBirthday, txtPosition, cbGender, txtCCCD, isCustomer, nv);
+            boolean nhanvien = NhanVien_BLL.updateStaff(txtName, txtPhone, txtUsername, txtAddress, txtBirthday, cbPosition, cbGender, txtCCCD, isCustomer, nv);
+            if (nhanvien == true) 
+                dispose();
         });
 
         setLocationRelativeTo(null);
@@ -167,7 +174,7 @@ public class ChiTietNhanVien extends JDialog {
         if (isCustomer) {
             txtEmail.setEnabled(editable); // Chỉ cho phép chỉnh sửa email nếu là khách hàng
         } else {
-            txtPosition.setEnabled(editable); // Chỉ cho phép chỉnh sửa chức vụ nếu là nhân viên
+            cbPosition.setEnabled(editable); // Chỉ cho phép chỉnh sửa chức vụ nếu là nhân viên
             txtCCCD.setEnabled(editable); // Chỉ cho phép chỉnh sửa CCCD nếu là nhân viên
         }
     }

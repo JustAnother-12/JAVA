@@ -91,7 +91,7 @@ public class NhanVienTable extends JPanel  implements GUI.Admin.component.Header
         // Cột "Tác vụ" có 2 nút "Chi tiết" và "Xóa"
         table.getColumn("Tác vụ").setCellRenderer(new NutGiaoDien_BLL("staff"));
         table.getColumn("Tác vụ").setCellEditor(new NutSuKien_BLL(this,tableModel));
-
+        table.setDefaultEditor(Object.class, null);
         // ScrollPane chứa bảng
         JScrollPane scrollPane = new JScrollPane(table);
         scrollPane.setBounds(2, 40 , 770, 570);
