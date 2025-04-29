@@ -3,6 +3,6 @@
         "."
     ],
     "java.project.referencedLibraries": [
-        "d:\\JAVA\\JAVA\\lib\\mysql-connector-j-9.2.0.jar"
+        "lib\\mysql-connector-j-9.2.0.jar"
     ]
 }

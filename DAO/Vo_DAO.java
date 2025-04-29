@@ -11,7 +11,7 @@ public class Vo_DAO {
     public boolean OpenConnection() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/ban_van_phong_pham", "root", "");
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/ban_van_phong_pham", "root", "123456789");
             return true;
         } catch (ClassNotFoundException | SQLException e) {
             System.out.println(e.getMessage());
@@ -27,6 +27,47 @@ public class Vo_DAO {
         }catch (SQLException e){
             System.out.println(e.getMessage());
         }
+    }
+
+    public String getLastestVOID(){
+        String latestID = "";
+        if (OpenConnection()){
+            try {
+                String sql = "SELECT masp FROM VO ORDER BY masp DESC LIMIT 1";
+                PreparedStatement stmt = con.prepareStatement(sql);
+                ResultSet rs = stmt.executeQuery();
+                if (rs.next()) {
+                    latestID = rs.getString("masp");
+                }
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            } finally{
+                closeConnection();
+            }
+        }
+        return latestID;
+    }
+
+    public String getNextVOID(Connection con){
+        String latestID = "";
+        try {
+            String sql = "SELECT masp FROM VO ORDER BY masp DESC LIMIT 1";
+            PreparedStatement stmt = con.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                latestID = rs.getString("masp");
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        String prefix = latestID.replaceAll("\\d+", "");
+        String numberic = latestID.replaceAll("[^\\d]", "");
+
+        int number = Integer.parseInt(numberic);
+        number++;
+        String nextnumberic = String.format("0%" + numberic.length() + "d", number);
+        return (prefix+nextnumberic).replace(" ", ""); 
     }
 
     public ArrayList<Vo_DTO> getAllVo(){
@@ -61,30 +102,87 @@ public class Vo_DAO {
         return arr;
     }
 
+    public boolean updateVo(Vo_DTO vo){
+        boolean result = false;
+        if(OpenConnection()){
+            try{
+                con.setAutoCommit(false);
+                String query1 = "UPDATE SANPHAM "+
+                                "SET tensp = ?, dongiasp = ?, soluongsp = ? "+
+                                "WHERE masp = ?";
+                String query2 = "UPDATE VO "+
+                                "SET loaivo = ?, nhasanxuat = ?, chatlieu = ?, sotrang= ? "+
+                                "WHERE masp = ?";
+                PreparedStatement stmt1 = con.prepareStatement(query1);
+                PreparedStatement stmt2 = con.prepareStatement(query2);
+                stmt1.setString(1, vo.getTen_SanPham());
+                stmt1.setDouble(2, vo.getGia_SanPham());
+                stmt1.setInt(3, vo.getSoLuong_SanPham());
+                stmt1.setString(4, vo.getID_SanPham());
+
+                stmt2.setString(1,vo.getLoai_Vo());
+                stmt2.setString(2, vo.getNhaSanXuat());
+                stmt2.setString(3, vo.getChatLieu());
+                stmt2.setInt(4, vo.getSoTrang());
+                stmt2.setString(5, vo.getID_SanPham());
+
+                if(stmt1.executeUpdate() >=1 && stmt2.executeUpdate() >=1){
+                    con.commit();
+                    result = true;
+                }
+                else{
+                    con.rollback();
+                }
+            }
+            catch(SQLException e){
+                System.out.println(e);
+            } finally{
+                try{
+                    con.setAutoCommit(true);
+                }
+                catch(SQLException e){
+                    System.out.println(e);
+                }
+                closeConnection();
+            }
+        }
+        return result;
+    }
+
     public boolean addVo(Vo_DTO vo){
         boolean result = false;
         if (OpenConnection()) {
             try {                    
+                con.setAutoCommit(false);
                 String query1 = "INSERT INTO SANPHAM VALUES(?,?,?,?)";
                 String query2 = "INSERT INTO VO VALUES(?,?,?,?,?)";
                 PreparedStatement stmt1 = con.prepareStatement(query1);
                 PreparedStatement stmt2 = con.prepareStatement(query2);
-                stmt1.setString(1, vo.getID_SanPham());
+                stmt1.setString(1, getNextVOID(con));
                 stmt1.setString(2, vo.getTen_SanPham());
                 stmt1.setDouble(3, vo.getGia_SanPham());
                 stmt1.setInt(4, vo.getSoLuong_SanPham());
 
-                stmt2.setString(1, vo.getID_SanPham());
+                stmt2.setString(1, getNextVOID(con));
                 stmt2.setString(2, vo.getLoai_Vo());
                 stmt2.setString(3, vo.getNhaSanXuat());
                 stmt2.setString(4, vo.getChatLieu());
                 stmt2.setInt(5, vo.getSoTrang());
 
-                if (stmt1.executeUpdate()>=1 && stmt2.executeUpdate()>=1)
+                if(stmt1.executeUpdate()>=1 && stmt2.executeUpdate()>=1){
+                    con.commit();
                     result = true;
+                }else{
+                    con.rollback();
+                }
             } catch (SQLException ex) {
                 System.out.println(ex);            
             } finally{
+                try{
+                    con.setAutoCommit(true);
+                }catch(SQLException e){
+                    System.out.println(e);
+                }
                 closeConnection();  
             } 
         }
@@ -94,7 +192,8 @@ public class Vo_DAO {
     public boolean removeVo(String id){
         boolean result = false;
         if (OpenConnection()) {
-            try {                    
+            try {              
+                con.setAutoCommit(false);      
                 String query1 = "DELETE FROM SANPHAM WHERE SANPHAM.masp = ?";
                 String query2 = "DELETE FROM VO WHERE VO.masp = ?";
                 PreparedStatement stmt1 = con.prepareStatement(query1);
@@ -102,11 +201,21 @@ public class Vo_DAO {
 
                 stmt1.setString(1, id);
                 stmt2.setString(1, id);
-                if (stmt1.executeUpdate()>=1 && stmt2.executeUpdate()>=1)
+                if (stmt2.executeUpdate()>=1 && stmt1.executeUpdate()>=1){
+                    con.commit();
                     result = true;
+                }
+                else{
+                    con.rollback();
+                }
             } catch (SQLException ex) {
                 System.out.println(ex);            
             } finally{
+                try{
+                    con.setAutoCommit(true);
+                }catch(SQLException e){
+                    System.out.println(e);
+                }
                 closeConnection();  
             } 
         }
@@ -116,7 +225,7 @@ public class Vo_DAO {
     public boolean hasVoID(String id){                        
         if (OpenConnection()) {
             try {            
-            String sql = "SELECT * FROM VO WHERE VO.masp="+id;
+            String sql = "SELECT * FROM VO WHERE VO.masp='"+id+"'";
             Statement stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
             if (rs.next())

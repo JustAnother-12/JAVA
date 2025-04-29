@@ -37,6 +37,49 @@ public class SanPham_BLL {
         return Butdao.getAllBut();
     }
 
+    public String getLatestSACHID(){
+        return Sachdao.getLastestSACHID();
+    }
+
+    public String getLatestVOID(){
+        return Vodao.getLastestVOID();
+    }
+
+    public String getLatestBUTID(){
+        return Butdao.getLastestBUTID();
+    }
+
+    public String updateSP(SanPham_DTO sp){
+        if(sp instanceof Sach_DTO){
+            Sach_DTO sanpham = (Sach_DTO) sp;
+            if(!Sachdao.hasSachID(sanpham.getID_SanPham())){
+                return "Sản phẩm không tồn tại!";
+            }
+            if(Sachdao.updateSach(sanpham)){
+                return "Cập nhật Sách thành công!";
+            }
+        }
+        else if(sp instanceof Vo_DTO){
+            Vo_DTO sanpham = (Vo_DTO) sp;
+            if(!Vodao.hasVoID(sanpham.getID_SanPham())){
+                return "Sản phẩm không tồn tại!";
+            }
+            if(Vodao.updateVo(sanpham)){
+                return "Cập nhật Vở thành công!";
+            }
+        }
+        else if(sp instanceof But_DTO){
+            But_DTO sanpham = (But_DTO) sp;
+            if(!Butdao.hasButID(sanpham.getID_SanPham())){
+                return "Sản phẩm không tồn tại!";
+            }
+            if(Butdao.updateBut(sanpham)){
+                return "Cập nhật Bút thành công!";
+            }     
+        }
+        return "Cập nhật Sản phẩm thất bại!";    
+    }
+
     public String addSP(SanPham_DTO sp){
         if(sp instanceof Sach_DTO){
             Sach_DTO sanpham = (Sach_DTO) sp;
@@ -65,7 +108,7 @@ public class SanPham_BLL {
                 return "Thêm Bút thành công!";
             }     
         }
-        return "Thêm Bút thất bại!";    
+        return "Thêm Sản phẩm thất bại!";    
     }
 
     public String removeSP(SanPham_DTO sp){
@@ -96,7 +139,7 @@ public class SanPham_BLL {
                 return "Xóa Bút thành công!";
             }     
         }
-        return "Xóa Bút thất bại!";    
+        return "Xóa Sản phẩm thất bại!";    
     }
 
 

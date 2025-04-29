@@ -6,6 +6,27 @@
     "configurations": [
         {
             "type": "java",
+            "name": "TrangChu",
+            "request": "launch",
+            "mainClass": "GUI.user.TrangChu",
+            "projectName": "JAVA_1c7fabf8"
+        },
+        {
+            "type": "java",
+            "name": "ProdmaFrame",
+            "request": "launch",
+            "mainClass": "GUI.Admin.product.ProdmaFrame",
+            "projectName": "JAVA_1c7fabf8"
+        },
+        {
+            "type": "java",
+            "name": "ProductManager",
+            "request": "launch",
+            "mainClass": "GUI.Admin.product.ProductManager",
+            "projectName": "JAVA_1c7fabf8"
+        },
+        {
+            "type": "java",
             "name": "Main",
             "request": "launch",
             "mainClass": "GUI.Admin.Main",
