@@ -1,46 +1,48 @@
 package GUI.Admin.product;
 
 import javax.swing.*;
-import javax.swing.event.ChangeListener;
 
-import BLL.NhaCungCap_BLL;
-import DTO.NhaCungCap_DTO;
+import DTO.ChiTietPhieuNhap_DTO;
+import DTO.SanPham_DTO;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.util.ArrayList;
 
 public class importQuantityFrame extends JFrame{
     private JPanel formPanel;
     private JLabel formLabel;
     private JLabel quantityLabel;
-    private JSpinner quantitySpinner;
-    private JLabel providerLabel;
-    private JComboBox<String> providerComboBox; 
+    private JTextField quantityTextfield;
+    // private JLabel providerLabel;
+    // private JComboBox<String> providerComboBox; 
 
     private JButton confirmButton;
     private JButton cancelButton;
 
 
-    private NhaCungCap_BLL nccBLL;
+    private SanPham_DTO sp;
+    private ProdmaFrame parent;
 
-    public importQuantityFrame(){
+    public importQuantityFrame(ProdmaFrame parent, SanPham_DTO sp){
+        this.parent = parent;
+        this.sp = sp;
         initComponents();
     }
 
     private void initComponents(){
-        nccBLL = new NhaCungCap_BLL();
         formPanel = new JPanel();
-        formLabel = new JLabel("NHẬP HÀNG");
+        formLabel = new JLabel(sp.getTen_SanPham().toUpperCase());
         quantityLabel = new JLabel("Số lượng:");
-        quantitySpinner = new JSpinner();
-        providerLabel = new JLabel("Nhà cung cấp:");
-        ArrayList<NhaCungCap_DTO> danhSachNCC = nccBLL.getAllNCC();
-        String[] listTenNCC = new String[danhSachNCC.size()];
-        for (int i = 0; i < danhSachNCC.size(); i++) {
-            listTenNCC[i] = danhSachNCC.get(i).getTenNCC();
-        }
-        providerComboBox = new JComboBox<>(listTenNCC);
+        quantityTextfield = new JTextField();
+
+
+        // providerLabel = new JLabel("Nhà cung cấp:");
+        // ArrayList<NhaCungCap_DTO> danhSachNCC = nccBLL.getAllNCC();
+        // String[] listTenNCC = new String[danhSachNCC.size()];
+        // for (int i = 0; i < danhSachNCC.size(); i++) {
+        //     listTenNCC[i] = danhSachNCC.get(i).getTenNCC();
+        // }
+        // providerComboBox = new JComboBox<>(listTenNCC);
         confirmButton = new JButton("Xác nhận");
         cancelButton = new JButton("Hủy"); 
 
@@ -64,31 +66,39 @@ public class importQuantityFrame extends JFrame{
         
         quantityLabel.setFont(new Font("Segoe UI", 0, 16));
 
-        quantitySpinner.setBackground(Color.WHITE);
-        quantitySpinner.setFont(new Font("Segoe UI", 0, 16));
-        quantitySpinner.setModel(new SpinnerNumberModel(1, 1, Integer.MAX_VALUE, 1));
-
+        quantityTextfield.setBackground(Color.WHITE);
+        quantityTextfield.setFont(new Font("Segoe UI", 0, 16));
+        quantityTextfield.setPreferredSize(new Dimension(200,30));
+        quantityTextfield.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                char c = e.getKeyChar();
+                if (!Character.isDigit(c)) {
+                    e.consume(); // chặn nếu không phải số
+                }
+            }
+        });
         quantityPanel.add(quantityLabel);
-        quantityPanel.add(quantitySpinner);
+        quantityPanel.add(quantityTextfield);
 
         formPanel.add(quantityPanel);
         formPanel.add(Box.createVerticalStrut(10));
 
 
-        JPanel providerPanel = new JPanel();
-        providerPanel.setLayout(new FlowLayout());
-        providerPanel.setBackground(Color.WHITE);
+        // JPanel providerPanel = new JPanel();
+        // providerPanel.setLayout(new FlowLayout());
+        // providerPanel.setBackground(Color.WHITE);
 
-        providerLabel.setFont(new Font("Segoe UI", 0, 16));
+        // providerLabel.setFont(new Font("Segoe UI", 0, 16));
 
-        providerComboBox.setBackground(Color.WHITE);
-        providerComboBox.setFont(new Font("Segoe UI", 0, 16));
+        // providerComboBox.setBackground(Color.WHITE);
+        // providerComboBox.setFont(new Font("Segoe UI", 0, 16));
         
-        providerPanel.add(providerLabel);
-        providerPanel.add(providerComboBox);
+        // providerPanel.add(providerLabel);
+        // providerPanel.add(providerComboBox);
 
-        formPanel.add(providerPanel);
-        formPanel.add(Box.createHorizontalStrut(20));
+        // formPanel.add(providerPanel);
+        // formPanel.add(Box.createHorizontalStrut(20));
 
 
         JPanel buttonPanel = new JPanel();
@@ -114,8 +124,9 @@ public class importQuantityFrame extends JFrame{
 
         formPanel.add(buttonPanel);
 
+        setTitle("Nhập hàng");
         setResizable(false);
-        setSize(450,400);
+        setSize(450,300);
         getContentPane().add(formPanel);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -123,6 +134,28 @@ public class importQuantityFrame extends JFrame{
     }
 
     private void confirmButtonActionPerformed(ActionEvent evt){
-
+        int quantity = 0;
+        try{
+            quantity = Integer.parseInt(quantityTextfield.getText());
+        }catch(NumberFormatException e){
+            JOptionPane.showMessageDialog(this, 
+                    "Nhập không đúng định dạng!", 
+                    "Lỗi", 
+                    JOptionPane.ERROR_MESSAGE);
+        }
+        if(quantity >=1){
+            ChiTietPhieuNhap_DTO hangnhap = new ChiTietPhieuNhap_DTO("", sp, quantity, sp.getGia_SanPham()*0.8);
+            parent.importList.add(hangnhap);
+            JOptionPane.showMessageDialog(this, 
+                    "Đã thêm "+ quantityTextfield.getText() +" sản phẩm '" + sp.getTen_SanPham() + "' vào danh sách nhập!", 
+                    "Thông báo", 
+                    JOptionPane.INFORMATION_MESSAGE);
+            dispose();
+        }else{
+            JOptionPane.showMessageDialog(this, 
+                    "Số lượng nhập phải lớn hơn 0!", 
+                    "Lỗi", 
+                    JOptionPane.ERROR_MESSAGE);
+        }
     }
 }

@@ -33,6 +33,16 @@ public class SachForm extends JPanel{
         return !(author.isEmpty() || genre.isEmpty() || publisher.isEmpty() || publicationYear.isEmpty());
     }
 
+    private boolean checkValidInput(String input){
+        char[] chars = input.toCharArray();
+        for (char c : chars) {
+            if(!Character.isLetter(c)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     private void saveProduct() {
         String name = parent.nameTextField.getText().trim();
         int quantity = 0;
@@ -156,13 +166,20 @@ public class SachForm extends JPanel{
         confirmButton.setForeground(new Color(255, 255, 255));
         confirmButton.addActionListener(e -> {
             if (checkAdditionalFields()) {
-                if(sp==null){
-                    saveProduct();
-                }else{
-                    Sach_DTO sach = (Sach_DTO)sp;
-                    editProduct(sach);
+                if(checkValidInput(authorTextField.getText()) && 
+                    checkValidInput(genreTextField.getText()) && 
+                    checkValidInput(publisherTextField.getText())){
+                    if(sp==null){
+                        saveProduct();
+                    }else{
+                        Sach_DTO sach = (Sach_DTO)sp;
+                        editProduct(sach);
+                    }
+                    parent.dispose();
                 }
-                parent.dispose();
+                else{
+                    JOptionPane.showMessageDialog(this, "Thông tin nhập không đúng định dạng!.", "Error", JOptionPane.ERROR_MESSAGE);
+                }
             } else {
                 JOptionPane.showMessageDialog(this, "Vui lòng điền đầy đủ thông tin.", "Error", JOptionPane.ERROR_MESSAGE);
             }

@@ -11,6 +11,33 @@ public class SanPham_BLL {
     private ArrayList<SanPham_DTO> danhsachsp;
 
 
+    public Sach_DTO getSachFromID(String id){
+        for(Sach_DTO sach:getAllSach()){
+            if(sach.getID_SanPham().equals(id)){
+                return sach;
+            }
+        }
+        return null;
+    }
+
+    public Vo_DTO getVoFromID(String id){
+        for(Vo_DTO Vo:getAllVo()){
+            if(Vo.getID_SanPham().equals(id)){
+                return Vo;
+            }
+        }
+        return null;
+    }
+
+    public But_DTO getButFromID(String id){
+        for(But_DTO But:getAllBut()){
+            if(But.getID_SanPham().equals(id)){
+                return But;
+            }
+        }
+        return null;
+    }
+
     public ArrayList<SanPham_DTO> getAllSanPham(){
         danhsachsp = new ArrayList<>();
 

@@ -72,6 +72,16 @@ public class VoForm extends JPanel{
         return !(type.isEmpty() || material.isEmpty() || publisher.isEmpty() || pageNumber.isEmpty());
     }
 
+    private boolean checkValidInput(String input){
+        char[] chars = input.toCharArray();
+        for (char c : chars) {
+            if(!Character.isLetter(c)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public JPanel createAdditionalInfoPanel() {
         JPanel formPanel = new JPanel();
         formPanel.setBackground(new Color(255, 255, 255));
@@ -155,13 +165,20 @@ public class VoForm extends JPanel{
         confirmButton.setForeground(new Color(255, 255, 255));
         confirmButton.addActionListener(e -> {
             if (checkAdditionalFields()) {
-                if(sp==null){
-                    saveProduct();
-                }else{
-                    Vo_DTO vo = (Vo_DTO)sp;
-                    editProduct(vo);
+                if(checkValidInput(typeTextField.getText()) &&
+                    checkValidInput(materialTextField.getText()) &&
+                    checkValidInput(publisherTextField.getText())){
+                    if(sp==null){
+                        saveProduct();
+                    }else{
+                        Vo_DTO vo = (Vo_DTO)sp;
+                        editProduct(vo);
+                    }
+                    parent.dispose();
                 }
-                parent.dispose();
+                else{
+                    JOptionPane.showMessageDialog(this, "Thông tin nhập không đúng định dạng!.", "Error", JOptionPane.ERROR_MESSAGE);
+                }
             } else {
                 JOptionPane.showMessageDialog(this, "Vui lòng điền đầy đủ thông tin.", "Error", JOptionPane.ERROR_MESSAGE);
             }

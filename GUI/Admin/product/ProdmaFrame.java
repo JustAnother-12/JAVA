@@ -14,18 +14,21 @@ import DTO.But_DTO;
 import DTO.Sach_DTO;
 import DTO.SanPham_DTO;
 import DTO.Vo_DTO;
+import DTO.ChiTietPhieuNhap_DTO;
+import GUI.user.ButDescription;
+import GUI.user.SachDescription;
+import GUI.user.VoDescription;
 
 public class ProdmaFrame extends JFrame {
 
-    private JButton importQuantityButton;
+    private JComboBox<String> FilterComboBox;
+    private JButton importListButton;
     private JButton restartButton;
     private JButton addButton;
-    private JButton editButton;
     private JButton firstButton;
     private JButton lastButton;
     private JButton nextButton;
     private JButton previousButton;
-    private JButton removeButton;
     private JButton searchButton;
     private JPanel mainPanel;
     private JScrollPane productTableScrollPane;
@@ -38,10 +41,18 @@ public class ProdmaFrame extends JFrame {
     int position = -1;
 
     private SanPham_BLL productBLL = new SanPham_BLL();
+    private ArrayList<Sach_DTO> SachDescriptionList;
+    private ArrayList<Vo_DTO> VoDescriptionList;
+    private ArrayList<But_DTO> ButDescriptionList;
+    private SachDescription CurrentSachDescription;
+    private VoDescription CurrentVoDescription;
+    private ButDescription CurrentButDescription;
+
+    protected ArrayList<ChiTietPhieuNhap_DTO> importList = new ArrayList<>();
 
     public ProdmaFrame() {
         initComponents();
-        products = productBLL.getAllSanPham();
+        getSPandDetails("Tất cả");
         showProducts(products);
         System.out.println(productTable.getSelectedRow());
     }
@@ -49,21 +60,45 @@ public class ProdmaFrame extends JFrame {
     public void showProducts(ArrayList<SanPham_DTO> productList) {
         DefaultTableModel model = (DefaultTableModel) productTable.getModel();
         model.setRowCount(0);
-        Object[] row = new Object[6];
+        Object[] row = new Object[5];
         for (int i = 0; i < productList.size(); i++) {
             row[0] = productList.get(i).getID_SanPham();
             row[1] = productList.get(i).getTen_SanPham();
             row[2] = productList.get(i).getDanhMuc();
             row[3] = productList.get(i).getSoLuong_SanPham();
             row[4] = productList.get(i).getGia_SanPham();
-            row[5] = productList.get(i).getID_SanPham();
             model.addRow(row);
         }
     }
 
-    // public void showProductIndex(int index) {
-    //     searchBar.setText(products.get(index).getID_SanPham());
-    // }
+    private void getSPandDetails(String choice){
+        SachDescriptionList = new ArrayList<>();
+        VoDescriptionList = new ArrayList<>();
+        ButDescriptionList = new ArrayList<>();
+        if(choice.equals("Tất cả")){
+            products = productBLL.getAllSanPham();
+        }else if(choice.equals("Sách")){
+            products = new ArrayList<>(productBLL.getAllSach()); 
+        }else if(choice.equals("Vở")){
+            products = new ArrayList<>(productBLL.getAllVo());
+        }else if(choice.equals("Bút")){
+            products = new ArrayList<>(productBLL.getAllBut());
+        }
+        
+        for (SanPham_DTO sp:products){
+            if (sp instanceof Sach_DTO) {
+                Sach_DTO sach = (Sach_DTO) sp;
+                SachDescriptionList.add(sach);
+            } else if (sp instanceof Vo_DTO) {
+                Vo_DTO vo = (Vo_DTO) sp;
+                VoDescriptionList.add(vo);
+            } else if (sp instanceof But_DTO) {
+                But_DTO but = (But_DTO) sp;
+                ButDescriptionList.add(but);
+            }
+        }
+
+    }
 
     private void initComponents() {
         mainPanel = new JPanel();
@@ -72,27 +107,30 @@ public class ProdmaFrame extends JFrame {
         searchBar = new JTextField();
         restartButton = new JButton();
         searchButton = new JButton();
-        importQuantityButton = new JButton();
         addButton = new JButton();
-        editButton = new JButton();
-        removeButton = new JButton();
         firstButton = new JButton();
         previousButton = new JButton();
         nextButton = new JButton();
         lastButton = new JButton();
+        importListButton = new JButton();
 
 
         productTable.setModel(new DefaultTableModel(
             new Object[][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String[] {
-                "ID", "Name", "Category", "Quantity", "Price", "Image"
+                "ID", "Tên", "Phân loại", "Số lượng", "Đơn giá", "Tác vụ"
             }
-        ));
+        ){
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return column == 5; // Chỉ cột "Tác vụ" mới có thể chỉnh sửa
+            }
+        });
 
         productTable.setRowHeight(35);
         productTable.setGridColor(new Color(51, 51, 51));
@@ -104,103 +142,115 @@ public class ProdmaFrame extends JFrame {
             }
         });
 
+        // cài custom renderer và editor cho cột Tác vụ
+        productTable.getColumnModel().getColumn(5).setCellRenderer(new ButtonRenderer());
+        productTable.getColumnModel().getColumn(5).setCellEditor(new ButtonEditor(new JCheckBox(), this));
+
+        // chỉnh độ rộng cột
+        TableColumnModel columnModel = productTable.getColumnModel();
+        columnModel.getColumn(0).setPreferredWidth(30); 
+        columnModel.getColumn(5).setPreferredWidth(300); 
+        columnModel.getColumn(1).setPreferredWidth(200); 
+        columnModel.getColumn(2).setPreferredWidth(100); 
+        columnModel.getColumn(3).setPreferredWidth(80); 
+        columnModel.getColumn(4).setPreferredWidth(100); 
+
 
         productTableScrollPane.setViewportView(productTable);
         productTableScrollPane.setPreferredSize(new Dimension(531, 466));
 
 
-        // toppanel components
-        JPanel topPanel = new JPanel();
+        JPanel topPanel = new JPanel(new BorderLayout());
         topPanel.setBackground(new Color(255, 255, 255));
-        topPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
+
+        // Left side: Search
+        JPanel leftPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
+        leftPanel.setBackground(Color.WHITE);
 
         JLabel searchLabel = new JLabel();
         searchLabel.setFont(new Font("Segoe UI", 0, 20));
         searchLabel.setText("Search:");
-        topPanel.add(searchLabel);
+        leftPanel.add(searchLabel);
 
         searchBar.setFont(new Font("Segoe UI", 0, 20));
         searchBar.setPreferredSize(new Dimension(300, 30));
-        topPanel.add(searchBar);
+        leftPanel.add(searchBar);
 
         searchButton.setBackground(new Color(255, 102, 0));
         searchButton.setFont(new Font("Segoe UI", 0, 14));
-        searchButton.setForeground(new Color(255, 255, 255));
+        searchButton.setForeground(Color.WHITE);
         searchButton.setText("Search");
-        searchButton.setPreferredSize(new Dimension(50,30));
+        searchButton.setPreferredSize(new Dimension(80, 30));
         searchButton.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
         searchButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 searchButtonActionPerformed(evt);
             }
         });
-        topPanel.add(searchButton);
+        leftPanel.add(searchButton);
+
+        FilterComboBox = new JComboBox<>(new String[] { "Tất cả", "Sách", "Vở", "Bút" });
+        FilterComboBox.setBackground(Color.WHITE);
+        FilterComboBox.setFont(new Font("Segoe UI", 0, 14));
+        FilterComboBox.setPreferredSize(new Dimension(80, 30));
+        FilterComboBox.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                position = -1;
+                getSPandDetails((String)FilterComboBox.getSelectedItem());
+                showProducts(products);
+            }
+        });
+        leftPanel.add(FilterComboBox);
+
+        // Right side: Buttons
+        JPanel rightPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
+        rightPanel.setBackground(Color.WHITE);
+
+        addButton.setBackground(new Color(51, 51, 51));
+        addButton.setFont(new Font("Segoe UI", 0, 14));
+        addButton.setForeground(Color.WHITE);
+        addButton.setText("Thêm");
+        addButton.setPreferredSize(new Dimension(80, 30));
+        addButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                addButtonActionPerformed(evt);
+            }
+        });
+        rightPanel.add(addButton);
+
+        restartButton.setBackground(new Color(51, 51, 51));
+        restartButton.setFont(new Font("Segoe UI", 0, 14));
+        restartButton.setForeground(Color.WHITE);
+        restartButton.setText("Làm mới");
+        restartButton.setPreferredSize(new Dimension(100, 30));
+        restartButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                restartButtonActionPerformed(evt);
+            }
+        });
+        rightPanel.add(restartButton);
+
+        importListButton.setBackground(new Color(51, 51, 51));
+        importListButton.setFont(new Font("Segoe UI", 0, 14));
+        importListButton.setForeground(Color.WHITE);
+        importListButton.setText("Danh sách nhập");
+        importListButton.setPreferredSize(new Dimension(140, 30));
+        importListButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                new importListFrame(importList);
+            }
+        });
+        rightPanel.add(importListButton);
+
+
+        topPanel.add(leftPanel, BorderLayout.WEST);
+        topPanel.add(rightPanel, BorderLayout.EAST);
 
 
         // buttonPanel components
         JPanel buttonPanel = new JPanel();
         buttonPanel.setBackground(new Color(255, 255, 255));
         buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
-
-        restartButton.setBackground(new Color(51, 51, 51));
-        restartButton.setFont(new Font("Segoe UI", 0, 14));
-        restartButton.setForeground(new Color(255, 255, 255));
-        restartButton.setText("Refresh");
-        restartButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                restartButtonActionPerformed(evt);
-            }
-        });
-
-        buttonPanel.add(restartButton);
-
-        addButton.setBackground(new Color(51, 51, 51));
-        addButton.setFont(new Font("Segoe UI", 0, 14));
-        addButton.setForeground(new Color(255, 255, 255));
-        addButton.setText("Add");
-        addButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                addButtonActionPerformed(evt);
-            }
-        });
-
-        buttonPanel.add(addButton);
-
-        importQuantityButton.setBackground(new Color(0, 0, 0));
-        importQuantityButton.setFont(new Font("Segoe UI", 0, 14));
-        importQuantityButton.setForeground(new Color(255, 255, 255));
-        importQuantityButton.setText("Nhập hàng");
-        importQuantityButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                importQuantityButtonActionPerformed(evt);
-            }
-        });
-
-        buttonPanel.add(importQuantityButton);
-
-        editButton.setBackground(new Color(0, 0, 0));
-        editButton.setFont(new Font("Segoe UI", 0, 14));
-        editButton.setForeground(new Color(255, 255, 255));
-        editButton.setText("Edit");
-        editButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                editButtonActionPerformed(evt);
-            }
-        });
-
-        buttonPanel.add(editButton);
-
-        removeButton.setBackground(new Color(0, 0, 0));
-        removeButton.setFont(new Font("Segoe UI", 0, 14));
-        removeButton.setForeground(new Color(255, 255, 255));
-        removeButton.setText("Remove");
-        removeButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                removeButtonActionPerformed(evt);
-            }
-        });
-
-        buttonPanel.add(removeButton);
 
         firstButton.setBackground(new Color(204, 204, 204));
         firstButton.setFont(new Font("Segoe UI", 0, 14));
@@ -273,7 +323,7 @@ public class ProdmaFrame extends JFrame {
         );
 
 
-        setSize(962, 600);
+        setSize(1000, 600);
         setMinimumSize(new Dimension(800, 500));
         setLocationRelativeTo(null);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -281,11 +331,8 @@ public class ProdmaFrame extends JFrame {
     }
 
     private void productTableMouseClicked(MouseEvent evt) {
-        System.out.println("test");
         position = productTable.getSelectedRow();
         productTable.setRowSelectionInterval(position, position);
-        
-        System.out.println(position);
     }
 
     private void restartButtonActionPerformed(ActionEvent evt){
@@ -303,20 +350,13 @@ public class ProdmaFrame extends JFrame {
         showProducts(Searchproducts);
     }
 
-    private void importQuantityButtonActionPerformed(ActionEvent evt) {
-        if(position>=0){
-            new importQuantityFrame();
-        }else{
-            JOptionPane.showMessageDialog(this, "Vui lòng chọn một sản phẩm!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-        }
-    }
 
     private void addButtonActionPerformed(ActionEvent evt) {
         productForm = new ProductForm(this,null);
     }
 
-    private void editButtonActionPerformed(ActionEvent evt) {
-        if(position>=0){
+    protected void editButtonActionPerformed(int row) {
+        if (row >= 0 && row < products.size()) {
             SanPham_DTO product = products.get(position);
             productForm = new ProductForm(this, product);
 
@@ -346,13 +386,10 @@ public class ProdmaFrame extends JFrame {
                 productForm.butForm.publisherTextField.setText(but.getHang());
             }
         }
-        else{
-            JOptionPane.showMessageDialog(this, "Vui lòng chọn một sản phẩm!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-        }
     }
 
-    private void removeButtonActionPerformed(ActionEvent evt) {
-        if (position>=0){
+    protected void removeButtonActionPerformed(int row) {
+        if (row >= 0 && row < products.size()) {
             int choice = JOptionPane.showOptionDialog(this, 
                                         "Bạn muốn xóa sản phẩm '"+products.get(position).getTen_SanPham()+"' ?", 
                                         "Xóa sản phẩm", 
@@ -375,8 +412,38 @@ public class ProdmaFrame extends JFrame {
                 }
             }
         }
-        else{
-            JOptionPane.showMessageDialog(this, "Vui lòng chọn một sản phẩm!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+    }
+
+    protected void detailButtonActionPerformed(int row) {
+        if (row >= 0 && row < products.size()) {
+            if(CurrentSachDescription != null)
+                CurrentSachDescription.dispose();
+            else if(CurrentVoDescription != null)
+                CurrentVoDescription.dispose();
+            else if(CurrentButDescription != null)
+                CurrentButDescription.dispose();
+            SanPham_DTO sp = products.get(position);
+            if (sp.getID_SanPham().contains("S")){
+                for(Sach_DTO description : SachDescriptionList){
+                    if(description.getTen_SanPham().equals(sp.getTen_SanPham())){
+                        CurrentSachDescription = new SachDescription(description);
+                    }
+                }
+            }
+            else if(sp.getID_SanPham().contains("V")){
+                for(Vo_DTO description : VoDescriptionList){
+                    if(description.getTen_SanPham().equals(sp.getTen_SanPham())){
+                        CurrentVoDescription = new VoDescription(description);
+                    }
+                }
+            }
+            else{
+                for(But_DTO description : ButDescriptionList){
+                    if(description.getTen_SanPham().equals(sp.getTen_SanPham())){
+                        CurrentButDescription = new ButDescription(description);
+                    }
+                }
+            }
         }
     }
 
@@ -416,7 +483,8 @@ public class ProdmaFrame extends JFrame {
 
     public void refreshProducts() {
         position = -1;
-        products = productBLL.getAllSanPham();
+        FilterComboBox.setSelectedItem("Tất cả");
+        getSPandDetails("Tất cả");
         showProducts(products);
     }
 
@@ -432,6 +500,13 @@ public class ProdmaFrame extends JFrame {
             }
         }
         return result;
+    }
+
+    protected void addToImportList(int row) {
+        if (row >= 0 && row < products.size()) {
+            SanPham_DTO sp = products.get(row);
+            new importQuantityFrame(this,sp);
+        }
     }
 
     public static void main(String args[]) {

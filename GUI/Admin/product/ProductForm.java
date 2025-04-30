@@ -93,7 +93,7 @@ public class ProductForm extends JFrame {
         JLabel categoryLabel = new JLabel("Category:");
         categoryLabel.setFont(new Font("Segoe UI", 0, 20));
         categoryComboBox = new JComboBox<>(new String[] { "Sách", "Vở", "Bút" });
-        categoryComboBox.setBackground(new Color(204, 204, 204));
+        categoryComboBox.setBackground(Color.WHITE);
         categoryComboBox.setFont(new Font("Segoe UI", 0, 20));
         categoryComboBox.setBorder(BorderFactory.createEtchedBorder());
         categoryPanel.add(categoryLabel);
@@ -111,6 +111,16 @@ public class ProductForm extends JFrame {
         priceTextField = new JTextField();
         priceTextField.setFont(new Font("Segoe UI", 0, 20));
         priceTextField.setBorder(inputFieldBorder);
+        priceTextField.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                char c = e.getKeyChar();
+                if (!Character.isDigit(c)) {
+                    e.consume(); // chặn nếu không phải số
+                }
+            }
+        });
+
         pricePanel.add(priceLabel);
         pricePanel.add(Box.createHorizontalStrut(10));
         pricePanel.add(priceTextField);
@@ -242,7 +252,7 @@ public class ProductForm extends JFrame {
                 String folderPath = "GUI/user/ProductImage/";
                 File destinationDir = new File(folderPath);
                 if (!destinationDir.exists()) {
-                    // destinationDir.mkdirs();  // Tạo thư mục nếu chưa tồn tại
+                    return;
                 }
         
                 // Tạo file đích với tên ID.png
