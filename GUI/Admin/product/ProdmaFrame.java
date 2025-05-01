@@ -9,12 +9,16 @@ import java.util.ArrayList;
 import javax.swing.border.*;
 import javax.swing.table.*;
 
+import BLL.Order_BLL;
+import BLL.PhieuNhap_BLL;
 import BLL.SanPham_BLL;
 import DTO.But_DTO;
 import DTO.Sach_DTO;
 import DTO.SanPham_DTO;
 import DTO.Vo_DTO;
 import DTO.ChiTietPhieuNhap_DTO;
+import DTO.OrderDetail_DTO;
+import DTO.PhieuNhap_DTO;
 import GUI.user.ButDescription;
 import GUI.user.SachDescription;
 import GUI.user.VoDescription;
@@ -41,6 +45,8 @@ public class ProdmaFrame extends JFrame {
     int position = -1;
 
     private SanPham_BLL productBLL = new SanPham_BLL();
+    private PhieuNhap_BLL pnBLL = new PhieuNhap_BLL();
+    private Order_BLL orderBLL = new Order_BLL();
     private ArrayList<Sach_DTO> SachDescriptionList;
     private ArrayList<Vo_DTO> VoDescriptionList;
     private ArrayList<But_DTO> ButDescriptionList;
@@ -390,8 +396,9 @@ public class ProdmaFrame extends JFrame {
 
     protected void removeButtonActionPerformed(int row) {
         if (row >= 0 && row < products.size()) {
+            SanPham_DTO product = products.get(position);
             int choice = JOptionPane.showOptionDialog(this, 
-                                        "Bạn muốn xóa sản phẩm '"+products.get(position).getTen_SanPham()+"' ?", 
+                                        "Bạn muốn xóa sản phẩm '"+product.getTen_SanPham()+"' ?", 
                                         "Xóa sản phẩm", 
                                         JOptionPane.YES_NO_OPTION, 
                                         JOptionPane.INFORMATION_MESSAGE, 
@@ -399,9 +406,21 @@ public class ProdmaFrame extends JFrame {
                                         new Object[] {"OK","Cancel"}, 
                                         "Cancel");
             if (choice == 0){
-                if(productBLL.removeSP(products.get(position)).contains("thành công")){
+                for(ChiTietPhieuNhap_DTO ct:pnBLL.getAllChiTiet()){
+                    if(ct.getThongtinSP().getID_SanPham().equals(product.getID_SanPham())){
+                        pnBLL.removeCTPhieuNhapBySP(ct.getMaPN());
+                        break;
+                    }
+                }
+                for(OrderDetail_DTO detail:orderBLL.getAllDetail()){
+                    if(detail.getMasp().equals(product.getID_SanPham())){
+                        orderBLL.removeDetailBySP(product.getID_SanPham());
+                        break;
+                    }
+                }
+                if(productBLL.removeSP(product).contains("thành công")){
                     JOptionPane.showMessageDialog(this, "Xóa thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
-                    if(deleteProductImageById(products.get(position).getID_SanPham())){
+                    if(deleteProductImageById(product.getID_SanPham())){
                         JOptionPane.showMessageDialog(this, "Xóa ảnh thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
                     }else{
                         JOptionPane.showMessageDialog(this, "Xóa ảnh thất bại!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);

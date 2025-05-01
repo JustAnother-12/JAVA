@@ -34,7 +34,7 @@ public class PhieuNhap_DAO {
     public String getNextPHIEUID(Connection con){
         String latestID = "";
         try {
-            String sql = "SELECT maphieu FROM PHIEUNHAP ORDER BY masp DESC LIMIT 1";
+            String sql = "SELECT maphieu FROM PHIEUNHAP ORDER BY maphieu DESC LIMIT 1";
             PreparedStatement stmt = con.prepareStatement(sql);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
@@ -49,7 +49,7 @@ public class PhieuNhap_DAO {
 
         int number = Integer.parseInt(numberic);
         number++;
-        String nextnumberic = String.format("0%" + numberic.length() + "d", number);
+        String nextnumberic = String.format("%03d", number);
         return (prefix+nextnumberic).replace(" ", ""); 
     }
 
@@ -85,6 +85,38 @@ public class PhieuNhap_DAO {
                 PreparedStatement prstmt = con.prepareStatement(query);
                 prstmt.setString(1, id);
                 ResultSet rs = prstmt.executeQuery();
+                while (rs.next()) {
+                    String idpn = rs.getString("maphieu");
+                    String idsp = rs.getString("masp");
+                    int soluong = rs.getInt("soluongnhap");
+                    double dongianhap = rs.getDouble("dongianhap");
+                    SanPham_DTO sp = null; 
+                    if(idsp.contains("S")){
+                        sp = spbll.getSachFromID(idsp);
+                    } else if(idsp.contains("V")){
+                        sp = spbll.getVoFromID(idsp);
+                    } else{
+                        sp = spbll.getButFromID(idsp);
+                    }
+                    ChiTietPhieuNhap_DTO ctpn = new ChiTietPhieuNhap_DTO(idpn, sp, soluong, dongianhap);
+                    arr.add(ctpn);
+                }
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            } finally{
+                closeConnection();
+            }
+        }
+        return arr;
+    }
+
+    public ArrayList<ChiTietPhieuNhap_DTO> getAllChiTiet(){
+        ArrayList<ChiTietPhieuNhap_DTO> arr = new  ArrayList<>();
+        if (OpenConnection()){
+            try{
+                String query = "SELECT * FROM CHITIETPHIEUNHAP";
+                Statement stmt = con.createStatement();
+                ResultSet rs = stmt.executeQuery(query);
                 while (rs.next()) {
                     String idpn = rs.getString("maphieu");
                     String idsp = rs.getString("masp");
@@ -169,6 +201,74 @@ public class PhieuNhap_DAO {
             } 
         }
         return result;
+    }
+
+    public boolean removeCTPhieuNhapBySP(String id){
+        boolean result = false;
+        if (OpenConnection()) {
+            try {                   
+                con.setAutoCommit(false); 
+    
+                // Xóa chi tiết phiếu nhập
+                String query = "DELETE FROM CHITIETPHIEUNHAP WHERE maphieu = ?";
+                PreparedStatement stmt = con.prepareStatement(query);
+                stmt.setString(1, id);
+                int rowsAffected = stmt.executeUpdate();
+    
+                if (rowsAffected >= 1) {
+                    // Kiểm tra nếu không còn chi tiết nào nữa
+                    String checkQuery = "SELECT COUNT(*) AS total FROM CHITIETPHIEUNHAP WHERE maphieu = ?";
+                    PreparedStatement checkStmt = con.prepareStatement(checkQuery);
+                    checkStmt.setString(1, id);
+                    ResultSet rs = checkStmt.executeQuery();
+                    if (rs.next() && rs.getInt("total") == 0) {
+                        // Xóa luôn phiếu nhập
+                        String deletePN = "DELETE FROM PHIEUNHAP WHERE maphieu = ?";
+                        PreparedStatement delStmt = con.prepareStatement(deletePN);
+                        delStmt.setString(1, id);
+                        delStmt.executeUpdate(); // không cần kiểm tra số dòng vì COUNT trước đó đã xác nhận
+                    }
+    
+                    con.commit();
+                    result = true;
+                } else {
+                    con.rollback();
+                }
+            } catch (SQLException ex) {
+                System.out.println(ex);            
+                try {
+                    con.rollback();
+                } catch (SQLException e) {
+                    System.out.println(e);
+                }
+            } finally{
+                try{
+                    con.setAutoCommit(true);
+                } catch(SQLException e){
+                    System.out.println(e);
+                }
+                closeConnection();  
+            } 
+        }
+        return result;
+    }
+
+
+    public boolean hasCTPhieuNhapID(String id){                        
+        if (OpenConnection()) {
+            try {            
+                String sql = "SELECT * FROM CHITIETPHIEUNHAP WHERE CHITIETPHIEUNHAP.maphieu='"+id+"'";
+                Statement stmt = con.createStatement();
+                ResultSet rs = stmt.executeQuery(sql);
+                if (rs.next())
+                    return true;
+            } catch (SQLException ex) {
+                System.out.println(ex);            
+            } finally {     
+                closeConnection(); 
+            }   
+        }
+        return false;
     }
 
     public boolean hasPhieuNhapID(String id){                        

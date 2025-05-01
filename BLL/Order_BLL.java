@@ -14,6 +14,10 @@ public class Order_BLL {
         return orderDao.getDetailForOrder(id);
     }
 
+    public ArrayList<OrderDetail_DTO> getAllDetail(){
+        return orderDao.getAllDetail();
+    }
+
     public String addOrder(Order_DTO order, OrderDetail_DTO details){
         if(orderDao.hasOrderID(order.getMadonhang())){
             return "Đơn hàng đã tồn tại!";
@@ -22,6 +26,17 @@ public class Order_BLL {
             return "Thêm đơn hàng thành công!";
         }
         return "Thêm đơn hàng thất bại!";
+    }
+
+    public String removeDetailBySP(String id){
+        if(!orderDao.hasDetailID(id)){
+            return "Chi tiết đơn hàng không tồn tại!";
+        }
+        if(orderDao.removeDetailBySP(id)){
+            return "Xoá chi tiết đơn hàng thành công!";
+        }
+
+        return "Xóa chi tiết đơn hàng thất bại!";
     }
 
     public String removeOrder(String id){

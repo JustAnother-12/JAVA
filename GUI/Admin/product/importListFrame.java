@@ -5,16 +5,19 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 
 import BLL.NhaCungCap_BLL;
+import BLL.PhieuNhap_BLL;
 import DTO.ChiTietPhieuNhap_DTO;
 import DTO.NhaCungCap_DTO;
+import DTO.PhieuNhap_DTO;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class importListFrame extends JFrame{
     private JPanel mainPanel;
-    // private JLabel headerLabel;
     private JScrollPane tableScrollPane;
     private JTable importTable;
     private JLabel TotalLabel;
@@ -23,11 +26,13 @@ public class importListFrame extends JFrame{
     private JLabel providerLabel;
     private JComboBox<String> providerComboBox;
     private JLabel quantityLabel; 
-    private JTextField quantityTextField;
+    private JSpinner quantitySpinner;
     private JButton deleteButton;
 
     private NhaCungCap_BLL nccBLL;
+    private PhieuNhap_BLL pnBLL;
     private ArrayList<ChiTietPhieuNhap_DTO> importList;
+    private ArrayList<NhaCungCap_DTO> danhSachNCC;
     private double TotalValue;
     private int position = -1;
 
@@ -50,20 +55,20 @@ public class importListFrame extends JFrame{
     }
 
     private void initComponents(){
+        pnBLL = new PhieuNhap_BLL();
         mainPanel = new JPanel();
-        // headerLabel = new JLabel();
         tableScrollPane = new JScrollPane();
         importTable = new JTable();
         TotalLabel = new JLabel();
         TotalValueLabel = new JLabel();
         NhapHangButton = new JButton();
         quantityLabel = new JLabel();
-        quantityTextField = new JTextField();
+        quantitySpinner = new JSpinner();
         deleteButton = new JButton();
 
         providerLabel = new JLabel();
         nccBLL = new NhaCungCap_BLL();
-        ArrayList<NhaCungCap_DTO> danhSachNCC = nccBLL.getAllNCC();
+        danhSachNCC = nccBLL.getAllNCC();
         String[] listTenNCC = new String[danhSachNCC.size()];
         for (int i = 0; i < danhSachNCC.size(); i++) {
             listTenNCC[i] = danhSachNCC.get(i).getTenNCC();
@@ -72,12 +77,7 @@ public class importListFrame extends JFrame{
 
 
         importTable.setModel(new DefaultTableModel(
-            new Object[][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
-            },
+            new Object[][] {},
             new String[] {
                 "Tên sản phẩm", "Số lượng", "Đơn giá"
             }
@@ -133,19 +133,37 @@ public class importListFrame extends JFrame{
         quantityLabel.setText("Số lượng:");
         rightPanel.add(quantityLabel);
 
-        quantityTextField.setBackground(Color.WHITE);
-        quantityTextField.setFont(new Font("Segoe UI", 0, 16));
-        quantityTextField.setPreferredSize(new Dimension(200,30));
-        quantityTextField.addKeyListener(new KeyAdapter() {
+        quantitySpinner.setBackground(Color.WHITE);
+        quantitySpinner.setFont(new Font("Segoe UI", 0, 16));
+        quantitySpinner.setPreferredSize(new Dimension(200,30));
+        SpinnerNumberModel model = new SpinnerNumberModel(0, 0, Integer.MAX_VALUE, 1);
+        quantitySpinner.setModel(model);
+        quantitySpinner.addChangeListener(e -> {
+            if (position >= 0) {
+                int newQuantity = (int) quantitySpinner.getValue();
+                if(newQuantity > 0){
+                    importList.get(position).setSoluongNhap(newQuantity);
+                    importTable.setRowSelectionInterval(position, position); // Giữ lại dòng đang chọn
+                }else{
+                    importList.remove(position);
+                    position = -1;
+                }
+                showImports(importList); // Cập nhật lại bảng
+                TotalValueLabel.setText(String.valueOf(getTotalValue())); // Tính lại tổng tiền
+            }
+        });
+        JComponent editor = quantitySpinner.getEditor();
+        JFormattedTextField textField = ((JSpinner.DefaultEditor) editor).getTextField();
+        textField.addKeyListener(new KeyAdapter() {
             @Override
             public void keyTyped(KeyEvent e) {
                 char c = e.getKeyChar();
                 if (!Character.isDigit(c)) {
-                    e.consume(); // chặn nếu không phải số
+                    e.consume();
                 }
             }
         });
-        rightPanel.add(quantityTextField);
+        rightPanel.add(quantitySpinner);
 
         deleteButton.setBackground(new Color(51, 51, 51));
         deleteButton.setFont(new Font("Segoe UI", 0, 14));
@@ -167,22 +185,16 @@ public class importListFrame extends JFrame{
         footerPanel.setBackground(new Color(255, 255, 255));
         footerPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
 
-        JPanel TotalPanel = new JPanel();
-        TotalPanel.setBackground(new Color(255, 255, 255));
-        TotalPanel.setLayout(new FlowLayout());
-        TotalPanel.setPreferredSize(new Dimension(400, 30));
-
         TotalLabel.setFont(new Font("Segoe UI", 0, 14));
         TotalLabel.setText("Tổng cộng:");
-        TotalPanel.add(TotalLabel);
+        footerPanel.add(TotalLabel);
 
         TotalValueLabel.setFont(new Font("Segoe UI", 0, 14));
         TotalValueLabel.setPreferredSize(new Dimension(200,30));
-        TotalValueLabel.setText("0");
+        TotalValueLabel.setText(String.valueOf(getTotalValue()));
         TotalValueLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
-        TotalPanel.add(TotalValueLabel);
+        footerPanel.add(TotalValueLabel);
 
-        footerPanel.add(TotalPanel);
 
         NhapHangButton.setBackground(new Color(204, 204, 204));
         NhapHangButton.setFont(new Font("Segoe UI", 0, 14));
@@ -215,23 +227,63 @@ public class importListFrame extends JFrame{
             .addComponent(mainPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
-        setSize(1000, 600);
-        setMinimumSize(new Dimension(800, 500));
+        setSize(800, 400);
+        setMinimumSize(new Dimension(800, 400));
         setLocationRelativeTo(null);
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setVisible(true);
+    }
+
+    private Double getTotalValue(){
+        TotalValue = 0.0;
+        for (ChiTietPhieuNhap_DTO ct:importList){
+            TotalValue+=ct.getDongiaNhap()*ct.getSoluongNhap();
+        }
+        return TotalValue;
     }
 
     private void importTableMouseClicked(MouseEvent evt) {
         position = importTable.getSelectedRow();
         importTable.setRowSelectionInterval(position, position);
+        ChiTietPhieuNhap_DTO ct = importList.get(position);
+        quantitySpinner.setValue(ct.getSoluongNhap());
     }
 
     private void deleteButtonActionPerformed(ActionEvent evt){
-
+        if(position>=0){
+            importList.remove(position);
+            showImports(importList);
+            TotalValueLabel.setText(String.valueOf(getTotalValue())); // Tính lại tổng tiền
+            position = -1;
+        }else{
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn một sản phẩm!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private void NhapHangButtonActionPerformed(ActionEvent evt){
+        NhaCungCap_DTO nhacungcap = null;
+        for(NhaCungCap_DTO ncc:danhSachNCC){
+            if(ncc.getTenNCC().equals(providerComboBox.getSelectedItem().toString())){
+                nhacungcap = ncc;
+            }
+        }
+        if (nhacungcap != null && !importList.isEmpty()){
+            PhieuNhap_DTO pn = new PhieuNhap_DTO("",nhacungcap.getMaNCC(), "NV001", getCurrentDay(), importList);
+            JOptionPane.showMessageDialog(this, pnBLL.addPhieuNhap(pn), "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+            importList.clear();
+            showImports(importList);
+            TotalValueLabel.setText(String.valueOf(getTotalValue())); // Tính lại tổng tiền
+            position = -1;
+        }
+        else{
+            JOptionPane.showMessageDialog(this, "Danh sách rỗng!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+        }
+    }
 
+    private String getCurrentDay() {
+        LocalDate ngayHienTai = LocalDate.now();
+        DateTimeFormatter dinhDang = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        return ngayHienTai.format(dinhDang);
     }
 }

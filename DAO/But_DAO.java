@@ -66,7 +66,7 @@ public class But_DAO {
 
         int number = Integer.parseInt(numberic);
         number++;
-        String nextnumberic = String.format("0%" + numberic.length() + "d", number);
+        String nextnumberic = String.format("%03d", number);
         return (prefix+nextnumberic).replace(" ", ""); 
     }
 
