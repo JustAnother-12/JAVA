@@ -14,7 +14,7 @@ public class Order_DAO {
     public boolean OpenConnection() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/ban_van_phong_pham", "root", "");
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/ban_van_phong_pham", "root", "123456789");
             return true;
         } catch (ClassNotFoundException | SQLException e) {
             System.out.println(e.getMessage());
@@ -153,6 +153,33 @@ public class Order_DAO {
         return null;
     }
 
+    public ArrayList<OrderDetail_DTO> getAllDetail(){
+        ArrayList<OrderDetail_DTO> arr = new  ArrayList<>();
+        if (OpenConnection()){
+            try{
+                String query = "SELECT * FROM CHITIETDONHANG";
+                Statement pstmt = con.createStatement();
+                ResultSet rs = pstmt.executeQuery(query);
+                while (rs.next()) {
+                    String madonhang = rs.getString("madonhang");
+                    String masp = rs.getString("masp");
+                    int soluong = rs.getInt("soluong");
+                    double dongia = rs.getDouble("dongia");
+                    double thanhtien = rs.getDouble("thanhtien");
+
+                    // Tạo đối tượng OrderDetail
+                    OrderDetail_DTO detail = new OrderDetail_DTO(madonhang, masp, soluong, dongia, thanhtien);
+                    arr.add(detail);
+                }
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            } finally{
+                closeConnection();
+            }
+        }
+        return arr;
+    }
+
     public boolean ConfirmOrder(String id){
         if (OpenConnection()){
             try{
@@ -227,17 +254,81 @@ public class Order_DAO {
         return false;
     }
 
+    public boolean removeDetailBySP(String id){
+        boolean result = false;
+        if (OpenConnection()) {
+            try {                   
+                con.setAutoCommit(false); 
+    
+                // Xóa chi tiết đơn hàng
+                String query = "DELETE FROM CHITIETDONHANG WHERE madonhang = ?";
+                PreparedStatement stmt = con.prepareStatement(query);
+                stmt.setString(1, id);
+                int rowsAffected = stmt.executeUpdate();
+    
+                if (rowsAffected >= 1) {
+                    // Kiểm tra nếu không còn chi tiết nào nữa
+                    String checkQuery = "SELECT COUNT(*) AS total FROM CHITIETDONHANG WHERE madonhang = ?";
+                    PreparedStatement checkStmt = con.prepareStatement(checkQuery);
+                    checkStmt.setString(1, id);
+                    ResultSet rs = checkStmt.executeQuery();
+                    if (rs.next() && rs.getInt("total") == 0) {
+                        // Xóa luôn phiếu nhập
+                        String deletePN = "DELETE FROM DONHANG WHERE madonhang = ?";
+                        PreparedStatement delStmt = con.prepareStatement(deletePN);
+                        delStmt.setString(1, id);
+                        delStmt.executeUpdate(); // không cần kiểm tra số dòng vì COUNT trước đó đã xác nhận
+                    }
+    
+                    con.commit();
+                    result = true;
+                } else {
+                    con.rollback();
+                }
+            } catch (SQLException ex) {
+                System.out.println(ex);            
+                try {
+                    con.rollback();
+                } catch (SQLException e) {
+                    System.out.println(e);
+                }
+            } finally{
+                try{
+                    con.setAutoCommit(true);
+                } catch(SQLException e){
+                    System.out.println(e);
+                }
+                closeConnection();  
+            } 
+        }
+        return result;
+    }
+
+    public boolean hasDetailID(String id){
+        if (OpenConnection()) {
+            try {            
+                String sql = "SELECT * FROM CHITIETDONHANG WHERE CHITIETDONHANG.madonhang='"+id+"'";
+                Statement stmt = con.createStatement();
+                ResultSet rs = stmt.executeQuery(sql);
+                if (rs.next())
+                    return true;
+            } catch (SQLException ex) {
+                System.out.println(ex);            
+            } finally {     
+                closeConnection(); 
+            }   
+        }
+        return false;
+    }
+
     public boolean hasOrderID(String id){
         if (OpenConnection()) {
             try {            
-            String deleteChiTietSql = "DELETE FROM CHITETDONHANG WHERE madonhang ="+id;
-            String deleteDonHangSql = "DELETE FROM DONHANG WHERE madonhang ="+id;
-            Statement stmt1 = con.createStatement();
-            Statement stmt2 = con.createStatement();
-            ResultSet rs1 = stmt1.executeQuery(deleteChiTietSql);
-            ResultSet rs2 = stmt2.executeQuery(deleteDonHangSql);
-            if (rs1.next() && rs2.next())
-                return true;
+                String sql = "SELECT * FROM DONHANG WHERE DONHANG.madonhang='"+id+"'";
+                Statement stmt = con.createStatement();
+                ResultSet rs = stmt.executeQuery(sql);
+                if (rs.next())
+                    return true;
             } catch (SQLException ex) {
                 System.out.println(ex);            
             } finally {     

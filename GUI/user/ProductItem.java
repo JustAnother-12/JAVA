@@ -12,7 +12,6 @@ public class ProductItem extends JPanel {
     private JLabel Imagelb;
     private JLabel Namelb;
     private JLabel PriceTaglb;
-    private boolean selected;
 
     public String getName(){
         return Namelb.getText();

@@ -6,10 +6,24 @@
     "configurations": [
         {
             "type": "java",
-            "name": "Run Main",
+            "name": "TrangChu",
             "request": "launch",
-            "mainClass": "GUI.Admin.Main",
-            "projectName": "JAVA"
+            "mainClass": "GUI.user.TrangChu",
+            "projectName": "JAVA_1c7fabf8"
+        },
+        {
+            "type": "java",
+            "name": "ProdmaFrame",
+            "request": "launch",
+            "mainClass": "GUI.Admin.product.ProdmaFrame",
+            "projectName": "JAVA_1c7fabf8"
+        },
+        {
+            "type": "java",
+            "name": "ProductManager",
+            "request": "launch",
+            "mainClass": "GUI.Admin.product.ProductManager",
+            "projectName": "JAVA_1c7fabf8"
         },
         {
             "type": "java",
@@ -17,16 +31,6 @@
             "request": "launch",
             "mainClass": "GUI.Admin.Main",
             "projectName": "JAVA_136c8796"
-        },
-        {
-            "type": "java",
-            "name": "Launch Main",
-            "request": "launch",
-            "mainClass": "GUI.Admin.Main",
-            "projectName": "JAVA",
-            "classPaths": [
-                "lib/mysql-connector-j-9.2.0.jar"
-            ]
         },
         {
             "type": "java",

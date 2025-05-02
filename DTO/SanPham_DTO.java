@@ -55,5 +55,18 @@ public abstract class SanPham_DTO{
     public void setSoLuong_SanPham(int SoLuong_SanPham) {
         this.SoLuong_SanPham = SoLuong_SanPham;
     }
+
+    public String getDanhMuc(){
+        switch (ID_SanPham.substring(0, 1)) {
+            case "S":
+                return "Sách";
+            case "V":
+                return "Vở";
+            case "B":
+                return "Bút";
+            default:
+                return "N/A";
+        }
+    }
     
 }
