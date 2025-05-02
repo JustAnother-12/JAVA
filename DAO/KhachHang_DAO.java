@@ -2,10 +2,18 @@ package DAO;
 
 import DTO.*;
 import java.sql.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
+import javax.swing.JComboBox;
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
+import java.util.Date;
 
-public class KhachHang_DAO {
+public class KhachHang_DAO extends JDialog {
     private Connection con;
 
     public boolean OpenConnection() {
@@ -194,4 +202,156 @@ public class KhachHang_DAO {
         }
         return null;
     }
+    public void deleteCustomer(String id, DefaultTableModel tableModel, ArrayList<KhachHang_DTO> customerList) {
+        try (Connection conn = DatabaseConnection.getConnection()) {
+    
+            // 1. Lấy tất cả mã đơn hàng của khách hàng
+            String selectOrders = "SELECT madonhang FROM donhang WHERE makh = ?";
+            try (PreparedStatement selectOrderStmt = conn.prepareStatement(selectOrders)) {
+                selectOrderStmt.setString(1, id);
+                ResultSet rs = selectOrderStmt.executeQuery();
+    
+                // 2. Với mỗi đơn hàng, xóa chi tiết đơn hàng
+                while (rs.next()) {
+                    String madh = rs.getString("madonhang");
+    
+                    String deleteChiTiet = "DELETE FROM chitietdonhang WHERE madonhang = ?";
+                    try (PreparedStatement delCTStmt = conn.prepareStatement(deleteChiTiet)) {
+                        delCTStmt.setString(1, madh);
+                        delCTStmt.executeUpdate();
+                    }
+                }
+            }
+    
+            // 3. Xoá đơn hàng của khách
+            String deleteDonHang = "DELETE FROM donhang WHERE makh = ?";
+            try (PreparedStatement delOrderStmt = conn.prepareStatement(deleteDonHang)) {
+                delOrderStmt.setString(1, id);
+                delOrderStmt.executeUpdate();
+            }
+    
+            // 4. Xoá khách hàng
+            String deleteCustomer = "DELETE FROM khachhang WHERE makh = ?";
+            try (PreparedStatement delCustomerStmt = conn.prepareStatement(deleteCustomer)) {
+                delCustomerStmt.setString(1, id);
+                int affected = delCustomerStmt.executeUpdate();
+    
+                if (affected > 0) {
+                    JOptionPane.showMessageDialog(null, "Đã xóa khách hàng, đơn hàng và chi tiết liên quan.");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Không tìm thấy khách hàng để xóa.");
+                }
+            }
+    
+            // 5. Cập nhật lại bảng hiển thị
+            loadDataFormDatabase(customerList, tableModel);
+    
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null,
+                "Lỗi khi xóa khách hàng: " + e.getMessage(),
+                "Lỗi", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    
+    
+    public void loadDataFormDatabase(ArrayList<KhachHang_DTO> customerList,DefaultTableModel tableModel) {
+        try (Connection conn = DatabaseConnection.getConnection()) {
+                String queryforcs = "SELECT * FROM KHACHHANG";
+                PreparedStatement pstmt = conn.prepareStatement(queryforcs);
+                ResultSet rs = pstmt.executeQuery();
+                
+                while (rs.next()) {
+                    String id = rs.getString("makh");
+                    String name = rs.getString("tenkh");
+                    String username = rs.getString("username");
+                    String phone = rs.getString("sdt");
+                    KhachHang_DTO kh = new KhachHang_DTO(id, name, username, phone);
+                    customerList.add(kh);
+                    tableModel.addRow(new Object[]{id, name, username, phone,"Chi tiết" + "Xóa"});
+                }
+        } catch (Exception e) {}
+    }
+    // Kiểm tra SDT đã tồn tại (ngoại trừ khách hàng hiện tại)
+    public boolean isCustomerPhoneExist(Connection conn, String phone, String currentUsername) throws SQLException {
+        String query = "SELECT * FROM KHACHHANG WHERE sdt = ? AND username <> ?";
+        PreparedStatement stmt = conn.prepareStatement(query);
+        stmt.setString(1, phone);
+        stmt.setString(2, currentUsername);
+        ResultSet rs = stmt.executeQuery();
+        return rs.next();
+    }
+
+    // Kiểm tra email đã tồn tại (ngoại trừ khách hàng hiện tại)
+    public boolean isCustomerEmailExist(Connection conn, String email, String currentUsername) throws SQLException {
+        String query = "SELECT * FROM KHACHHANG WHERE email = ? AND username <> ?";
+        PreparedStatement stmt = conn.prepareStatement(query);
+        stmt.setString(1, email);
+        stmt.setString(2, currentUsername);
+        ResultSet rs = stmt.executeQuery();
+        return rs.next();
+    }
+
+    // Kiểm tra username đã tồn tại nếu đổi
+    public boolean isCustomerUsernameExist(Connection conn, String username) throws SQLException {
+        String query = "SELECT * FROM KHACHHANG WHERE username = ?";
+        PreparedStatement stmt = conn.prepareStatement(query);
+        stmt.setString(1, username);
+        ResultSet rs = stmt.executeQuery();
+        return rs.next();
+    }
+
+    public void updateCustomer(KhachHang_DTO kh, JTextField txtName, JTextField txtPhone, JTextField txtUsername,
+                           JTextField txtAddress, JTextField txtBirthday, JTextField txtEmail,
+                           JComboBox<String> cbGender) throws ParseException {
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            String newPhone = txtPhone.getText();
+            String newEmail = txtEmail.getText();
+            String newUsername = txtUsername.getText();
+            String currentUsername = kh.getUsername();  // Lưu ý: bạn phải có getUsername() trong DTO
+
+            // Kiểm tra trùng dữ liệu
+            if (isCustomerPhoneExist(conn, newPhone, currentUsername)) {
+                JOptionPane.showMessageDialog(null, "Số điện thoại đã tồn tại!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            if (isCustomerEmailExist(conn, newEmail, currentUsername)) {
+                JOptionPane.showMessageDialog(null, "Email đã tồn tại!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            if (!newUsername.equals(currentUsername) && isCustomerUsernameExist(conn, newUsername)) {
+                JOptionPane.showMessageDialog(null, "Username đã tồn tại!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            // Nếu không trùng thì cập nhật
+            String query = "UPDATE KHACHHANG SET tenkh = ?, sdt = ?, username = ?, diachikh = ?, ngaysinh = ?, email = ?, gioi = ? WHERE username = ?";
+            PreparedStatement pstmt = conn.prepareStatement(query);
+            pstmt.setString(1, txtName.getText());
+            pstmt.setString(2, newPhone);
+            pstmt.setString(3, newUsername);
+            pstmt.setString(4, txtAddress.getText());
+
+            SimpleDateFormat inputFormat = new SimpleDateFormat("dd/MM/yyyy");
+            SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date date = inputFormat.parse(txtBirthday.getText());
+            String formattedDate = outputFormat.format(date);
+
+            pstmt.setString(5, formattedDate);
+            pstmt.setString(6, newEmail);
+            pstmt.setString(7, (String) cbGender.getSelectedItem());
+            pstmt.setString(8, currentUsername);
+
+            pstmt.executeUpdate();
+            JOptionPane.showMessageDialog(null, "Cập nhật thông tin khách hàng thành công!");
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Lỗi khi cập nhật thông tin: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
 }

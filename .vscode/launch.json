@@ -6,10 +6,27 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Run Main",
+            "request": "launch",
+            "mainClass": "GUI.Admin.Main",
+            "projectName": "JAVA"
+        },
+        {
+            "type": "java",
             "name": "Main",
             "request": "launch",
             "mainClass": "GUI.Admin.Main",
             "projectName": "JAVA_136c8796"
+        },
+        {
+            "type": "java",
+            "name": "Launch Main",
+            "request": "launch",
+            "mainClass": "GUI.Admin.Main",
+            "projectName": "JAVA",
+            "classPaths": [
+                "lib/mysql-connector-j-9.2.0.jar"
+            ]
         },
         {
             "type": "java",

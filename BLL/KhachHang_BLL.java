@@ -1,10 +1,20 @@
 package BLL;
 
 import DTO.KhachHang_DTO;
+import GUI.Admin.swing.CheckFailInput_BLL;
 import DAO.KhachHang_DAO;
-import java.util.ArrayList;
+import DAO.NhanVien_DAO;
 
-public class KhachHang_BLL {
+import java.util.ArrayList;
+import javax.swing.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.sql.SQLException;
+import java.text.ParseException;
+
+import javax.swing.table.DefaultTableModel;
+
+public class KhachHang_BLL extends JDialog{
     KhachHang_DAO khachhangDao = new KhachHang_DAO();
 
     public ArrayList<KhachHang_DTO> getAllKhachHang(){
@@ -41,4 +51,29 @@ public class KhachHang_BLL {
 
         return "Xóa Khách hàng thất bại!";
     }
+    public void LoadDataToTabel(DefaultTableModel tableModel, ArrayList<KhachHang_DTO> customerList) {
+        KhachHang_DAO KhachHang_DAO = new KhachHang_DAO();
+        KhachHang_DAO.loadDataFormDatabase(customerList, tableModel);
+       }
+    public boolean updateCustomer(JTextField txtName,JTextField txtPhone,JTextField txtUsername,JTextField txtAddress,JTextField txtBirthday, JTextField txtEmail,JComboBox<String> cbGender, boolean isCustomer, KhachHang_DTO kh) {
+        KhachHang_DAO KhachHang_DAO = new KhachHang_DAO();
+        CheckFailInput_BLL checkFailInput_BLL = new CheckFailInput_BLL();
+        if (checkFailInput_BLL.validateFields(isCustomer, txtName, txtPhone, txtUsername, txtAddress, txtBirthday, txtEmail, null, null)) {
+            try {
+                KhachHang_DAO.updateCustomer(kh, txtName, txtPhone, txtUsername, txtBirthday, txtAddress, txtEmail, cbGender);
+                return true;
+            } catch (ParseException ex) {
+                Logger.getLogger(KhachHang_DAO.class.getName()).log(Level.SEVERE, "Error updating customer", ex);
+            }
+        }
+        return false;
+    }
+    public void deleteCustomer(String id, DefaultTableModel tableModel, ArrayList<KhachHang_DTO> staffList) throws SQLException {
+    try {
+        KhachHang_DAO temp = new KhachHang_DAO();
+        temp.deleteCustomer(id, tableModel, staffList);
+    } catch (Exception ex) {
+        Logger.getLogger(NhanVien_DAO.class.getName()).log(Level.SEVERE, "General Error deleting staff", ex);
+    }
+   }
 }

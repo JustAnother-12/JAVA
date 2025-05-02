@@ -3,10 +3,8 @@ package GUI.Admin.staff;
 import DAO.KhachHang_DAO;
 import DAO.NhanVien_DAO;
 import javax.swing.*;
-
-import BLL.Customer_BLL;
+import BLL.KhachHang_BLL;
 import BLL.NhanVien_BLL;
-
 import java.awt.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -80,8 +78,8 @@ public class ChiTietNhanVien extends JDialog {
         // Thêm sự kiện cho nút Lưu
         btnSave.addActionListener(e -> {
             // Cập nhật thông tin
-            Customer_BLL Customer_BLL = new Customer_BLL();
-            boolean khachhang = Customer_BLL.updateCustomer(txtName, txtPhone, txtUsername, txtAddress, txtBirthday, txtEmail, cbGender, isCustomer, kh);
+            KhachHang_BLL KhachHang_BLL = new KhachHang_BLL();
+            boolean khachhang = KhachHang_BLL.updateCustomer(txtName, txtPhone, txtUsername, txtAddress, txtBirthday, txtEmail, cbGender, isCustomer, kh);
             if (khachhang == true) 
                 dispose();
         });
