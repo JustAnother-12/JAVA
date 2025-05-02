@@ -93,6 +93,7 @@ public class CustomerTable extends javax.swing.JPanel implements GUI.Admin.compo
     @Override
     public void onSearch(String text) {
         searchById(text,tableModel,table);
+        searchByName(text, tableModel, table);
     }
     @Override
     public void onFilterByRole(String role) {
@@ -108,6 +109,15 @@ public class CustomerTable extends javax.swing.JPanel implements GUI.Admin.compo
             sorter.setRowFilter(null); // Hiện toàn bộ
         } else {
             sorter.setRowFilter(RowFilter.regexFilter("(?i)" + text.trim(), 0)); // Theo cột ID
+        }
+    }
+    public void searchByName(String text,DefaultTableModel tableModel,JTable table) {
+        TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(tableModel);
+        table.setRowSorter(sorter);
+        if (text.trim().isEmpty()) {
+            sorter.setRowFilter(null); // Hiện toàn bộ
+        } else {
+            sorter.setRowFilter(RowFilter.regexFilter("(?i)" + text.trim(), 1)); // Theo cột Name
         }
     }
     public void sortTable(boolean ascending,DefaultTableModel tableModel,JTable table) {

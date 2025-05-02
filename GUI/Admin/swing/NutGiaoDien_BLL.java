@@ -2,9 +2,7 @@ package GUI.Admin.swing;
 
 import javax.swing.*;
 import javax.swing.table.TableCellRenderer;
-
 import DTO.Order_DTO;
-
 import java.awt.*;
 import java.util.ArrayList;
 

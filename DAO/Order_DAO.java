@@ -3,6 +3,8 @@ package DAO;
 import DTO.*;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.swing.table.DefaultTableModel;
 
@@ -31,21 +33,26 @@ public class Order_DAO {
             System.out.println(e.getMessage());
         }
     }
-    public void loadDataFormDatabase(DefaultTableModel tableModel,ArrayList<Order_DTO> orderList,ArrayList<OrderDetail_DTO> orderDetailList) {
-        try (Connection conn = DatabaseConnection.getConnection()) {
-            String query = "SELECT d.madonhang, d.diachidat, d.ngaydat, d.tinhtrang, d.tongtien, d.manv, d.makh, ct.masp, ct.soluong, ct.dongia, ct.thanhtien FROM DONHANG d JOIN CHITIETDONHANG ct ON d.madonhang = ct.madonhang";
-            PreparedStatement pstmt = conn.prepareStatement(query);
-            ResultSet rs = pstmt.executeQuery();
+    public void loadDataFormDatabase(DefaultTableModel tableModel, ArrayList<Order_DTO> orderList, ArrayList<OrderDetail_DTO> orderDetailList) {
+    try (Connection conn = DatabaseConnection.getConnection()) {
+        String query = "SELECT d.madonhang, d.diachidat, d.ngaydat, d.tinhtrang, d.tongtien, d.manv, d.makh, ct.masp, ct.soluong, ct.dongia, ct.thanhtien FROM DONHANG d JOIN CHITIETDONHANG ct ON d.madonhang = ct.madonhang";
+        PreparedStatement pstmt = conn.prepareStatement(query);
+        ResultSet rs = pstmt.executeQuery();
 
-            while (rs.next()) {
-                // Lấy dữ liệu đơn hàng
-                String madonhang = rs.getString("madonhang");
-                String diachidat = rs.getString("diachidat");
-                String ngaydat = rs.getString("ngaydat");
-                String tinhtrang = rs.getString("tinhtrang");
-                double tongtien = rs.getDouble("tongtien");
-                String manv = rs.getString("manv");
-                String makh = rs.getString("makh");
+        Set<String> addedOrderIds = new HashSet<>();
+
+        while (rs.next()) {
+            // Lấy dữ liệu đơn hàng
+            String madonhang = rs.getString("madonhang");
+            String diachidat = rs.getString("diachidat");
+            String ngaydat = rs.getString("ngaydat");
+            String tinhtrang = rs.getString("tinhtrang");
+            double tongtien = rs.getDouble("tongtien");
+            String manv = rs.getString("manv");
+            String makh = rs.getString("makh");
+
+            // Chỉ thêm vào orderList 1 lần
+            if (!addedOrderIds.contains(madonhang)) {
                 String tenkh = "";
                 String queryFindUser = "SELECT tenkh FROM KHACHHANG WHERE makh = ?";
                 try (PreparedStatement findName = conn.prepareStatement(queryFindUser)) {
@@ -55,34 +62,34 @@ public class Order_DAO {
                         tenkh = rsTenKH.getString("tenkh");
                     }
                 }
-                // Tạo đối tượng Order
+
+                // Tạo đối tượng Order và thêm vào danh sách
                 Order_DTO order = new Order_DTO(madonhang, diachidat, ngaydat, tinhtrang, tongtien, manv, makh);
                 orderList.add(order);
+
+                // Hiển thị lên bảng (chỉ 1 lần)
                 FormatDate_BLL temp = new FormatDate_BLL();
                 String Date = temp.convertDateFormat(ngaydat);
-                tableModel.addRow(new Object[] {
-                madonhang,tenkh,tinhtrang,Date,tongtien,"Tác vụ"
-                //Hiển thị lên bảng (JTable)
-            });
-            // Lấy dữ liệu chi tiết đơn hàng
+                tableModel.addRow(new Object[]{madonhang, tenkh, tinhtrang, Date, tongtien, "Tác vụ"});
+
+                addedOrderIds.add(madonhang);
+            }
+
+            // Dữ liệu chi tiết đơn hàng
             String masp = rs.getString("masp");
             int soluong = rs.getInt("soluong");
             double dongia = rs.getDouble("dongia");
             double thanhtien = rs.getDouble("thanhtien");
 
-            // Tạo đối tượng OrderDetail
+            // Thêm chi tiết
             OrderDetail_DTO detail = new OrderDetail_DTO(madonhang, masp, soluong, dongia, thanhtien);
             orderDetailList.add(detail);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
-        // orderList = orderbll.getAllOrder();
-        // for(Order_DTO order : orderList){
-        //     OrderDetail_DTO detail = orderbll.getDetails(order.getMadonhang());
-        //     orderDetailList.add(detail);
-        // }
+    } catch (Exception e) {
+        e.printStackTrace();
     }
+}
+
 
     public ArrayList<Order_DTO> getAllOrder(){
         ArrayList<Order_DTO> arr = new  ArrayList<>();
@@ -101,18 +108,6 @@ public class Order_DAO {
                     double tongtien = rs.getDouble("tongtien");
                     String manv = rs.getString("manv");
                     String makh = rs.getString("makh");
-                    // String tenkh = "";
-
-                    // // Tìm tên khách hanngf trong csdl
-                    // String queryFindUser = "SELECT tenkh FROM KHACHHANG WHERE makh = ?";
-                    // try (PreparedStatement findName = con.prepareStatement(queryFindUser)) {
-                    //     findName.setString(1, makh);
-                    //     ResultSet rsTenKH = findName.executeQuery();
-                    //     if (rsTenKH.next()) {
-                    //         tenkh = rsTenKH.getString("tenkh");
-                    //     }
-                    // }
-
                     // Tạo đối tượng Order
                     Order_DTO order = new Order_DTO(madonhang, diachidat, ngaydat, tinhtrang, tongtien, manv, makh);
                     arr.add(order);
@@ -232,19 +227,19 @@ public class Order_DAO {
     public boolean DeleteOrder(String id){
         if (OpenConnection()){
             try{
-                String deleteChiTietSql = "DELETE FROM CHITETDONHANG WHERE madonhang = ?";
+                String deleteChiTietSql = "DELETE FROM CHITIETDONHANG WHERE madonhang = ?";
                 String deleteDonHangSql = "DELETE FROM DONHANG WHERE madonhang = ?";
                 PreparedStatement deleteChiTietStmt = con.prepareStatement(deleteChiTietSql);
                 PreparedStatement deleteDonHangStmt = con.prepareStatement(deleteDonHangSql);
-                
-                // Xóa chi tiết đơn hàng
+    
+                // ✅ Đúng thứ tự: xoá chi tiết trước
                 deleteChiTietStmt.setString(1, id);
-                // Xóa đơn hàng
+                deleteChiTietStmt.executeUpdate();
+    
                 deleteDonHangStmt.setString(1, id);
-                if (deleteDonHangStmt.executeUpdate() >=1 &&  deleteChiTietStmt.executeUpdate() >= 1){
-                    return true;
-                }
-                System.out.println("Đơn hàng và chi tiết đơn hàng đã được xóa thành công.");
+                deleteDonHangStmt.executeUpdate();
+    
+                return true;
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
             } finally{
@@ -253,7 +248,7 @@ public class Order_DAO {
         }
         return false;
     }
-
+    
     public boolean removeDetailBySP(String id){
         boolean result = false;
         if (OpenConnection()) {
@@ -337,5 +332,44 @@ public class Order_DAO {
         }
         return false;
     }
-    
+
+    public String getCustomerName(String makh) {
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            PreparedStatement stmt = conn.prepareStatement("SELECT tenkh FROM KHACHHANG WHERE makh = ?");
+            stmt.setString(1, makh);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) return rs.getString("tenkh");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return "Không rõ";
+    }
+
+    public String getEmployeeInfo(String manv) {
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            PreparedStatement stmt = conn.prepareStatement("SELECT tennv FROM NHANVIEN WHERE manv = ?");
+            stmt.setString(1, manv);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return manv + " - " + rs.getString("tennv");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
+    public String getProductName(String masp) {
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            PreparedStatement stmt = conn.prepareStatement("SELECT tensp FROM SANPHAM WHERE masp = ?");
+            stmt.setString(1, masp);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getString("tensp");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return "Không rõ";
+    }
 }

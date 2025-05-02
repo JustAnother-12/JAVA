@@ -113,6 +113,7 @@ public class NhanVienTable extends JPanel  implements GUI.Admin.component.Header
     @Override
     public void onSearch(String text) {
         searchById(text, tableModel, table);
+        searchByName(text, tableModel, table);
     }
 
     @Override
@@ -127,6 +128,15 @@ public class NhanVienTable extends JPanel  implements GUI.Admin.component.Header
             sorter.setRowFilter(null); // Hiện toàn bộ
         } else {
             sorter.setRowFilter(RowFilter.regexFilter("(?i)" + text.trim(), 0)); // Theo cột ID
+        }
+    }
+    public void searchByName(String text,DefaultTableModel tableModel,JTable table) {
+        TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(tableModel);
+        table.setRowSorter(sorter);
+        if (text.trim().isEmpty()) {
+            sorter.setRowFilter(null); // Hiện toàn bộ
+        } else {
+            sorter.setRowFilter(RowFilter.regexFilter("(?i)" + text.trim(), 1)); // Theo cột Name
         }
     }
 }
