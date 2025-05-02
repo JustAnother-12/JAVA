@@ -3,6 +3,8 @@ package GUI.user;
 import java.awt.*;
 import javax.swing.*;
 
+import utils.MyButton;
+
 public class DangKy extends JFrame {
     private JPanel panel = new JPanel();
     private JLabel lblTitle = new JLabel("ĐĂNG KÝ", JLabel.CENTER);

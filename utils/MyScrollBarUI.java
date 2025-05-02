@@ -1,4 +1,4 @@
-package GUI.user;
+package utils;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -42,7 +42,7 @@ public class MyScrollBarUI extends BasicScrollBarUI {
     protected void paintThumb(Graphics g, JComponent c, Rectangle thumbBounds) {
         Graphics2D g2 = (Graphics2D) g.create();
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        g2.setColor(new Color(200, 200, 200));
+        g2.setColor(new Color(180, 180, 180));
         g2.fillRoundRect(thumbBounds.x, thumbBounds.y + 10, thumbBounds.width, thumbBounds.height- 20, 10, 10);
         g2.dispose();
     }

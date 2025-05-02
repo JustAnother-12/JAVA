@@ -4,6 +4,7 @@ import javax.swing.*;
 
 import DTO.ChiTietPhieuNhap_DTO;
 import DTO.SanPham_DTO;
+import utils.*;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -13,11 +14,9 @@ public class importQuantityFrame extends JFrame{
     private JLabel formLabel;
     private JLabel quantityLabel;
     private JTextField quantityTextfield;
-    // private JLabel providerLabel;
-    // private JComboBox<String> providerComboBox; 
 
-    private JButton confirmButton;
-    private JButton cancelButton;
+    private MyButton confirmButton;
+    private MyButton cancelButton;
 
 
     private SanPham_DTO sp;
@@ -43,8 +42,8 @@ public class importQuantityFrame extends JFrame{
         //     listTenNCC[i] = danhSachNCC.get(i).getTenNCC();
         // }
         // providerComboBox = new JComboBox<>(listTenNCC);
-        confirmButton = new JButton("Xác nhận");
-        cancelButton = new JButton("Hủy"); 
+        confirmButton = new MyButton("Xác nhận");
+        cancelButton = new MyButton("Hủy"); 
 
         formPanel.setLayout(new BoxLayout(formPanel, BoxLayout.Y_AXIS));
         formPanel.setPreferredSize(new Dimension(400,300));
@@ -85,33 +84,19 @@ public class importQuantityFrame extends JFrame{
         formPanel.add(Box.createVerticalStrut(10));
 
 
-        // JPanel providerPanel = new JPanel();
-        // providerPanel.setLayout(new FlowLayout());
-        // providerPanel.setBackground(Color.WHITE);
-
-        // providerLabel.setFont(new Font("Segoe UI", 0, 16));
-
-        // providerComboBox.setBackground(Color.WHITE);
-        // providerComboBox.setFont(new Font("Segoe UI", 0, 16));
-        
-        // providerPanel.add(providerLabel);
-        // providerPanel.add(providerComboBox);
-
-        // formPanel.add(providerPanel);
-        // formPanel.add(Box.createHorizontalStrut(20));
-
-
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
         buttonPanel.setBackground(Color.WHITE);
         
         confirmButton.setFont(new Font("Segoe UI", 0, 16));
+        confirmButton.setBackground(Color.decode("#00B4DB"));
         confirmButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 confirmButtonActionPerformed(evt);
             }
         });
         cancelButton.setFont(new Font("Segoe UI", 0, 16));
+        cancelButton.setBackground(new Color(190,190,190));
         cancelButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 dispose();
@@ -145,7 +130,19 @@ public class importQuantityFrame extends JFrame{
         }
         if(quantity >=1){
             ChiTietPhieuNhap_DTO hangnhap = new ChiTietPhieuNhap_DTO("", sp, quantity, sp.getGia_SanPham()*0.8);
-            parent.importList.add(hangnhap);
+            int index = 0;
+            boolean existed = false;
+            for(ChiTietPhieuNhap_DTO ct:parent.importList){
+                if(ct.getThongtinSP().getID_SanPham().equals(hangnhap.getThongtinSP().getID_SanPham()) ){ // trùng thì tăng số lượng
+                    int OldQuantity = ct.getSoluongNhap();
+                    parent.importList.get(index).setSoluongNhap(OldQuantity+hangnhap.getSoluongNhap());
+                    existed = true;
+                }
+                index++;
+            }
+            if(!existed) // không trùng thì thêm vào
+                parent.importList.add(hangnhap);
+
             JOptionPane.showMessageDialog(this, 
                     "Đã thêm "+ quantityTextfield.getText() +" sản phẩm '" + sp.getTen_SanPham() + "' vào danh sách nhập!", 
                     "Thông báo", 

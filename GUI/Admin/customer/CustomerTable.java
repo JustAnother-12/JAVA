@@ -29,7 +29,7 @@ public class CustomerTable extends javax.swing.JPanel implements GUI.Admin.compo
     public CustomerTable() {
         initComponents();
         setLayout(null);
-        setBounds(0,0, 800, 650);
+        setBounds(0,0, 900, 650);
         setBackground(Color.WHITE);
         JButton btnSortAsc = new JButton("Sắp xếp Tăng");
         btnSortAsc.setBounds(20, 0, 150, 30);
@@ -64,9 +64,10 @@ public class CustomerTable extends javax.swing.JPanel implements GUI.Admin.compo
         table.getColumn("Tác vụ").setCellRenderer(new NutGiaoDien_BLL("customer"));
         table.getColumn("Tác vụ").setCellEditor(new NutSuKien_BLL(this,tableModel));
         table.setDefaultEditor(Object.class, null);
+
         // ScrollPane chứa bảng
         JScrollPane scrollPane = new JScrollPane(table);
-        scrollPane.setBounds(2, 40 , 770, 570);
+        scrollPane.setBounds(2, 40 , 860, 570);
         add(scrollPane);
         revalidate();
         repaint();

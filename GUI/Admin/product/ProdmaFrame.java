@@ -18,26 +18,26 @@ import DTO.SanPham_DTO;
 import DTO.Vo_DTO;
 import DTO.ChiTietPhieuNhap_DTO;
 import DTO.OrderDetail_DTO;
-import DTO.PhieuNhap_DTO;
 import GUI.user.ButDescription;
 import GUI.user.SachDescription;
 import GUI.user.VoDescription;
+import utils.*;
 
-public class ProdmaFrame extends JFrame {
+public class ProdmaFrame extends JPanel {
 
     private JComboBox<String> FilterComboBox;
-    private JButton importListButton;
-    private JButton restartButton;
-    private JButton addButton;
-    private JButton firstButton;
-    private JButton lastButton;
-    private JButton nextButton;
-    private JButton previousButton;
-    private JButton searchButton;
+    private MyButton importListButton;
+    private MyButton restartButton;
+    private MyButton addButton;
+    private MyButton firstButton;
+    private MyButton lastButton;
+    private MyButton nextButton;
+    private MyButton previousButton;
+    // private JButton searchButton;
+    // private JTextField searchBar;
     private JPanel mainPanel;
     private JScrollPane productTableScrollPane;
     private JTable productTable;
-    private JTextField searchBar;
     private ProductForm productForm;
 
     Border mainPanelBorder = BorderFactory.createMatteBorder(1, 1, 1, 1, Color.darkGray);
@@ -110,15 +110,15 @@ public class ProdmaFrame extends JFrame {
         mainPanel = new JPanel();
         productTableScrollPane = new JScrollPane();
         productTable = new JTable();
-        searchBar = new JTextField();
-        restartButton = new JButton();
-        searchButton = new JButton();
-        addButton = new JButton();
-        firstButton = new JButton();
-        previousButton = new JButton();
-        nextButton = new JButton();
-        lastButton = new JButton();
-        importListButton = new JButton();
+        // searchBar = new JTextField();
+        // searchButton = new JButton();
+        restartButton = new MyButton();
+        addButton = new MyButton();
+        firstButton = new MyButton();
+        previousButton = new MyButton();
+        nextButton = new MyButton();
+        lastButton = new MyButton();
+        importListButton = new MyButton();
 
 
         productTable.setModel(new DefaultTableModel(
@@ -154,16 +154,17 @@ public class ProdmaFrame extends JFrame {
 
         // chỉnh độ rộng cột
         TableColumnModel columnModel = productTable.getColumnModel();
-        columnModel.getColumn(0).setPreferredWidth(30); 
-        columnModel.getColumn(5).setPreferredWidth(300); 
+        columnModel.getColumn(0).setPreferredWidth(50); 
         columnModel.getColumn(1).setPreferredWidth(200); 
-        columnModel.getColumn(2).setPreferredWidth(100); 
+        columnModel.getColumn(2).setPreferredWidth(80); 
         columnModel.getColumn(3).setPreferredWidth(80); 
-        columnModel.getColumn(4).setPreferredWidth(100); 
+        columnModel.getColumn(4).setPreferredWidth(80); 
+        columnModel.getColumn(5).setPreferredWidth(300); 
 
-
+        productTableScrollPane.getVerticalScrollBar().setUI(new MyScrollBarUI());
+        productTableScrollPane.getVerticalScrollBar().setPreferredSize(new Dimension(10,0));
         productTableScrollPane.setViewportView(productTable);
-        productTableScrollPane.setPreferredSize(new Dimension(531, 466));
+        productTableScrollPane.setPreferredSize(new Dimension(850, 570));
 
 
         JPanel topPanel = new JPanel(new BorderLayout());
@@ -173,27 +174,27 @@ public class ProdmaFrame extends JFrame {
         JPanel leftPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
         leftPanel.setBackground(Color.WHITE);
 
-        JLabel searchLabel = new JLabel();
-        searchLabel.setFont(new Font("Segoe UI", 0, 20));
-        searchLabel.setText("Search:");
-        leftPanel.add(searchLabel);
+        // JLabel searchLabel = new JLabel();
+        // searchLabel.setFont(new Font("Segoe UI", 0, 20));
+        // searchLabel.setText("Search:");
+        // leftPanel.add(searchLabel);
 
-        searchBar.setFont(new Font("Segoe UI", 0, 20));
-        searchBar.setPreferredSize(new Dimension(300, 30));
-        leftPanel.add(searchBar);
+        // searchBar.setFont(new Font("Segoe UI", 0, 20));
+        // searchBar.setPreferredSize(new Dimension(300, 30));
+        // leftPanel.add(searchBar);
 
-        searchButton.setBackground(new Color(255, 102, 0));
-        searchButton.setFont(new Font("Segoe UI", 0, 14));
-        searchButton.setForeground(Color.WHITE);
-        searchButton.setText("Search");
-        searchButton.setPreferredSize(new Dimension(80, 30));
-        searchButton.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
-        searchButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                searchButtonActionPerformed(evt);
-            }
-        });
-        leftPanel.add(searchButton);
+        // searchButton.setBackground(new Color(255, 102, 0));
+        // searchButton.setFont(new Font("Segoe UI", 0, 14));
+        // searchButton.setForeground(Color.WHITE);
+        // searchButton.setText("Search");
+        // searchButton.setPreferredSize(new Dimension(80, 30));
+        // searchButton.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
+        // searchButton.addActionListener(new ActionListener() {
+        //     public void actionPerformed(ActionEvent evt) {
+        //         searchButtonActionPerformed(evt);
+        //     }
+        // });
+        // leftPanel.add(searchButton);
 
         FilterComboBox = new JComboBox<>(new String[] { "Tất cả", "Sách", "Vở", "Bút" });
         FilterComboBox.setBackground(Color.WHITE);
@@ -258,8 +259,8 @@ public class ProdmaFrame extends JFrame {
         buttonPanel.setBackground(new Color(255, 255, 255));
         buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
 
-        firstButton.setBackground(new Color(204, 204, 204));
-        firstButton.setFont(new Font("Segoe UI", 0, 14));
+        firstButton.setBackground(new Color(51, 51, 51));
+        firstButton.setFont(new Font("Segoe UI", Font.BOLD, 14));
         firstButton.setForeground(new Color(255, 255, 255));
         firstButton.setText("<<");
         firstButton.addActionListener(new ActionListener() {
@@ -270,8 +271,8 @@ public class ProdmaFrame extends JFrame {
 
         buttonPanel.add(firstButton);
 
-        previousButton.setBackground(new Color(204, 204, 204));
-        previousButton.setFont(new Font("Segoe UI", 0, 14));
+        previousButton.setBackground(new Color(51, 51, 51));
+        previousButton.setFont(new Font("Segoe UI", Font.BOLD, 14));
         previousButton.setForeground(new Color(255, 255, 255));
         previousButton.setText("<");
         previousButton.addActionListener(new ActionListener() {
@@ -282,8 +283,8 @@ public class ProdmaFrame extends JFrame {
 
         buttonPanel.add(previousButton);
 
-        nextButton.setBackground(new Color(204, 204, 204));
-        nextButton.setFont(new Font("Segoe UI", 0, 14));
+        nextButton.setBackground(new Color(51, 51, 51));
+        nextButton.setFont(new Font("Segoe UI", Font.BOLD, 14));
         nextButton.setForeground(new Color(255, 255, 255));
         nextButton.setText(">");
         nextButton.addActionListener(new ActionListener() {
@@ -294,8 +295,8 @@ public class ProdmaFrame extends JFrame {
 
         buttonPanel.add(nextButton);
 
-        lastButton.setBackground(new Color(204, 204, 204));
-        lastButton.setFont(new Font("Segoe UI", 0, 14));
+        lastButton.setBackground(new Color(51, 51, 51));
+        lastButton.setFont(new Font("Segoe UI", Font.BOLD, 14));
         lastButton.setForeground(new Color(255, 255, 255));
         lastButton.setText(">>");
         lastButton.addActionListener(new ActionListener() {
@@ -307,9 +308,9 @@ public class ProdmaFrame extends JFrame {
         buttonPanel.add(lastButton);
 
 
-        mainPanel.setBorder(mainPanelBorder);
+        // mainPanel.setBorder(mainPanelBorder);
         mainPanel.setBackground(new Color(255, 255, 255));
-        mainPanel.setPreferredSize(new Dimension(962, 600));
+        mainPanel.setPreferredSize(new Dimension(900, 650));
         mainPanel.setLayout(new BorderLayout(10, 10));
         mainPanel.add(topPanel, BorderLayout.NORTH);
         mainPanel.add(productTableScrollPane, BorderLayout.CENTER);
@@ -317,8 +318,18 @@ public class ProdmaFrame extends JFrame {
 
 
         // setup layout
-        GroupLayout layout = new GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
+        // GroupLayout layout = new GroupLayout(getContentPane());
+        // getContentPane().setLayout(layout);
+        // layout.setHorizontalGroup(
+        //     layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+        //     .addComponent(mainPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        // );
+        // layout.setVerticalGroup(
+        //     layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+        //     .addComponent(mainPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        // );
+        GroupLayout layout = new GroupLayout(this);
+        setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addComponent(mainPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -329,10 +340,10 @@ public class ProdmaFrame extends JFrame {
         );
 
 
-        setSize(1000, 600);
+        setSize(900, 650);
         setMinimumSize(new Dimension(800, 500));
-        setLocationRelativeTo(null);
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        // setLocationRelativeTo(null);
+        // setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setVisible(true);
     }
 
@@ -345,16 +356,16 @@ public class ProdmaFrame extends JFrame {
         refreshProducts();
     }
 
-    private void searchButtonActionPerformed(ActionEvent evt) {
-        String query = searchBar.getText().trim().toLowerCase();
-        ArrayList<SanPham_DTO> Searchproducts = new ArrayList<>();
-        for(SanPham_DTO sp:products){
-            if(sp.getTen_SanPham().toLowerCase().contains(query)){
-                Searchproducts.add(sp);
-            }
-        }
-        showProducts(Searchproducts);
-    }
+    // private void searchButtonActionPerformed(ActionEvent evt) {
+    //     String query = searchBar.getText().trim().toLowerCase();
+    //     ArrayList<SanPham_DTO> Searchproducts = new ArrayList<>();
+    //     for(SanPham_DTO sp:products){
+    //         if(sp.getTen_SanPham().toLowerCase().contains(query)){
+    //             Searchproducts.add(sp);
+    //         }
+    //     }
+    //     showProducts(Searchproducts);
+    // }
 
 
     private void addButtonActionPerformed(ActionEvent evt) {
@@ -526,9 +537,5 @@ public class ProdmaFrame extends JFrame {
             SanPham_DTO sp = products.get(row);
             new importQuantityFrame(this,sp);
         }
-    }
-
-    public static void main(String args[]) {
-        new ProdmaFrame();
     }
 }

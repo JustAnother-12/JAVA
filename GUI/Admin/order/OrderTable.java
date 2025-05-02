@@ -27,7 +27,7 @@ public class OrderTable extends javax.swing.JPanel implements Header.searchListe
     public OrderTable() {
         initComponents();
         setLayout(null);
-        setBounds(0,0, 800, 650);
+        setBounds(0,0, 900, 650);
         setBackground(Color.WHITE);
         this.setName("order");
 
@@ -88,7 +88,7 @@ public class OrderTable extends javax.swing.JPanel implements Header.searchListe
         table.setDefaultEditor(Object.class, null);
         // ScrollPane chứa bảng
         JScrollPane scrollPane = new JScrollPane(table);
-        scrollPane.setBounds(2, 40 , 770, 570);
+        scrollPane.setBounds(2, 40 , 860, 570);
         add(scrollPane);
         revalidate();
         repaint();
