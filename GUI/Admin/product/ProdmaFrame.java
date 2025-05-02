@@ -8,8 +8,7 @@ import javax.swing.*;
 import java.util.ArrayList;
 import javax.swing.border.*;
 import javax.swing.table.*;
-
-import BLL.Order_BLL;
+import BLL.DonHang_BLL;
 import BLL.PhieuNhap_BLL;
 import BLL.SanPham_BLL;
 import DTO.But_DTO;
@@ -46,7 +45,7 @@ public class ProdmaFrame extends JPanel {
 
     private SanPham_BLL productBLL = new SanPham_BLL();
     private PhieuNhap_BLL pnBLL = new PhieuNhap_BLL();
-    private Order_BLL orderBLL = new Order_BLL();
+    private DonHang_BLL orderBLL = new DonHang_BLL();
     private ArrayList<Sach_DTO> SachDescriptionList;
     private ArrayList<Vo_DTO> VoDescriptionList;
     private ArrayList<But_DTO> ButDescriptionList;
