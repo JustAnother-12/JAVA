@@ -99,9 +99,19 @@ public class OrderTable extends javax.swing.JPanel implements Header.searchListe
             sorter.setRowFilter(RowFilter.regexFilter("(?i)" + text.trim(), 0)); // Theo cột ID
         }
     }
+    public void searchByName(String text) {
+        TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(tableModel);
+        table.setRowSorter(sorter);
+        if (text.trim().isEmpty()) {
+            sorter.setRowFilter(null); // Hiện toàn bộ
+        } else {
+            sorter.setRowFilter(RowFilter.regexFilter("(?i)" + text.trim(), 1)); // Theo cột ID
+        }
+    }
     @Override
     public void onSearch(String text) {
         searchById(text);
+        searchByName(text);
     }
     @Override
     public void onFilterByRole(String role) {
