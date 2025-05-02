@@ -41,7 +41,7 @@ public class Main extends JFrame {
                 switch (index) {
                     case 1:
                         setForm("Product", productForm);
-                        header.setSearchListener(customerForm);
+                        header.setSearchListener(productForm);
                         header.getjLabel2().setIcon(new ImageIcon(getClass().getResource("/GUI/Admin/icon/none.jpg")));
                         break;
                     case 2:

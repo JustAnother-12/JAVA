@@ -203,6 +203,42 @@ public class PhieuNhap_DAO {
         return result;
     }
 
+    public boolean removePhieuNhap(String id){
+        if (OpenConnection()){
+            try{
+                con.setAutoCommit(false);
+
+                String query1 = "DELETE FROM CHITETPHIEUNHAP WHERE maphieu = ?";
+                String query2 = "DELETE FROM PHIEUNHAP WHERE maphieu = ?";
+                PreparedStatement stmt1 = con.prepareStatement(query1);
+                PreparedStatement stmt2 = con.prepareStatement(query2);
+                
+                // Xóa chi tiết phiếu nhập
+                stmt1.setString(1, id);
+                // Xóa phiếu nhập
+                stmt2.setString(1, id);
+
+                if (stmt2.executeUpdate() >=1 &&  stmt1.executeUpdate() >= 1){
+                    con.commit();
+                    return true;
+                }
+                else{
+                    con.rollback();
+                }
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            } finally{
+                try{
+                    con.setAutoCommit(true);
+                }catch(SQLException e){
+                    System.out.println(e);
+                }
+                closeConnection();  
+            }
+        }
+        return false;
+    }
+
     public boolean removeCTPhieuNhapBySP(String id){
         boolean result = false;
         if (OpenConnection()) {
@@ -226,7 +262,7 @@ public class PhieuNhap_DAO {
                         String deletePN = "DELETE FROM PHIEUNHAP WHERE maphieu = ?";
                         PreparedStatement delStmt = con.prepareStatement(deletePN);
                         delStmt.setString(1, id);
-                        delStmt.executeUpdate(); // không cần kiểm tra số dòng vì COUNT trước đó đã xác nhận
+                        delStmt.executeUpdate();
                     }
     
                     con.commit();
@@ -236,11 +272,6 @@ public class PhieuNhap_DAO {
                 }
             } catch (SQLException ex) {
                 System.out.println(ex);            
-                try {
-                    con.rollback();
-                } catch (SQLException e) {
-                    System.out.println(e);
-                }
             } finally{
                 try{
                     con.setAutoCommit(true);
