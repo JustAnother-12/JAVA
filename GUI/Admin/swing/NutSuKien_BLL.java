@@ -2,17 +2,19 @@ package GUI.Admin.swing;
 
 import javax.swing.*;
 import javax.swing.table.TableCellEditor;
-import DAO.Customer_DAO;
-import DAO.NhanVien_DAO;
+
+import BLL.DonHang_BLL;
+import BLL.KhachHang_BLL;
+import BLL.NhanVien_BLL;
 import DTO.KhachHang_DTO;
 import DTO.NhanVien_DTO;
 import DTO.Order_DTO;
-import DAO.Order_DAO;
 import GUI.Admin.customer.CustomerTable;
 import GUI.Admin.staff.ChiTietNhanVien;
 import GUI.Admin.staff.NhanVienTable;
 import GUI.Admin.order.*;
 import java.awt.*;
+import java.sql.SQLException;
 import java.text.ParseException;
 import javax.swing.table.DefaultTableModel;
 import java.util.*;
@@ -56,7 +58,20 @@ public class NutSuKien_BLL implements TableCellEditor {
             }
         });
 
-        btnDelete.addActionListener(e -> deleteRow(tableModel));
+        btnDelete.addActionListener(e -> {
+            try {
+                deleteRow(tableModel);
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
+        });
+        btnConfirm.addActionListener(e -> {
+            try {
+                confirmOrder(tableModel);
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
+        });
     }
     @Override
     public boolean isCellEditable(EventObject anEvent) {
@@ -173,23 +188,47 @@ public class NutSuKien_BLL implements TableCellEditor {
         }
         return null;
     }
-    private void deleteRow(DefaultTableModel tableModel) {
+    private void deleteRow(DefaultTableModel tableModel) throws SQLException{
         if (table != null) {
             String id = table.getValueAt(selectedRow, 0).toString();
             int confirm = JOptionPane.showConfirmDialog(panel, "Bạn có chắc chắn muốn xóa tài khoản này?", "Xác nhận xóa", JOptionPane.YES_NO_OPTION);
             if (confirm == JOptionPane.YES_OPTION) {
                 if (formType == FormType.STAFF) {
-                    NhanVien_DAO temp = new NhanVien_DAO();
+                    NhanVien_BLL temp = new NhanVien_BLL();
                     temp.deleteStaff(id, tableModel, staffList.getAccountList());
                 } else if (formType == FormType.CUSTOMER){
-                    Customer_DAO temp = new Customer_DAO();
+                    KhachHang_BLL temp = new KhachHang_BLL();
                     temp.deleteCustomer(id, tableModel, customerList.getCustomerList());
                 } else if (formType == FormType.ORDER) {
-                    Order_DAO temp = new Order_DAO();
+                    DonHang_BLL temp = new DonHang_BLL();
                     temp.DeleteOrder(id);
                 }
                 ((DefaultTableModel) table.getModel()).removeRow(selectedRow);
                 stopCellEditing();
+            }
+        }
+    }
+    private void confirmOrder(DefaultTableModel tableModel) throws SQLException {
+        if (table != null) {
+            String id = table.getValueAt(selectedRow, 0).toString();
+            int confirm = JOptionPane.showConfirmDialog(panel, "Bạn có chắc chắn muốn xóa đơn hàng này?", "Xác nhận xóa", JOptionPane.YES_NO_OPTION);
+            if (confirm == JOptionPane.YES_OPTION) {
+                if (formType == FormType.ORDER) {
+                    DonHang_BLL temp = new DonHang_BLL();
+                //     temp.confirmOrder(id);
+                //     //temp.LoadDataToTabel(tableModel, orderList.getOrderList(), orderList.getOrderDetailList());
+                // }
+                // ((DefaultTableModel) table.getModel()).removeRow(selectedRow);
+                temp.confirmOrder(id);
+                // Xóa hết dữ liệu hiện có trong bảng
+                while (tableModel.getRowCount() > 0) {
+                    tableModel.removeRow(0);
+                }
+
+                    // Load lại dữ liệu bằng cách duyệt danh sách mới, thêm từng hàng vào tableModel
+                    temp.LoadDataToTabel(tableModel, orderList.getOrderList(), orderList.getOrderDetailList());
+                    stopCellEditing();
+                }
             }
         }
     }

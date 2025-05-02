@@ -64,7 +64,7 @@ public class Header extends JPanel {
     }
     public Header() {
         initComponents();
-        myinitcomponent();
+        //myinitcomponent();
         setOpaque(false);
         setSize(800, 150);
     }
@@ -75,7 +75,6 @@ public class Header extends JPanel {
         jLabel1 = new javax.swing.JLabel();
         searchText1 = new SearchText();
         jLabel2 = new javax.swing.JLabel();
-        jToggleButton1 = new javax.swing.JToggleButton();
 
         jButton1.setText("jButton1");
 
@@ -87,15 +86,6 @@ public class Header extends JPanel {
 
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/Admin/icon/menu.png"))); 
         jLabel2.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5));
-
-        jToggleButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/Admin/icon/close.jpg"))); 
-        jToggleButton1.setBorder(null);
-        jToggleButton1.setBorderPainted(false);
-        jToggleButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jToggleButton1ActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -109,7 +99,6 @@ public class Header extends JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 188, Short.MAX_VALUE)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jToggleButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(15, 15, 15))
         );
         layout.setVerticalGroup(
@@ -118,29 +107,25 @@ public class Header extends JPanel {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jToggleButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
             .addComponent(searchText1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
-
-        jToggleButton1.getAccessibleContext().setAccessibleParent(null);
 
         getAccessibleContext().setAccessibleName("");
     }
 
-    private void jToggleButton1ActionPerformed(java.awt.event.ActionEvent evt) {
-        System.exit(0);
-    }
+    // private void jToggleButton1ActionPerformed(java.awt.event.ActionEvent evt) {
+    //     System.exit(0);
+    // }
 
     private static final Logger LOG = Logger.getLogger(Header.class.getName());
-    private void myinitcomponent() {
-        JButton closeButton = new JButton("/com/raven/icon/close.jpg");
-        closeButton.addActionListener(e ->{
-            System.exit(0);
-        });
-        this.add(closeButton);
-    }
+    // private void myinitcomponent() {
+    //     JButton closeButton = new JButton("/com/raven/icon/close.jpg");
+    //     closeButton.addActionListener(e ->{
+    //         System.exit(0);
+    //     });
+    //     this.add(closeButton);
+    // }
     @Override
     protected void paintComponent(Graphics grphcs) {
         Graphics2D g2 = (Graphics2D) grphcs;

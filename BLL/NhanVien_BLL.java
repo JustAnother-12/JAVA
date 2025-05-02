@@ -1,6 +1,6 @@
 package BLL;
 
-import java.text.ParseException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -8,7 +8,6 @@ import java.util.logging.Logger;
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
-import DAO.ChiTietThongTinTaiKhoan_DAO;
 import DAO.NhanVien_DAO;
 import DAO.ThemNhanVien_DAO;
 import DTO.NhanVien_DTO;
@@ -22,12 +21,12 @@ public class NhanVien_BLL {
         nhanVien_DAO.loadDataFormDatabase(tableModel, staffList);
    }
    public boolean updateStaff(JTextField txtName,JTextField txtPhone,JTextField txtUsername,JTextField txtAddress,JTextField txtBirthday, JComboBox<String> txtPosition, JComboBox<String> cbGender, JTextField txtCCCD, boolean isCustomer, NhanVien_DTO nv) {
-    ChiTietThongTinTaiKhoan_DAO chiTietNhanVien_DAO = new ChiTietThongTinTaiKhoan_DAO();
+    NhanVien_DAO NhanVien_DAO = new NhanVien_DAO();
     CheckFailInput_BLL checkFailInput_BLL = new CheckFailInput_BLL();
     // Cập nhật thông tin
     if (checkFailInput_BLL.validateFields(isCustomer, txtName, txtPhone, txtUsername, txtAddress, txtBirthday, null, txtPosition, txtCCCD)) {
         try {
-            chiTietNhanVien_DAO.updateStaff(nv, txtName, txtPhone, txtUsername, txtAddress, txtBirthday, txtPosition, txtCCCD, cbGender);;
+            NhanVien_DAO.updateStaff(nv, txtName, txtPhone, txtUsername, txtAddress, txtBirthday, txtPosition, txtCCCD, cbGender);;
             return true;
         } catch (Exception ex) {
             Logger.getLogger(ChiTietNhanVien.class.getName()).log(Level.SEVERE, null, ex);
@@ -44,5 +43,13 @@ public class NhanVien_BLL {
         Logger.getLogger(ChiTietNhanVien.class.getName()).log(Level.SEVERE, null, ex);
     }
     return false;
+   }
+   public void deleteStaff(String id, DefaultTableModel tableModel, ArrayList<NhanVien_DTO> staffList) throws SQLException {
+    try {
+        NhanVien_DAO temp = new NhanVien_DAO();
+        temp.deleteStaff(id, tableModel, staffList);
+    } catch (Exception ex) {
+        Logger.getLogger(NhanVien_DAO.class.getName()).log(Level.SEVERE, "General Error deleting staff", ex);
+    }
    }
 }

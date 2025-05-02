@@ -17,7 +17,8 @@ import javax.swing.SortOrder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
-import BLL.Customer_BLL;
+
+import BLL.KhachHang_BLL;
 import GUI.Admin.swing.NutGiaoDien_BLL;
 import GUI.Admin.swing.NutSuKien_BLL;
 import DTO.KhachHang_DTO;
@@ -58,8 +59,9 @@ public class CustomerTable extends javax.swing.JPanel implements GUI.Admin.compo
         }
 
         // Thêm dữ liệu mẫu
-        Customer_BLL Customer_BLL = new Customer_BLL();
-        Customer_BLL.LoadDataToTabel(tableModel, customerList);
+        KhachHang_BLL KhachHang_BLL = new KhachHang_BLL();
+        KhachHang_BLL.LoadDataToTabel(tableModel, customerList);
+        KhachHang_BLL.LoadDataToTabel(null, customerList);
         // Cột "Tác vụ" có 2 nút "Chi tiết" và "Xóa"
         table.getColumn("Tác vụ").setCellRenderer(new NutGiaoDien_BLL("customer"));
         table.getColumn("Tác vụ").setCellEditor(new NutSuKien_BLL(this,tableModel));
