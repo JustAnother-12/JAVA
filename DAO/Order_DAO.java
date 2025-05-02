@@ -14,7 +14,7 @@ public class Order_DAO {
     public boolean OpenConnection() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/ban_van_phong_pham", "root", "123456789");
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/ban_van_phong_pham", "root", "");
             return true;
         } catch (ClassNotFoundException | SQLException e) {
             System.out.println(e.getMessage());
@@ -183,7 +183,7 @@ public class Order_DAO {
     public boolean ConfirmOrder(String id){
         if (OpenConnection()){
             try{
-                String query = "Update donhang set tinhtrang=Đã xử lý where madonhang = ?";
+                String query = "Update donhang set tinhtrang = 'Đã xử lý' where madonhang = ?";
                 PreparedStatement stmt = con.prepareStatement(query);
                 stmt.setString(1,id);
                 if (stmt.executeUpdate()>=1)

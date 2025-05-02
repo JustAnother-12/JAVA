@@ -60,7 +60,7 @@ public class KhachHang_BLL extends JDialog{
         CheckFailInput_BLL checkFailInput_BLL = new CheckFailInput_BLL();
         if (checkFailInput_BLL.validateFields(isCustomer, txtName, txtPhone, txtUsername, txtAddress, txtBirthday, txtEmail, null, null)) {
             try {
-                KhachHang_DAO.updateCustomer(kh, txtName, txtPhone, txtUsername, txtBirthday, txtAddress, txtEmail, cbGender);
+                KhachHang_DAO.updateCustomer(kh, txtName, txtPhone, txtUsername, txtAddress, txtBirthday, txtEmail, cbGender);
                 return true;
             } catch (ParseException ex) {
                 Logger.getLogger(KhachHang_DAO.class.getName()).log(Level.SEVERE, "Error updating customer", ex);

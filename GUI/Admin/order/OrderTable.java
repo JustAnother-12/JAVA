@@ -136,44 +136,6 @@ public class OrderTable extends javax.swing.JPanel implements Header.searchListe
     public ArrayList<OrderDetail_DTO> getOrderDetailList() {
         return orderDetailList;
     }
-
-
-    public void cofirmOrder(String id) {
-        String query = "Update donhang set tinhtrang=Đã xử lý where madonhang = ?";
-        try (Connection conn = DatabaseConnection.getConnection()){
-            PreparedStatement stmt = conn.prepareStatement(query);
-            stmt.setString(1,id);
-            stmt.executeUpdate();
-            Order_DAO order_DAO = new Order_DAO();
-        order_DAO.loadDataFormDatabase(tableModel,orderList,orderDetailList);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    public void deleteOrder(String id) {
-        String deleteChiTietSql = "DELETE FROM CHITETDONHANG WHERE madonhang = ?";
-        String deleteDonHangSql = "DELETE FROM DONHANG WHERE madonhang = ?";
-        
-        try (Connection conn = DatabaseConnection.getConnection()) {
-             PreparedStatement deleteChiTietStmt = conn.prepareStatement(deleteChiTietSql);
-             PreparedStatement deleteDonHangStmt = conn.prepareStatement(deleteDonHangSql);
-             
-            // Xóa chi tiết đơn hàng
-            deleteChiTietStmt.setString(1, id);
-            deleteChiTietStmt.executeUpdate();
-
-            // Xóa đơn hàng
-            deleteDonHangStmt.setString(1, id);
-            deleteDonHangStmt.executeUpdate();
-            Order_DAO order_DAO = new Order_DAO();
-        order_DAO.loadDataFormDatabase(tableModel,orderList,orderDetailList);
-            System.out.println("Đơn hàng và chi tiết đơn hàng đã được xóa thành công.");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
     
     
     private void initComponents() {//GEN-BEGIN:initComponents

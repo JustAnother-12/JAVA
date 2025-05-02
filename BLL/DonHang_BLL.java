@@ -34,7 +34,16 @@ public class DonHang_BLL {
         }
         return "Thêm đơn hàng thất bại!";
     }
+    public String removeDetailBySP(String id){
+        if(!orderDao.hasDetailID(id)){
+            return "Chi tiết đơn hàng không tồn tại!";
+        }
+        if(orderDao.removeDetailBySP(id)){
+            return "Xoá chi tiết đơn hàng thành công!";
+        }
 
+        return "Xóa chi tiết đơn hàng thất bại!";
+    }
     public String removeOrder(String id){
         if(!orderDao.hasOrderID(id)){
             return "Đơn hàng không tồn tại!";
@@ -64,4 +73,5 @@ public class DonHang_BLL {
             Logger.getLogger(NhanVien_DAO.class.getName()).log(Level.SEVERE, "General Error deleting staff", ex);
         }
     }
+    
 }

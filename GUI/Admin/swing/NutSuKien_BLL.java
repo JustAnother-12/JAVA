@@ -65,6 +65,13 @@ public class NutSuKien_BLL implements TableCellEditor {
                 e1.printStackTrace();
             }
         });
+        btnConfirm.addActionListener(e -> {
+            try {
+                confirmOrder(tableModel);
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
+        });
     }
     @Override
     public boolean isCellEditable(EventObject anEvent) {
@@ -198,6 +205,30 @@ public class NutSuKien_BLL implements TableCellEditor {
                 }
                 ((DefaultTableModel) table.getModel()).removeRow(selectedRow);
                 stopCellEditing();
+            }
+        }
+    }
+    private void confirmOrder(DefaultTableModel tableModel) throws SQLException {
+        if (table != null) {
+            String id = table.getValueAt(selectedRow, 0).toString();
+            int confirm = JOptionPane.showConfirmDialog(panel, "Bạn có chắc chắn muốn xóa đơn hàng này?", "Xác nhận xóa", JOptionPane.YES_NO_OPTION);
+            if (confirm == JOptionPane.YES_OPTION) {
+                if (formType == FormType.ORDER) {
+                    DonHang_BLL temp = new DonHang_BLL();
+                //     temp.confirmOrder(id);
+                //     //temp.LoadDataToTabel(tableModel, orderList.getOrderList(), orderList.getOrderDetailList());
+                // }
+                // ((DefaultTableModel) table.getModel()).removeRow(selectedRow);
+                temp.confirmOrder(id);
+                // Xóa hết dữ liệu hiện có trong bảng
+                while (tableModel.getRowCount() > 0) {
+                    tableModel.removeRow(0);
+                }
+
+                    // Load lại dữ liệu bằng cách duyệt danh sách mới, thêm từng hàng vào tableModel
+                    temp.LoadDataToTabel(tableModel, orderList.getOrderList(), orderList.getOrderDetailList());
+                    stopCellEditing();
+                }
             }
         }
     }
