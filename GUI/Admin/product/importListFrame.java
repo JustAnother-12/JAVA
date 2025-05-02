@@ -9,6 +9,7 @@ import BLL.PhieuNhap_BLL;
 import DTO.ChiTietPhieuNhap_DTO;
 import DTO.NhaCungCap_DTO;
 import DTO.PhieuNhap_DTO;
+import utils.*;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -22,12 +23,12 @@ public class importListFrame extends JFrame{
     private JTable importTable;
     private JLabel TotalLabel;
     private JLabel TotalValueLabel;
-    private JButton NhapHangButton;
+    private MyButton NhapHangButton;
     private JLabel providerLabel;
     private JComboBox<String> providerComboBox;
     private JLabel quantityLabel; 
     private JSpinner quantitySpinner;
-    private JButton deleteButton;
+    private MyButton deleteButton;
 
     private NhaCungCap_BLL nccBLL;
     private PhieuNhap_BLL pnBLL;
@@ -61,10 +62,10 @@ public class importListFrame extends JFrame{
         importTable = new JTable();
         TotalLabel = new JLabel();
         TotalValueLabel = new JLabel();
-        NhapHangButton = new JButton();
+        NhapHangButton = new MyButton();
         quantityLabel = new JLabel();
         quantitySpinner = new JSpinner();
-        deleteButton = new JButton();
+        deleteButton = new MyButton();
 
         providerLabel = new JLabel();
         nccBLL = new NhaCungCap_BLL();
@@ -99,7 +100,8 @@ public class importListFrame extends JFrame{
         columnModel.getColumn(1).setPreferredWidth(100); 
         columnModel.getColumn(2).setPreferredWidth(100); 
 
-
+        tableScrollPane.getVerticalScrollBar().setUI(new MyScrollBarUI());
+        tableScrollPane.getVerticalScrollBar().setPreferredSize(new Dimension(10,0));
         tableScrollPane.setViewportView(importTable);
         tableScrollPane.setPreferredSize(new Dimension(531, 466));
 
@@ -196,7 +198,7 @@ public class importListFrame extends JFrame{
         footerPanel.add(TotalValueLabel);
 
 
-        NhapHangButton.setBackground(new Color(204, 204, 204));
+        NhapHangButton.setBackground(Color.decode("#00B4DB"));
         NhapHangButton.setFont(new Font("Segoe UI", 0, 14));
         NhapHangButton.setForeground(new Color(255, 255, 255));
         NhapHangButton.setText("Xác nhận nhập hàng");

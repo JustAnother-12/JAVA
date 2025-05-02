@@ -11,6 +11,8 @@ import java.awt.*;
 
 import javax.swing.*;
 
+import utils.MyButton;
+
 
 public class DangNhap extends JFrame{
     private JPanel panel = new JPanel();

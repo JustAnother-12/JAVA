@@ -1,6 +1,7 @@
-package GUI.user;
+package utils;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -21,7 +22,18 @@ public class MyButton extends JButton {
         setBorder(new EmptyBorder(8, 10, 8, 10));
         setFont(new Font("sansserif", Font.BOLD, 12));
         setForeground(Color.WHITE);
+        
         addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));  // Thay đổi cursor thành bàn tay
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                setCursor(Cursor.getDefaultCursor());  // Quay lại cursor mặc định
+            }
+
             @Override
             public void mousePressed(MouseEvent e) {
                 bg = getBackground();
@@ -32,7 +44,6 @@ public class MyButton extends JButton {
             public void mouseReleased(MouseEvent e) {
                 setBackground(bg);
             }
-
         });
     }
 

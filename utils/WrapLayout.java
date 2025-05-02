@@ -1,4 +1,4 @@
-package GUI.user;
+package utils;
 
 import java.awt.*;
 import javax.swing.JScrollPane;
