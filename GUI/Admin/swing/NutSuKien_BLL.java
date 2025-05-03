@@ -6,12 +6,21 @@ import javax.swing.table.TableCellEditor;
 import BLL.DonHang_BLL;
 import BLL.KhachHang_BLL;
 import BLL.NhanVien_BLL;
+import BLL.NhaCungCap_BLL;//
+import BLL.PhieuNhap_BLL;
+import DTO.NhaCungCap_DTO;//
+import DTO.ChiTietPhieuNhap_DTO;
 import DTO.KhachHang_DTO;
 import DTO.NhanVien_DTO;
 import DTO.Order_DTO;
+import DTO.PhieuNhap_DTO;
+import GUI.Admin.supplier.ChiTietNhaCungCap;//
+import GUI.Admin.importorder.ImportDetailForm;//
 import GUI.Admin.customer.CustomerTable;
+import GUI.Admin.importorder.HistoryTable;
 import GUI.Admin.staff.ChiTietNhanVien;
 import GUI.Admin.staff.NhanVienTable;
+import GUI.Admin.supplier.SupplierTable;
 import GUI.Admin.order.*;
 import java.awt.*;
 import java.sql.SQLException;
@@ -27,52 +36,65 @@ public class NutSuKien_BLL implements TableCellEditor {
     private NhanVienTable staffList;
     private CustomerTable customerList;
     private OrderTable orderList;
-    public enum FormType { STAFF, CUSTOMER ,ORDER}
+    private SupplierTable supplierList;
+    private HistoryTable importList;
+    public enum FormType { STAFF, CUSTOMER ,ORDER,SUPPLIER,IMPORT}
     private FormType formType;
 
     public NutSuKien_BLL(NhanVienTable staffList,DefaultTableModel tableModel) {
-        this(staffList, null, null, FormType.STAFF,tableModel);
+        this(staffList, null, null,null ,null,FormType.STAFF,tableModel);
     }
 
     public NutSuKien_BLL(CustomerTable customerList,DefaultTableModel tableModel) {
-        this(null, customerList, null, FormType.CUSTOMER,tableModel);
+        this(null, customerList, null,null, null,FormType.CUSTOMER,tableModel);
     }
     public NutSuKien_BLL(OrderTable orderList,DefaultTableModel tableModel) {
-        this(null, null, orderList, FormType.ORDER,tableModel);
+        this(null, null, orderList,null, null,FormType.ORDER,tableModel);
     }
-    public NutSuKien_BLL(NhanVienTable accountList, CustomerTable customerList,OrderTable orderList, FormType type,DefaultTableModel tableModel) {
-        panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 5));
-        btnDetail = new JButton("Chi tiết");
-        btnDelete = new JButton("Xóa");
-        btnConfirm = new JButton("Xác nhận");
-        this.staffList = accountList;
-        this.customerList = customerList;
-        this.orderList = orderList;
-        this.formType = type;
-
-        btnDetail.addActionListener(e -> {
-            try {
-                showDetail();
-            } catch (ParseException e1) {
-                e1.printStackTrace();
-            }
-        });
-
-        btnDelete.addActionListener(e -> {
-            try {
-                deleteRow(tableModel);
-            } catch (SQLException e1) {
-                e1.printStackTrace();
-            }
-        });
-        btnConfirm.addActionListener(e -> {
-            try {
-                confirmOrder(tableModel);
-            } catch (SQLException e1) {
-                e1.printStackTrace();
-            }
-        });
+    public NutSuKien_BLL(SupplierTable supplierList, DefaultTableModel tableModel) {
+    this(null, null, null, supplierList,null, FormType.SUPPLIER, tableModel);
     }
+
+    public NutSuKien_BLL(HistoryTable importList, DefaultTableModel tableModel) {
+    this(null, null, null, null, importList, FormType.IMPORT, tableModel);
+    }
+
+public NutSuKien_BLL(NhanVienTable accountList, CustomerTable customerList,OrderTable orderList,SupplierTable supplierList,HistoryTable importList, FormType type,DefaultTableModel tableModel) {
+    panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 5));
+    btnDetail = new JButton("Chi tiết");
+    btnDelete = new JButton("Xóa");
+    btnConfirm = new JButton("Xác nhận");
+    this.staffList = accountList;
+    this.customerList = customerList;
+    this.orderList = orderList;
+    this.supplierList = supplierList;
+    this.importList = importList;
+    this.formType = type;
+
+    btnDetail.addActionListener(e -> {
+        try {
+            showDetail();
+        } catch (ParseException e1) {
+            e1.printStackTrace();
+        }
+    });
+
+    btnDelete.addActionListener(e -> {
+        try {
+            deleteRow(tableModel);
+        } catch (SQLException e1) {
+            e1.printStackTrace();
+        }
+    });
+    btnConfirm.addActionListener(e -> {
+        try {
+            confirmOrder(tableModel);
+        } catch (SQLException e1) {
+            e1.printStackTrace();
+        }
+    });
+}
+
     @Override
     public boolean isCellEditable(EventObject anEvent) {
         return true;
@@ -105,14 +127,14 @@ public class NutSuKien_BLL implements TableCellEditor {
         panel.removeAll();
         this.table = table;
         this.selectedRow = row;
-        if (formType == FormType.STAFF || formType == FormType.CUSTOMER) {
+        if (formType == FormType.STAFF || formType == FormType.CUSTOMER || formType == FormType.SUPPLIER || formType == FormType.IMPORT) {
             panel.add(btnDetail);
             panel.add(btnDelete);
         } else if (formType == FormType.ORDER) {
             if(orderList != null && row < orderList.getOrderList().size()) {
                 Order_DTO temp = orderList.getOrderAt(row);
                 if("Chưa xử lý".equalsIgnoreCase(temp.getTinhtrang())) 
-                panel.add(btnConfirm);    
+                    panel.add(btnConfirm);    
             }
             panel.add(btnDetail);
             panel.add(btnDelete);
@@ -123,7 +145,7 @@ public class NutSuKien_BLL implements TableCellEditor {
     @Override
     public Object getCellEditorValue() {
         String tableName = table.getName();
-        if ("customer".equals(tableName) || "staff".equals(tableName)) 
+        if ("customer".equals(tableName) || "staff".equals(tableName) || "supplier".equals(tableName) || "import".equals(tableName)) 
             return "Chi tiết   Xóa";
         return "Xác nhận   Chi tiết   Xóa";
     }
@@ -149,6 +171,12 @@ public class NutSuKien_BLL implements TableCellEditor {
             } else if (formType == FormType.ORDER) {
                 obj = findOrderById(id);
             }
+            else if (formType == FormType.SUPPLIER) {
+                obj = findSupplierById(id);
+            }
+            else if (formType == FormType.IMPORT) {
+                obj = findImportById(id);
+            }
             
             if (obj instanceof KhachHang_DTO) {
                 new ChiTietNhanVien((KhachHang_DTO) obj); 
@@ -156,7 +184,12 @@ public class NutSuKien_BLL implements TableCellEditor {
                 new ChiTietNhanVien((NhanVien_DTO) obj); 
             } else if(obj instanceof Order_DTO) {
                 new OrderDetailForm((Order_DTO)obj, orderList.getOrderDetailList());
-            } else {
+            }else if (obj instanceof NhaCungCap_DTO) {
+                new ChiTietNhaCungCap((NhaCungCap_DTO) obj);
+            }else if (obj instanceof ChiTietPhieuNhap_DTO) {
+                new ImportDetailForm((PhieuNhap_DTO) obj);
+            }
+            else {
                 // Nếu không tìm thấy account hợp lệ, hiển thị thông báo
                 showDetailDialog("Lỗi", "Không tìm thấy thông tin tài khoản.");
             }
@@ -186,6 +219,22 @@ public class NutSuKien_BLL implements TableCellEditor {
         }
         return null;
     }
+    private Object findSupplierById(String id) {
+        for (Object s : supplierList.getSupplierList()) {
+            if (s instanceof NhaCungCap_DTO && ((NhaCungCap_DTO) s).getMaNCC().equals(id)) {
+                return s;
+            }
+        }
+        return null;
+    }
+    private Object findImportById(String id) {
+        for (Object s: importList.getImportList()) {
+            if (s instanceof PhieuNhap_DTO && ((PhieuNhap_DTO) s).getMaPN().equals(id)) {
+                return s;
+            }
+        }
+        return null;
+    }
     private void deleteRow(DefaultTableModel tableModel) throws SQLException{
         if (table != null) {
             String id = table.getValueAt(selectedRow, 0).toString();
@@ -200,6 +249,13 @@ public class NutSuKien_BLL implements TableCellEditor {
                 } else if (formType == FormType.ORDER) {
                     DonHang_BLL temp = new DonHang_BLL();
                     temp.DeleteOrder(id);
+                }else if (formType == FormType.SUPPLIER) {
+                    NhaCungCap_BLL temp = new NhaCungCap_BLL();
+                    temp.deleteSupplier(id, tableModel, supplierList.getSupplierList());
+                }
+                else if (formType == FormType.IMPORT) {
+                    PhieuNhap_BLL temp = new PhieuNhap_BLL();
+                    temp.deleteImport(id, tableModel, importList.getImportList());
                 }
                 ((DefaultTableModel) table.getModel()).removeRow(selectedRow);
                 stopCellEditing();

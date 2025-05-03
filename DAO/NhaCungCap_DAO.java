@@ -165,4 +165,69 @@ public class NhaCungCap_DAO {
         }
         return false;
     }
+
+    // Thêm nhà cung cấp
+    public boolean insertNCC(NhaCungCap_DTO ncc) {
+        boolean result = false;
+        if (OpenConnection()) {
+            try {
+                String sql = "INSERT INTO NHACUNGCAP(mancc, tenncc, sdt, email) VALUES (?, ?, ?, ?)";
+                PreparedStatement stmt = con.prepareStatement(sql);
+                stmt.setString(1, ncc.getMaNCC());
+                stmt.setString(2, ncc.getTenNCC());
+                stmt.setString(3, ncc.getSdtNCC());
+                stmt.setString(4, ncc.getEmailNCC());
+
+                result = stmt.executeUpdate() > 0;
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            } finally {
+                closeConnection();
+            }
+        }
+        return result;
+    }
+
+    // Cập nhật nhà cung cấp
+    public boolean updateNCC(NhaCungCap_DTO ncc) {
+        boolean result = false;
+        if (OpenConnection()) {
+            try {
+                String sql = "UPDATE NHACUNGCAP SET tenncc = ?, sdt = ?, email = ? WHERE mancc = ?";
+                PreparedStatement stmt = con.prepareStatement(sql);
+                stmt.setString(1, ncc.getTenNCC());
+                stmt.setString(2, ncc.getSdtNCC());
+                stmt.setString(3, ncc.getEmailNCC());
+                stmt.setString(4, ncc.getMaNCC());
+
+                result = stmt.executeUpdate() > 0;
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            } finally {
+                closeConnection();
+            }
+        }
+        return result;
+    }
+
+    // Xóa nhà cung cấp
+    public boolean deleteNCC(String maNCC) {
+        boolean result = false;
+        if (OpenConnection()) {
+            try {
+                String sql = "DELETE FROM NHACUNGCAP WHERE mancc = ?";
+                PreparedStatement stmt = con.prepareStatement(sql);
+                stmt.setString(1, maNCC);
+
+                result = stmt.executeUpdate() > 0;
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            } finally {
+                closeConnection();
+            }
+        }
+        return result;
+    }
 }
+
+

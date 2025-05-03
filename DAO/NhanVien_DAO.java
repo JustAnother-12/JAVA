@@ -14,7 +14,7 @@ import javax.swing.JTextField;
 import javax.swing.table.*;
 import DTO.NhanVien_DTO;
 
-public class NhanVien_DAO extends javax.swing.JPanel {
+public class NhanVien_DAO {
     public void filterByRole(String role, DefaultTableModel tableModel,ArrayList<NhanVien_DTO> accountList) {
         tableModel.setRowCount(0); // Clear bảng
         accountList.clear();
@@ -57,7 +57,7 @@ public class NhanVien_DAO extends javax.swing.JPanel {
                 }
         } catch (Exception e) {}
     }
-    public void deleteStaff(String id, DefaultTableModel tableModel,ArrayList<NhanVien_DTO> staffList) {
+    public boolean deleteStaff(String id, DefaultTableModel tableModel,ArrayList<NhanVien_DTO> staffList) {
         try (Connection conn = DatabaseConnection.getConnection()) {
                 String checkQuery = "SELECT COUNT(*) FROM NHANVIEN WHERE manv = ?";
                 PreparedStatement checkStmt = conn.prepareStatement(checkQuery);
@@ -69,18 +69,17 @@ public class NhanVien_DAO extends javax.swing.JPanel {
                     PreparedStatement pstmt = conn.prepareStatement(deleteQuery);
                     pstmt.setString(1, id);
                     pstmt.executeUpdate();
-                    JOptionPane.showMessageDialog(this, "Xóa tài khoản nhân viên thành công!");
+                    return true;
                 } else {
                     // Nếu không tìm thấy ID trong cả hai bảng
-                    JOptionPane.showMessageDialog(this, "Không tìm thấy tài khoản với ID: " + id, "Lỗi", JOptionPane.ERROR_MESSAGE);
-                    return;
+                    return false;
                 }
             // Cập nhật lại bảng
             //loadDataFormDatabase(tableModel, staffList);
         } catch (SQLException e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Lỗi khi xóa tài khoản: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
+        return false;
     }
     public NhanVien_DTO getDataOfStaff(NhanVien_DTO nv) {
         NhanVien_DTO a = null; // Khởi tạo a với giá trị null
@@ -113,33 +112,36 @@ public class NhanVien_DAO extends javax.swing.JPanel {
 
         return a; // Trả về đối tượng customer hoặc null nếu không tìm thấy
     }
-    // Kiểm tra SDT đã tồn tại (ngoại trừ username hiện tại)
-    public boolean isPhoneExist(Connection conn, String phone, String currentUsername) throws SQLException {
-        String query = "SELECT * FROM NHANVIEN WHERE sdt = ? AND username <> ?";
-        PreparedStatement stmt = conn.prepareStatement(query);
-        stmt.setString(1, phone);
-        stmt.setString(2, currentUsername);
-        ResultSet rs = stmt.executeQuery();
-        return rs.next();
+    public boolean isPhoneExist(String phone, String currentUsername) throws SQLException {
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            String query = "SELECT * FROM NHANVIEN WHERE sdt = ? AND username <> ?";
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setString(1, phone);
+            stmt.setString(2, currentUsername);
+            ResultSet rs = stmt.executeQuery();
+            return rs.next();
+        }
     }
-
-    // Kiểm tra CCCD đã tồn tại (ngoại trừ username hiện tại)
-    public boolean isCCCDExist(Connection conn, String cccd, String currentUsername) throws SQLException {
-        String query = "SELECT * FROM NHANVIEN WHERE CCCD = ? AND username <> ?";
-        PreparedStatement stmt = conn.prepareStatement(query);
-        stmt.setString(1, cccd);
-        stmt.setString(2, currentUsername);
-        ResultSet rs = stmt.executeQuery();
-        return rs.next();
+    
+    public boolean isCCCDExist(String cccd, String currentUsername) throws SQLException {
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            String query = "SELECT * FROM NHANVIEN WHERE CCCD = ? AND username <> ?";
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setString(1, cccd);
+            stmt.setString(2, currentUsername);
+            ResultSet rs = stmt.executeQuery();
+            return rs.next();
+        }
     }
-
-    // Kiểm tra username mới có bị trùng không
-    public boolean isUsernameExist(Connection conn, String username) throws SQLException {
-        String query = "SELECT * FROM NHANVIEN WHERE username = ?";
-        PreparedStatement stmt = conn.prepareStatement(query);
-        stmt.setString(1, username);
-        ResultSet rs = stmt.executeQuery();
-        return rs.next();
+    
+    public boolean isUsernameExist(String username) throws SQLException {
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            String query = "SELECT * FROM NHANVIEN WHERE username = ?";
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setString(1, username);
+            ResultSet rs = stmt.executeQuery();
+            return rs.next();
+        }
     }
     public void updateStaff(NhanVien_DTO nv, JTextField txtName, JTextField txtPhone, JTextField txtUsername,
                         JTextField txtAddress, JTextField txtBirthday, JComboBox<String> cbPosition,
@@ -149,21 +151,6 @@ public class NhanVien_DAO extends javax.swing.JPanel {
             String newCCCD = txtCCCD.getText();
             String newUsername = txtUsername.getText();
             String currentUsername = nv.getUsername();
-
-            if (isPhoneExist(conn, newPhone, currentUsername)) {
-                JOptionPane.showMessageDialog(null, "Số điện thoại đã tồn tại!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
-                return;
-            }
-
-            if (isCCCDExist(conn, newCCCD, currentUsername)) {
-                JOptionPane.showMessageDialog(null, "CCCD đã tồn tại!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
-                return;
-            }
-
-            if (!newUsername.equals(currentUsername) && isUsernameExist(conn, newUsername)) {
-                JOptionPane.showMessageDialog(null, "Username đã tồn tại!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
-                return;
-            }
 
             String query = "UPDATE NHANVIEN SET tennv = ?, sdt = ?, username = ?, diachinv = ?, gioitinh = ?, ngaysinh = ?, chucvu = ?, CCCD = ? WHERE username = ?";
             PreparedStatement pstmt = conn.prepareStatement(query);

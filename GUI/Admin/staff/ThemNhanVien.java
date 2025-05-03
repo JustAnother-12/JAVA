@@ -71,7 +71,7 @@ public class ThemNhanVien extends javax.swing.JDialog{
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     NhanVien_BLL NhanVien_BLL = new NhanVien_BLL();
-                    boolean nhanvien = NhanVien_BLL.addStaff(txtName, txtPhone, txtUsername, txtAddress, txtBirthday, cbPosition, cbGender, txtCCCD, txtPassword, tableModel, existingIDs);
+                    boolean nhanvien = NhanVien_BLL.addStaff(txtName, cbPosition, txtPhone, txtUsername, txtPassword, txtAddress, txtCCCD, txtBirthday, cbGender, tableModel, existingIDs);
                     if (nhanvien == true)
                         dispose();
                 }

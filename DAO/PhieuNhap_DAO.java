@@ -316,7 +316,7 @@ public class PhieuNhap_DAO {
                         String deletePN = "DELETE FROM PHIEUNHAP WHERE maphieu = ?";
                         PreparedStatement delStmt = con.prepareStatement(deletePN);
                         delStmt.setString(1, id);
-                        delStmt.executeUpdate();
+                        delStmt.executeUpdate(); // không cần kiểm tra số dòng vì COUNT trước đó đã xác nhận
                     }
     
                     con.commit();
@@ -326,6 +326,11 @@ public class PhieuNhap_DAO {
                 }
             } catch (SQLException ex) {
                 System.out.println(ex);            
+                try {
+                    con.rollback();
+                } catch (SQLException e) {
+                    System.out.println(e);
+                }
             } finally{
                 try{
                     con.setAutoCommit(true);
@@ -373,5 +378,22 @@ public class PhieuNhap_DAO {
             }   
         }
         return false;
+    }
+    public boolean deletePhieuNhap(String id) {
+        boolean result = false;
+        if (OpenConnection()) {
+            try {
+                String sql = "DELETE FROM PHIEUNHAP WHERE maphieu = ?";
+                PreparedStatement stmt = con.prepareStatement(sql);
+                stmt.setString(1, id);
+                int rowsAffected = stmt.executeUpdate();
+                result = rowsAffected > 0;
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            } finally {
+                closeConnection();
+            }
+        }
+        return result;
     }
 }

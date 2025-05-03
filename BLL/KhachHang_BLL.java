@@ -67,10 +67,28 @@ public class KhachHang_BLL extends JDialog{
         CheckFailInput_BLL checkFailInput_BLL = new CheckFailInput_BLL();
         if (checkFailInput_BLL.validateFields(isCustomer, txtName, txtPhone, txtUsername, txtAddress, txtBirthday, txtEmail, null, null)) {
             try {
+                
+                if (KhachHang_DAO.isCustomerPhoneExist(txtPhone.getText(), kh.getUsername())) {
+                    JOptionPane.showMessageDialog(null, "Số điện thoại đã tồn tại!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+                    return false;
+                }
+
+                if (KhachHang_DAO.isCustomerEmailExist(txtEmail.getText(), kh.getUsername())) {
+                    JOptionPane.showMessageDialog(null, "Email đã tồn tại!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+                    return false;
+                }
+
+                if (!txtUsername.getText().equals(kh.getUsername()) && KhachHang_DAO.isCustomerUsernameExist(txtUsername.getText())) {
+                    JOptionPane.showMessageDialog(null, "Username đã tồn tại!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+                    return false;
+                }
                 KhachHang_DAO.updateCustomer(kh, txtName, txtPhone, txtUsername, txtAddress, txtBirthday, txtEmail, cbGender);
                 return true;
+            } catch (SQLException ex) {
+                Logger.getLogger(KhachHang_DAO.class.getName()).log(Level.SEVERE, "Error updating customer", ex);
             } catch (ParseException ex) {
                 Logger.getLogger(KhachHang_DAO.class.getName()).log(Level.SEVERE, "Error updating customer", ex);
+
             }
         }
         return false;
