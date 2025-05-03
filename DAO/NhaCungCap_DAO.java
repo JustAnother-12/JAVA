@@ -10,7 +10,7 @@ public class NhaCungCap_DAO {
     public boolean OpenConnection() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/ban_van_phong_pham", "root", "");
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/ban_van_phong_pham", "root", "123456789");
             return true;
         } catch (ClassNotFoundException | SQLException e) {
             System.out.println(e.getMessage());
@@ -20,10 +20,10 @@ public class NhaCungCap_DAO {
 
     public void closeConnection() {
         try {
-            if (con != null) {
+            if (con != null){
                 con.close();
             }
-        } catch (SQLException e) {
+        }catch (SQLException e){
             System.out.println(e.getMessage());
         }
     }

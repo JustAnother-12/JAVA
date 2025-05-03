@@ -20,9 +20,10 @@ import DTO.OrderDetail_DTO;
 import GUI.user.ButDescription;
 import GUI.user.SachDescription;
 import GUI.user.VoDescription;
+import GUI.Admin.component.Header;
 import utils.*;
 
-public class ProdmaFrame extends JPanel {
+public class ProdmaFrame extends JPanel implements Header.searchListener{
 
     private JComboBox<String> FilterComboBox;
     private MyButton importListButton;
@@ -317,6 +318,7 @@ public class ProdmaFrame extends JPanel {
 
 
         // setup layout
+<<<<<<< HEAD
         // GroupLayout layout = new GroupLayout(getContentPane());
         // getContentPane().setLayout(layout);
         // layout.setHorizontalGroup(
@@ -327,6 +329,8 @@ public class ProdmaFrame extends JPanel {
         //     layout.createParallelGroup(GroupLayout.Alignment.LEADING)
         //     .addComponent(mainPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         // );
+=======
+>>>>>>> f12552f8c4b649d3ae7ba50ab0c18a3e9098c80f
         GroupLayout layout = new GroupLayout(this);
         setLayout(layout);
         layout.setHorizontalGroup(
@@ -355,16 +359,24 @@ public class ProdmaFrame extends JPanel {
         refreshProducts();
     }
 
-    // private void searchButtonActionPerformed(ActionEvent evt) {
-    //     String query = searchBar.getText().trim().toLowerCase();
-    //     ArrayList<SanPham_DTO> Searchproducts = new ArrayList<>();
-    //     for(SanPham_DTO sp:products){
-    //         if(sp.getTen_SanPham().toLowerCase().contains(query)){
-    //             Searchproducts.add(sp);
-    //         }
-    //     }
-    //     showProducts(Searchproducts);
-    // }
+    @Override
+    public void onSearch(String text) {
+        searchByName(text.trim().toLowerCase());
+    }
+    @Override
+    public void onFilterByRole(String role) {
+        
+    }
+
+    private void searchByName(String txt) {
+        ArrayList<SanPham_DTO> Searchproducts = new ArrayList<>();
+        for(SanPham_DTO sp:products){
+            if(sp.getTen_SanPham().toLowerCase().contains(txt)){
+                Searchproducts.add(sp);
+            }
+        }
+        showProducts(Searchproducts);
+    }
 
 
     private void addButtonActionPerformed(ActionEvent evt) {

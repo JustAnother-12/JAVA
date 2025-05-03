@@ -13,7 +13,7 @@ public class PhieuNhap_DAO {
     public boolean OpenConnection() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/ban_van_phong_pham", "root", "");
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/ban_van_phong_pham", "root", "123456789");
             return true;
         } catch (ClassNotFoundException | SQLException e) {
             System.out.println(e.getMessage());
@@ -201,6 +201,42 @@ public class PhieuNhap_DAO {
             } 
         }
         return result;
+    }
+
+    public boolean removePhieuNhap(String id){
+        if (OpenConnection()){
+            try{
+                con.setAutoCommit(false);
+
+                String query1 = "DELETE FROM CHITETPHIEUNHAP WHERE maphieu = ?";
+                String query2 = "DELETE FROM PHIEUNHAP WHERE maphieu = ?";
+                PreparedStatement stmt1 = con.prepareStatement(query1);
+                PreparedStatement stmt2 = con.prepareStatement(query2);
+                
+                // Xóa chi tiết phiếu nhập
+                stmt1.setString(1, id);
+                // Xóa phiếu nhập
+                stmt2.setString(1, id);
+
+                if (stmt2.executeUpdate() >=1 &&  stmt1.executeUpdate() >= 1){
+                    con.commit();
+                    return true;
+                }
+                else{
+                    con.rollback();
+                }
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            } finally{
+                try{
+                    con.setAutoCommit(true);
+                }catch(SQLException e){
+                    System.out.println(e);
+                }
+                closeConnection();  
+            }
+        }
+        return false;
     }
 
     public boolean removeCTPhieuNhapBySP(String id){

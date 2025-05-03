@@ -29,6 +29,10 @@ public class DonHang_BLL {
         return orderDao.getDetailForOrder(id);
     }
 
+    public ArrayList<OrderDetail_DTO> getAllDetail(){
+        return orderDao.getAllDetail();
+    }
+
     public String addOrder(Order_DTO order, OrderDetail_DTO details){
         if(orderDao.hasOrderID(order.getMadonhang())){
             return "Đơn hàng đã tồn tại!";
