@@ -8,7 +8,7 @@ import java.sql.*;
 public class DatabaseConnection {
     private static final String DB_URL = "jdbc:mysql://localhost:3306/ban_van_phong_pham"; // Địa chỉ cơ sở dữ liệu
     private static final String USER = "root"; // Tên người dùng
-    private static final String PASS = "";
+    private static final String PASS = "123456789";
     public static Connection getConnection() throws SQLException {
         return DriverManager.getConnection(DB_URL,USER,PASS);
     }
