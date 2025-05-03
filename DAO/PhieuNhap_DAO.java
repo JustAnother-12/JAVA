@@ -381,7 +381,8 @@ public class PhieuNhap_DAO {
     }
     public boolean deletePhieuNhap(String id) {
         boolean result = false;
-        if (OpenConnection()) {
+        con = DatabaseConnection.OpenConnection();
+        if (con != null) {
             try {
                 String sql = "DELETE FROM PHIEUNHAP WHERE maphieu = ?";
                 PreparedStatement stmt = con.prepareStatement(sql);
@@ -391,7 +392,7 @@ public class PhieuNhap_DAO {
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
             } finally {
-                closeConnection();
+                DatabaseConnection.closeConnection(con);
             }
         }
         return result;

@@ -55,9 +55,9 @@ public class Sach_DAO{
         if (con != null) {
             try {            
                 String sql ="SELECT * " +
-                            "FROM SACH, SANPHAM" +
-                            "WHERE SANPHAM.masp = SACH.masp " +
-                            "AND SANPHAM.masp ='"+id+"'";
+                            "FROM SACH s, SANPHAM sp " + 
+                            "WHERE sp.masp ='"+id+"' " +
+                            "AND s.masp = sp.masp ";
                 Statement stmt = con.createStatement();
                 ResultSet rs = stmt.executeQuery(sql);
                 if (rs.next()){
@@ -74,7 +74,8 @@ public class Sach_DAO{
                 }
             } catch (SQLException ex) {
                 System.out.println(ex);            
-            } finally {     
+            } 
+            finally {     
                 DatabaseConnection.closeConnection(con); 
             }   
         }

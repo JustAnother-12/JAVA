@@ -77,76 +77,76 @@ public class NhaCungCap_DAO {
         return null;
     }
 
-    public boolean updateNCC(NhaCungCap_DTO ncc){
-        boolean result = false;
-        con = DatabaseConnection.OpenConnection();
-        if(con != null){
-            try{
-                String query1 = "UPDATE NHACUNGCAP "+
-                                "SET tenncc = ?, sdt = ?, email = ? "+
-                                "WHERE mancc = ?";
-                PreparedStatement stmt1 = con.prepareStatement(query1);
+    // public boolean updateNCC(NhaCungCap_DTO ncc){
+    //     boolean result = false;
+    //     con = DatabaseConnection.OpenConnection();
+    //     if(con != null){
+    //         try{
+    //             String query1 = "UPDATE NHACUNGCAP "+
+    //                             "SET tenncc = ?, sdt = ?, email = ? "+
+    //                             "WHERE mancc = ?";
+    //             PreparedStatement stmt1 = con.prepareStatement(query1);
                 
-                stmt1.setString(1, ncc.getTenNCC());
-                stmt1.setString(2, ncc.getSdtNCC());
-                stmt1.setString(3, ncc.getEmailNCC());
-                stmt1.setString(4, ncc.getMaNCC());
+    //             stmt1.setString(1, ncc.getTenNCC());
+    //             stmt1.setString(2, ncc.getSdtNCC());
+    //             stmt1.setString(3, ncc.getEmailNCC());
+    //             stmt1.setString(4, ncc.getMaNCC());
 
-                if(stmt1.executeUpdate() >=1){
-                    result = true;
-                }
-            }
-            catch(SQLException e){
-                System.out.println(e);
-            } finally{
-                DatabaseConnection.closeConnection(con);
-            }
-        }
-        return result;
-    }
+    //             if(stmt1.executeUpdate() >=1){
+    //                 result = true;
+    //             }
+    //         }
+    //         catch(SQLException e){
+    //             System.out.println(e);
+    //         } finally{
+    //             DatabaseConnection.closeConnection(con);
+    //         }
+    //     }
+    //     return result;
+    // }
 
-    public boolean addNCC(NhaCungCap_DTO ncc){
-        boolean result = false;
-        con = DatabaseConnection.OpenConnection();
-        if (con != null) {
-            try {                    
-                String query1 = "INSERT INTO NHACUNGCAP VALUES(?,?,?,?)";
-                PreparedStatement stmt1 = con.prepareStatement(query1);
-                stmt1.setString(1, getNextNCCID(con));
-                stmt1.setString(2, ncc.getTenNCC());
-                stmt1.setString(3, ncc.getSdtNCC());
-                stmt1.setString(4, ncc.getEmailNCC());
+    // public boolean addNCC(NhaCungCap_DTO ncc){
+    //     boolean result = false;
+    //     con = DatabaseConnection.OpenConnection();
+    //     if (con != null) {
+    //         try {                    
+    //             String query1 = "INSERT INTO NHACUNGCAP VALUES(?,?,?,?)";
+    //             PreparedStatement stmt1 = con.prepareStatement(query1);
+    //             stmt1.setString(1, getNextNCCID(con));
+    //             stmt1.setString(2, ncc.getTenNCC());
+    //             stmt1.setString(3, ncc.getSdtNCC());
+    //             stmt1.setString(4, ncc.getEmailNCC());
 
-                if (stmt1.executeUpdate()>=1)
-                    result = true;
-            } catch (SQLException ex) {
-                System.out.println(ex);            
-            } finally{
-                DatabaseConnection.closeConnection(con);  
-            } 
-        }
-        return result;
-    }
+    //             if (stmt1.executeUpdate()>=1)
+    //                 result = true;
+    //         } catch (SQLException ex) {
+    //             System.out.println(ex);            
+    //         } finally{
+    //             DatabaseConnection.closeConnection(con);  
+    //         } 
+    //     }
+    //     return result;
+    // }
 
-    public boolean removeNCC(String id){
-        boolean result = false;
-        con = DatabaseConnection.OpenConnection();
-        if (con != null) {
-            try {                    
-                String query1 = "DELETE FROM NHACUNGCAP WHERE NHACUNGCAP.mancc = ?";
-                PreparedStatement stmt1 = con.prepareStatement(query1);
+    // public boolean removeNCC(String id){
+    //     boolean result = false;
+    //     con = DatabaseConnection.OpenConnection();
+    //     if (con != null) {
+    //         try {                    
+    //             String query1 = "DELETE FROM NHACUNGCAP WHERE NHACUNGCAP.mancc = ?";
+    //             PreparedStatement stmt1 = con.prepareStatement(query1);
 
-                stmt1.setString(1, id);
-                if (stmt1.executeUpdate()>=1)
-                    result = true;
-            } catch (SQLException ex) {
-                System.out.println(ex);            
-            } finally{
-                DatabaseConnection.closeConnection(con);  
-            } 
-        }
-        return result;
-    }
+    //             stmt1.setString(1, id);
+    //             if (stmt1.executeUpdate()>=1)
+    //                 result = true;
+    //         } catch (SQLException ex) {
+    //             System.out.println(ex);            
+    //         } finally{
+    //             DatabaseConnection.closeConnection(con);  
+    //         } 
+    //     }
+    //     return result;
+    // }
 
     public boolean hasNCCID(String id){         
         con = DatabaseConnection.OpenConnection();               
@@ -169,7 +169,8 @@ public class NhaCungCap_DAO {
     // Thêm nhà cung cấp
     public boolean insertNCC(NhaCungCap_DTO ncc) {
         boolean result = false;
-        if (OpenConnection()) {
+        con = DatabaseConnection.OpenConnection();
+        if (con != null) {
             try {
                 String sql = "INSERT INTO NHACUNGCAP(mancc, tenncc, sdt, email) VALUES (?, ?, ?, ?)";
                 PreparedStatement stmt = con.prepareStatement(sql);
@@ -182,7 +183,7 @@ public class NhaCungCap_DAO {
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
             } finally {
-                closeConnection();
+                DatabaseConnection.closeConnection(con);
             }
         }
         return result;
@@ -191,7 +192,8 @@ public class NhaCungCap_DAO {
     // Cập nhật nhà cung cấp
     public boolean updateNCC(NhaCungCap_DTO ncc) {
         boolean result = false;
-        if (OpenConnection()) {
+        con = DatabaseConnection.OpenConnection();
+        if (con != null) {
             try {
                 String sql = "UPDATE NHACUNGCAP SET tenncc = ?, sdt = ?, email = ? WHERE mancc = ?";
                 PreparedStatement stmt = con.prepareStatement(sql);
@@ -204,7 +206,7 @@ public class NhaCungCap_DAO {
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
             } finally {
-                closeConnection();
+                DatabaseConnection.closeConnection(con);
             }
         }
         return result;
@@ -213,7 +215,8 @@ public class NhaCungCap_DAO {
     // Xóa nhà cung cấp
     public boolean deleteNCC(String maNCC) {
         boolean result = false;
-        if (OpenConnection()) {
+        con = DatabaseConnection.OpenConnection();
+        if (con != null) {
             try {
                 String sql = "DELETE FROM NHACUNGCAP WHERE mancc = ?";
                 PreparedStatement stmt = con.prepareStatement(sql);
@@ -223,7 +226,7 @@ public class NhaCungCap_DAO {
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
             } finally {
-                closeConnection();
+                DatabaseConnection.closeConnection(con);
             }
         }
         return result;

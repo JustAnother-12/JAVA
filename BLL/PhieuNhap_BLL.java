@@ -38,29 +38,30 @@ public class PhieuNhap_BLL {
         }
         return "Xóa chi tiết phiếu nhập thất bại!";
     }
+    
     public void loadToTable(DefaultTableModel model, ArrayList<PhieuNhap_DTO> list) {
-    list.clear();
-    list.addAll(new PhieuNhap_DAO().getAllPhieuNhap());
+        list.clear();
+        list.addAll(new PhieuNhap_DAO().getAllPhieuNhap());
 
-    model.setRowCount(0);
-    for (PhieuNhap_DTO pn : list) {
-        model.addRow(new Object[]{
-            pn.getMaPN(),
-            pn.getMaNCC(),
-            pn.getMaNV(),
-            pn.getNgayNhap(),
-            "Chi tiết | Sửa | Xoá"
-        });
-    }
-}
-public void deleteImport(String id, DefaultTableModel model, ArrayList<PhieuNhap_DTO> list) {
-    for (int i = 0; i < list.size(); i++) {
-        if (list.get(i).getMaPN().equals(id)) {
-            list.remove(i);
-            model.removeRow(i);
-            pnDAO.deletePhieuNhap(id); 
-            break;
+        model.setRowCount(0);
+        for (PhieuNhap_DTO pn : list) {
+            model.addRow(new Object[]{
+                pn.getMaPN(),
+                pn.getMaNCC(),
+                pn.getMaNV(),
+                pn.getNgayNhap(),
+                "Chi tiết | Sửa | Xoá"
+            });
         }
     }
-}
+    public void deleteImport(String id, DefaultTableModel model, ArrayList<PhieuNhap_DTO> list) {
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).getMaPN().equals(id)) {
+                list.remove(i);
+                model.removeRow(i);
+                pnDAO.deletePhieuNhap(id); 
+                break;
+            }
+        }
+    }
 }

@@ -76,7 +76,7 @@ public class But_DAO {
         if (con != null) {
             try {            
                 String sql ="SELECT * " +
-                            "FROM BUT, SANPHAM" +
+                            "FROM BUT, SANPHAM " +
                             "WHERE SANPHAM.masp = BUT.masp " +
                             "AND SANPHAM.masp ='"+id+"'";
                 Statement stmt = con.createStatement();

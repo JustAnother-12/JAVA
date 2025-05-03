@@ -76,7 +76,7 @@ public class Vo_DAO {
         if (con != null) {
             try {            
                 String sql ="SELECT * " +
-                            "FROM VO, SANPHAM" +
+                            "FROM VO, SANPHAM " +
                             "WHERE SANPHAM.masp = VO.masp " +
                             "AND SANPHAM.masp ='"+id+"'";
                 Statement stmt = con.createStatement();
