@@ -1,0 +1,195 @@
+package DAO;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+
+import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+import javax.swing.table.*;
+import DTO.NhanVien_DTO;
+
+public class NhanVien_DAO extends javax.swing.JPanel {
+    public void filterByRole(String role, DefaultTableModel tableModel,ArrayList<NhanVien_DTO> accountList) {
+        tableModel.setRowCount(0); // Clear bảng
+        accountList.clear();
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            String query = role.equals("Tất cả")
+                ? "SELECT * FROM NHANVIEN"
+                : "SELECT * FROM NHANVIEN WHERE chucvu = ?";
+            PreparedStatement pstmt = conn.prepareStatement(query);
+            if (!role.equals("Tất cả")) {
+                pstmt.setString(1, role);
+            }
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                String id = rs.getString("manv");
+                String name = rs.getString("tennv");
+                String username = rs.getString("username");
+                String phone = rs.getString("sdt");
+                NhanVien_DTO nv = new NhanVien_DTO(id, name, username, phone);
+                accountList.add(nv);
+                tableModel.addRow(new Object[]{id, name, username, phone, "Chi tiết" + "Xoá"});
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    public void loadDataFormDatabase(DefaultTableModel tableModel,ArrayList<NhanVien_DTO> accountList) {
+        try (Connection conn = DatabaseConnection.getConnection()) {
+                String queryfors = "SELECT * FROM NHANVIEN";
+                PreparedStatement pstmt = conn.prepareStatement(queryfors);
+                ResultSet rs = pstmt.executeQuery();
+                
+                while (rs.next()) {
+                    String id = rs.getString("manv");
+                    String name = rs.getString("tennv");
+                    String username = rs.getString("username");
+                    String phone = rs.getString("sdt");
+                    NhanVien_DTO nv = new NhanVien_DTO(id, name, username, phone);
+                    accountList.add(nv);
+                    tableModel.addRow(new Object[]{id, name, username, phone, "Chi tiết" + "Xoá"});
+                }
+        } catch (Exception e) {}
+    }
+    public void deleteStaff(String id, DefaultTableModel tableModel,ArrayList<NhanVien_DTO> staffList) {
+        try (Connection conn = DatabaseConnection.getConnection()) {
+                String checkQuery = "SELECT COUNT(*) FROM NHANVIEN WHERE manv = ?";
+                PreparedStatement checkStmt = conn.prepareStatement(checkQuery);
+                checkStmt.setString(1, id);
+                ResultSet rs = checkStmt.executeQuery();
+                if (rs.next() && rs.getInt(1) > 0) {
+                    // Nếu ID là của nhân viên
+                    String deleteQuery = "DELETE FROM NHANVIEN WHERE manv = ?";
+                    PreparedStatement pstmt = conn.prepareStatement(deleteQuery);
+                    pstmt.setString(1, id);
+                    pstmt.executeUpdate();
+                    JOptionPane.showMessageDialog(this, "Xóa tài khoản nhân viên thành công!");
+                } else {
+                    // Nếu không tìm thấy ID trong cả hai bảng
+                    JOptionPane.showMessageDialog(this, "Không tìm thấy tài khoản với ID: " + id, "Lỗi", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+            // Cập nhật lại bảng
+            //loadDataFormDatabase(tableModel, staffList);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Lỗi khi xóa tài khoản: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    public NhanVien_DTO getDataOfStaff(NhanVien_DTO nv) {
+        NhanVien_DTO a = null; // Khởi tạo a với giá trị null
+        String query = "SELECT * FROM NHANVIEN WHERE manv = ?"; // Truy vấn để lấy dữ liệu
+
+        try (Connection conn = DatabaseConnection.getConnection(); // Kết nối đến cơ sở dữ liệu
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+         
+            pstmt.setString(1, nv.getManv()); // Thiết lập ID của khách hàng
+            ResultSet rs = pstmt.executeQuery(); // Thực thi truy vấn
+
+            if (rs.next()) { // Nếu có kết quả
+                // Tạo đối tượng customer từ kết quả truy vấn
+                a = new NhanVien_DTO(
+                    rs.getString("manv"),
+                    rs.getString("tennv"),
+                    rs.getString("chucvu"),
+                    rs.getString("sdt"),
+                    rs.getString("username"),
+                    rs.getString("passwordnv"),
+                    rs.getString("diachinv"),
+                    rs.getString("CCCD"),
+                    rs.getString("gioitinh"),
+                    rs.getString("ngaysinh")
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(); // In ra lỗi nếu có
+        }   
+
+        return a; // Trả về đối tượng customer hoặc null nếu không tìm thấy
+    }
+    // Kiểm tra SDT đã tồn tại (ngoại trừ username hiện tại)
+    public boolean isPhoneExist(Connection conn, String phone, String currentUsername) throws SQLException {
+        String query = "SELECT * FROM NHANVIEN WHERE sdt = ? AND username <> ?";
+        PreparedStatement stmt = conn.prepareStatement(query);
+        stmt.setString(1, phone);
+        stmt.setString(2, currentUsername);
+        ResultSet rs = stmt.executeQuery();
+        return rs.next();
+    }
+
+    // Kiểm tra CCCD đã tồn tại (ngoại trừ username hiện tại)
+    public boolean isCCCDExist(Connection conn, String cccd, String currentUsername) throws SQLException {
+        String query = "SELECT * FROM NHANVIEN WHERE CCCD = ? AND username <> ?";
+        PreparedStatement stmt = conn.prepareStatement(query);
+        stmt.setString(1, cccd);
+        stmt.setString(2, currentUsername);
+        ResultSet rs = stmt.executeQuery();
+        return rs.next();
+    }
+
+    // Kiểm tra username mới có bị trùng không
+    public boolean isUsernameExist(Connection conn, String username) throws SQLException {
+        String query = "SELECT * FROM NHANVIEN WHERE username = ?";
+        PreparedStatement stmt = conn.prepareStatement(query);
+        stmt.setString(1, username);
+        ResultSet rs = stmt.executeQuery();
+        return rs.next();
+    }
+    public void updateStaff(NhanVien_DTO nv, JTextField txtName, JTextField txtPhone, JTextField txtUsername,
+                        JTextField txtAddress, JTextField txtBirthday, JComboBox<String> cbPosition,
+                        JTextField txtCCCD, JComboBox<String> cbGender) throws ParseException {
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            String newPhone = txtPhone.getText();
+            String newCCCD = txtCCCD.getText();
+            String newUsername = txtUsername.getText();
+            String currentUsername = nv.getUsername();
+
+            if (isPhoneExist(conn, newPhone, currentUsername)) {
+                JOptionPane.showMessageDialog(null, "Số điện thoại đã tồn tại!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            if (isCCCDExist(conn, newCCCD, currentUsername)) {
+                JOptionPane.showMessageDialog(null, "CCCD đã tồn tại!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            if (!newUsername.equals(currentUsername) && isUsernameExist(conn, newUsername)) {
+                JOptionPane.showMessageDialog(null, "Username đã tồn tại!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            String query = "UPDATE NHANVIEN SET tennv = ?, sdt = ?, username = ?, diachinv = ?, gioitinh = ?, ngaysinh = ?, chucvu = ?, CCCD = ? WHERE username = ?";
+            PreparedStatement pstmt = conn.prepareStatement(query);
+            pstmt.setString(1, txtName.getText());
+            pstmt.setString(2, newPhone);
+            pstmt.setString(3, newUsername);
+            pstmt.setString(4, txtAddress.getText());
+
+            SimpleDateFormat inputFormat = new SimpleDateFormat("dd/MM/yyyy");
+            SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date date = inputFormat.parse(txtBirthday.getText());
+            String formattedDate = outputFormat.format(date);
+
+            pstmt.setString(5, (String) cbGender.getSelectedItem());
+            pstmt.setString(6, formattedDate);
+            pstmt.setString(7, (String) cbPosition.getSelectedItem());
+            pstmt.setString(8, newCCCD);
+            pstmt.setString(9, currentUsername);
+
+            pstmt.executeUpdate();
+            JOptionPane.showMessageDialog(null, "Cập nhật thông tin nhân viên thành công!");
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Lỗi khi cập nhật thông tin: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+}
