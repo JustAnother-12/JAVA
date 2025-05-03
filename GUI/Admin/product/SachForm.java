@@ -10,10 +10,10 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class SachForm extends JPanel{
-    protected JTextField authorTextField;
-    protected JTextField genreTextField;
-    protected JTextField publisherTextField;
-    protected JTextField publicationYearTextField;
+    public JTextField authorTextField;
+    public JTextField genreTextField;
+    public JTextField publisherTextField;
+    public JTextField publicationYearTextField;
 
     private Border inputFieldBorder = BorderFactory.createMatteBorder(0, 0, 2, 0, Color.darkGray);
     private ProductForm parent;
@@ -25,23 +25,13 @@ public class SachForm extends JPanel{
         this.sp = sp;
     }
 
-    private boolean checkAdditionalFields() {
-        String author = authorTextField.getText().trim();
-        String genre = genreTextField.getText().trim();
-        String publisher = publisherTextField.getText().trim();
-        String publicationYear = publicationYearTextField.getText().trim();
-        return !(author.isEmpty() || genre.isEmpty() || publisher.isEmpty() || publicationYear.isEmpty());
-    }
-
-    private boolean checkValidInput(String input){
-        char[] chars = input.toCharArray();
-        for (char c : chars) {
-            if(!Character.isLetter(c)) {
-                return false;
-            }
-        }
-        return true;
-    }
+    // private boolean checkAdditionalFields() {
+    //     String author = authorTextField.getText().trim();
+    //     String genre = genreTextField.getText().trim();
+    //     String publisher = publisherTextField.getText().trim();
+    //     String publicationYear = publicationYearTextField.getText().trim();
+    //     return !(author.isEmpty() || genre.isEmpty() || publisher.isEmpty() || publicationYear.isEmpty());
+    // }
 
     private void saveProduct() {
         String name = parent.nameTextField.getText().trim();
@@ -165,21 +155,14 @@ public class SachForm extends JPanel{
         confirmButton.setFont(new Font("Segoe UI", 0, 14));
         confirmButton.setForeground(new Color(255, 255, 255));
         confirmButton.addActionListener(e -> {
-            if (checkAdditionalFields()) {
-                if(checkValidInput(authorTextField.getText()) && 
-                    checkValidInput(genreTextField.getText()) && 
-                    checkValidInput(publisherTextField.getText())){
-                    if(sp==null){
-                        saveProduct();
-                    }else{
-                        Sach_DTO sach = (Sach_DTO)sp;
-                        editProduct(sach);
-                    }
-                    parent.dispose();
+            if (parent.productBLL.checkSACHAdditionalFields(this)) {
+                if(sp==null){
+                    saveProduct();
+                }else{
+                    Sach_DTO sach = (Sach_DTO)sp;
+                    editProduct(sach);
                 }
-                else{
-                    JOptionPane.showMessageDialog(this, "Thông tin nhập không đúng định dạng!.", "Error", JOptionPane.ERROR_MESSAGE);
-                }
+                parent.dispose();
             } else {
                 JOptionPane.showMessageDialog(this, "Vui lòng điền đầy đủ thông tin.", "Error", JOptionPane.ERROR_MESSAGE);
             }

@@ -53,7 +53,7 @@ public class ButtonEditor extends AbstractCellEditor implements TableCellEditor 
 
         deleteButton = new MyButton("Xóa");
         deleteButton.setFont(new Font("Segoe UI", 0, 12));
-        deleteButton.setBackground(new Color(255, 153, 0));
+        deleteButton.setBackground(Color.RED);
         deleteButton.setForeground(Color.WHITE);
         deleteButton.setPreferredSize(new Dimension(200, 25));
         deleteButton.addActionListener(e -> {

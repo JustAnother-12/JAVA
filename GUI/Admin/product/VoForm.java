@@ -10,10 +10,10 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class VoForm extends JPanel{
-    protected JTextField typeTextField;
-    protected JTextField materialTextField;
-    protected JTextField publisherTextField;
-    protected JTextField pagenumberTextField;
+    public JTextField typeTextField;
+    public JTextField materialTextField;
+    public JTextField publisherTextField;
+    public JTextField pagenumberTextField;
 
     private Border inputFieldBorder = BorderFactory.createMatteBorder(0, 0, 2, 0, Color.darkGray);
     private ProductForm parent;
@@ -64,23 +64,13 @@ public class VoForm extends JPanel{
         
     }
 
-    private boolean checkAdditionalFields() {
-        String type = typeTextField.getText().trim();
-        String material = materialTextField.getText().trim();
-        String publisher = publisherTextField.getText().trim();
-        String pageNumber = pagenumberTextField.getText().trim();
-        return !(type.isEmpty() || material.isEmpty() || publisher.isEmpty() || pageNumber.isEmpty());
-    }
-
-    private boolean checkValidInput(String input){
-        char[] chars = input.toCharArray();
-        for (char c : chars) {
-            if(!Character.isLetter(c)) {
-                return false;
-            }
-        }
-        return true;
-    }
+    // private boolean checkAdditionalFields() {
+    //     String type = typeTextField.getText().trim();
+    //     String material = materialTextField.getText().trim();
+    //     String publisher = publisherTextField.getText().trim();
+    //     String pageNumber = pagenumberTextField.getText().trim();
+    //     return !(type.isEmpty() || material.isEmpty() || publisher.isEmpty() || pageNumber.isEmpty());
+    // }
 
     public JPanel createAdditionalInfoPanel() {
         JPanel formPanel = new JPanel();
@@ -164,21 +154,16 @@ public class VoForm extends JPanel{
         confirmButton.setFont(new Font("Segoe UI", 0, 14));
         confirmButton.setForeground(new Color(255, 255, 255));
         confirmButton.addActionListener(e -> {
-            if (checkAdditionalFields()) {
-                if(checkValidInput(typeTextField.getText()) &&
-                    checkValidInput(materialTextField.getText()) &&
-                    checkValidInput(publisherTextField.getText())){
-                    if(sp==null){
-                        saveProduct();
-                    }else{
-                        Vo_DTO vo = (Vo_DTO)sp;
-                        editProduct(vo);
-                    }
-                    parent.dispose();
+            if (parent.productBLL.checkVOAdditionalFields(this)) {
+                
+                if(sp==null){
+                    saveProduct();
+                }else{
+                    Vo_DTO vo = (Vo_DTO)sp;
+                    editProduct(vo);
                 }
-                else{
-                    JOptionPane.showMessageDialog(this, "Thông tin nhập không đúng định dạng!.", "Error", JOptionPane.ERROR_MESSAGE);
-                }
+                parent.dispose();
+                
             } else {
                 JOptionPane.showMessageDialog(this, "Vui lòng điền đầy đủ thông tin.", "Error", JOptionPane.ERROR_MESSAGE);
             }

@@ -33,8 +33,6 @@ public class ProdmaFrame extends JPanel implements Header.searchListener{
     private MyButton lastButton;
     private MyButton nextButton;
     private MyButton previousButton;
-    // private JButton searchButton;
-    // private JTextField searchBar;
     private JPanel mainPanel;
     private JScrollPane productTableScrollPane;
     private JTable productTable;
@@ -110,8 +108,6 @@ public class ProdmaFrame extends JPanel implements Header.searchListener{
         mainPanel = new JPanel();
         productTableScrollPane = new JScrollPane();
         productTable = new JTable();
-        // searchBar = new JTextField();
-        // searchButton = new JButton();
         restartButton = new MyButton();
         addButton = new MyButton();
         firstButton = new MyButton();
@@ -174,27 +170,6 @@ public class ProdmaFrame extends JPanel implements Header.searchListener{
         JPanel leftPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
         leftPanel.setBackground(Color.WHITE);
 
-        // JLabel searchLabel = new JLabel();
-        // searchLabel.setFont(new Font("Segoe UI", 0, 20));
-        // searchLabel.setText("Search:");
-        // leftPanel.add(searchLabel);
-
-        // searchBar.setFont(new Font("Segoe UI", 0, 20));
-        // searchBar.setPreferredSize(new Dimension(300, 30));
-        // leftPanel.add(searchBar);
-
-        // searchButton.setBackground(new Color(255, 102, 0));
-        // searchButton.setFont(new Font("Segoe UI", 0, 14));
-        // searchButton.setForeground(Color.WHITE);
-        // searchButton.setText("Search");
-        // searchButton.setPreferredSize(new Dimension(80, 30));
-        // searchButton.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
-        // searchButton.addActionListener(new ActionListener() {
-        //     public void actionPerformed(ActionEvent evt) {
-        //         searchButtonActionPerformed(evt);
-        //     }
-        // });
-        // leftPanel.add(searchButton);
 
         FilterComboBox = new JComboBox<>(new String[] { "Tất cả", "Sách", "Vở", "Bút" });
         FilterComboBox.setBackground(Color.WHITE);
@@ -308,7 +283,7 @@ public class ProdmaFrame extends JPanel implements Header.searchListener{
         buttonPanel.add(lastButton);
 
 
-        // mainPanel.setBorder(mainPanelBorder);
+        
         mainPanel.setBackground(new Color(255, 255, 255));
         mainPanel.setPreferredSize(new Dimension(900, 650));
         mainPanel.setLayout(new BorderLayout(10, 10));
@@ -332,8 +307,6 @@ public class ProdmaFrame extends JPanel implements Header.searchListener{
 
         setSize(900, 650);
         setMinimumSize(new Dimension(800, 500));
-        // setLocationRelativeTo(null);
-        // setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setVisible(true);
     }
 

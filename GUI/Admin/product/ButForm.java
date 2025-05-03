@@ -9,9 +9,9 @@ import DTO.SanPham_DTO;
 import java.awt.*;
 
 public class ButForm extends JPanel{
-    protected JTextField colorTextField;
-    protected JTextField typeTextField;
-    protected JTextField publisherTextField;
+    public JTextField colorTextField;
+    public JTextField typeTextField;
+    public JTextField publisherTextField;
 
     private Border inputFieldBorder = BorderFactory.createMatteBorder(0, 0, 2, 0, Color.darkGray);
     private ProductForm parent;
@@ -56,24 +56,6 @@ public class ButForm extends JPanel{
         }else{
             JOptionPane.showMessageDialog(this, "Cập nhật thất bại!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
         }
-    }
-
-    private boolean checkAdditionalFields() {
-        
-        String type = typeTextField.getText().trim();
-        String color = colorTextField.getText().trim();
-        String publisher = publisherTextField.getText().trim();
-        return !(type.isEmpty() || color.isEmpty() || publisher.isEmpty());
-    }
-
-    private boolean checkValidInput(String input){
-        char[] chars = input.toCharArray();
-        for (char c : chars) {
-            if(!Character.isLetter(c)) {
-                return false;
-            }
-        }
-        return true;
     }
 
     public JPanel createAdditionalInfoPanel() {
@@ -136,21 +118,15 @@ public class ButForm extends JPanel{
         confirmButton.setFont(new Font("Segoe UI", 0, 14));
         confirmButton.setForeground(new Color(255, 255, 255));
         confirmButton.addActionListener(e -> {
-            if (checkAdditionalFields()) {
-                if(checkValidInput(typeTextField.getText()) &&
-                    checkValidInput(colorTextField.getText()) &&
-                    checkValidInput(publisherTextField.getText())){
-                    if(sp==null){
-                        saveProduct();
-                    }else{
-                        But_DTO but = (But_DTO)sp;
-                        editProduct(but);
-                    }
-                    parent.dispose();
+            if (parent.productBLL.checkBUTAdditionalFields(this)) {
+            
+                if(sp==null){
+                    saveProduct();
+                }else{
+                    But_DTO but = (But_DTO)sp;
+                    editProduct(but);
                 }
-                else{
-                    JOptionPane.showMessageDialog(this, "Thông tin nhập không đúng định dạng!.", "Error", JOptionPane.ERROR_MESSAGE);
-                }
+                parent.dispose();
                 
             } else {
                 JOptionPane.showMessageDialog(this, "Vui lòng điền đầy đủ thông tin.", "Error", JOptionPane.ERROR_MESSAGE);

@@ -1,6 +1,10 @@
 package BLL;
 
 import DTO.*;
+import GUI.Admin.product.ButForm;
+import GUI.Admin.product.ProductForm;
+import GUI.Admin.product.SachForm;
+import GUI.Admin.product.VoForm;
 import DAO.*;
 import java.util.ArrayList;
 
@@ -11,30 +15,54 @@ public class SanPham_BLL {
     private ArrayList<SanPham_DTO> danhsachsp;
 
 
+    public boolean checkEmptyFields(ProductForm form) {
+        String name = form.nameTextField.getText().trim();
+        String price = form.priceTextField.getText().trim();
+        return !(name.isEmpty() || price.isEmpty());
+    }
+
+    public boolean checkSACHAdditionalFields(SachForm form) {
+        String author = form.authorTextField.getText().trim();
+        String genre = form.genreTextField.getText().trim();
+        String publisher = form.publisherTextField.getText().trim();
+        String publicationYear = form.publicationYearTextField.getText().trim();
+        return !(author.isEmpty() || genre.isEmpty() || publisher.isEmpty() || publicationYear.isEmpty());
+    }
+
+    public boolean checkVOAdditionalFields(VoForm form) {
+        String type = form.typeTextField.getText().trim();
+        String material = form.materialTextField.getText().trim();
+        String publisher = form.publisherTextField.getText().trim();
+        String pageNumber = form.pagenumberTextField.getText().trim();
+        return !(type.isEmpty() || material.isEmpty() || publisher.isEmpty() || pageNumber.isEmpty());
+    }
+
+    public boolean checkBUTAdditionalFields(ButForm form) {
+        
+        String type = form.typeTextField.getText().trim();
+        String color = form.colorTextField.getText().trim();
+        String publisher = form.publisherTextField.getText().trim();
+        return !(type.isEmpty() || color.isEmpty() || publisher.isEmpty());
+    }
+
     public Sach_DTO getSachFromID(String id){
-        for(Sach_DTO sach:getAllSach()){
-            if(sach.getID_SanPham().equals(id)){
-                return sach;
-            }
-        }
+        Sach_DTO sach = Sachdao.getSACHfromID(id);
+        if (sach != null)
+            return sach;
         return null;
     }
 
     public Vo_DTO getVoFromID(String id){
-        for(Vo_DTO Vo:getAllVo()){
-            if(Vo.getID_SanPham().equals(id)){
-                return Vo;
-            }
-        }
+        Vo_DTO vo = Vodao.getVOfromID(id);
+        if (vo != null)
+            return vo;
         return null;
     }
 
     public But_DTO getButFromID(String id){
-        for(But_DTO But:getAllBut()){
-            if(But.getID_SanPham().equals(id)){
-                return But;
-            }
-        }
+        But_DTO but = Butdao.getBUTfromID(id);
+        if (but != null)
+            return but;
         return null;
     }
 

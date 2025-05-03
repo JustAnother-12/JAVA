@@ -28,6 +28,13 @@ public class KhachHang_BLL extends JDialog{
         return null;
     }
 
+    public KhachHang_DTO getKhachHangFromID(String id){
+        KhachHang_DTO kh = khachhangDao.getKhachHangfromID(id);
+        if (kh != null)
+            return kh;
+        return null;
+    }
+
     public String addKhachHang(KhachHang_DTO kh){
         if(khachhangDao.hasKhachHangID(kh.getId_KhachHang())){
             return "khách hàng đã tồn tại!";

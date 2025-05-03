@@ -3,35 +3,36 @@ package DAO;
 import java.sql.*;
 import java.util.ArrayList;
 
-import DTO.Vo_DTO;
+import DTO.*;
 
 public class Vo_DAO {
     private Connection con;
 
-    public boolean OpenConnection() {
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/ban_van_phong_pham", "root", "123456789");
-            return true;
-        } catch (ClassNotFoundException | SQLException e) {
-            System.out.println(e.getMessage());
-            return false;
-        }
-    }
+    // public boolean OpenConnection() {
+    //     try {
+    //         Class.forName("com.mysql.cj.jdbc.Driver");
+    //         con = DriverManager.getConnection("jdbc:mysql://localhost:3306/ban_van_phong_pham", "root", "123456789");
+    //         return true;
+    //     } catch (ClassNotFoundException | SQLException e) {
+    //         System.out.println(e.getMessage());
+    //         return false;
+    //     }
+    // }
 
-    public void closeConnection() {
-        try {
-            if (con != null){
-                con.close();
-            }
-        }catch (SQLException e){
-            System.out.println(e.getMessage());
-        }
-    }
+    // public void closeConnection() {
+    //     try {
+    //         if (con != null){
+    //             con.close();
+    //         }
+    //     }catch (SQLException e){
+    //         System.out.println(e.getMessage());
+    //     }
+    // }
 
     public String getLastestVOID(){
         String latestID = "";
-        if (OpenConnection()){
+        con = DatabaseConnection.OpenConnection();
+        if (con != null){
             try {
                 String sql = "SELECT masp FROM VO ORDER BY masp DESC LIMIT 1";
                 PreparedStatement stmt = con.prepareStatement(sql);
@@ -42,7 +43,7 @@ public class Vo_DAO {
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
             } finally{
-                closeConnection();
+                DatabaseConnection.closeConnection(con);
             }
         }
         return latestID;
@@ -70,9 +71,41 @@ public class Vo_DAO {
         return (prefix+nextnumberic).replace(" ", ""); 
     }
 
+    public Vo_DTO getVOfromID(String id){
+        con = DatabaseConnection.OpenConnection();
+        if (con != null) {
+            try {            
+                String sql ="SELECT * " +
+                            "FROM VO, SANPHAM" +
+                            "WHERE SANPHAM.masp = VO.masp " +
+                            "AND SANPHAM.masp ='"+id+"'";
+                Statement stmt = con.createStatement();
+                ResultSet rs = stmt.executeQuery(sql);
+                if (rs.next()){
+                    String idvo = rs.getString("masp");
+                    String ten = rs.getString("tensp");
+                    double gia = rs.getDouble("dongiasp");
+                    int soLuong = rs.getInt("soluongsp");
+                    String loaivo = rs.getString("loaivo");
+                    String nhasanxuat = rs.getString("nhasanxuat");
+                    String chatlieu = rs.getString("chatlieu");
+                    int sotrang = rs.getInt("sotrang");
+                    Vo_DTO sp = new Vo_DTO(idvo, ten, gia, soLuong, loaivo, nhasanxuat, chatlieu, sotrang);
+                    return sp;
+                }
+            } catch (SQLException ex) {
+                System.out.println(ex);            
+            } finally {     
+                DatabaseConnection.closeConnection(con); 
+            }   
+        }
+        return null;
+    }
+
     public ArrayList<Vo_DTO> getAllVo(){
         ArrayList<Vo_DTO> arr = new  ArrayList<>();
-        if (OpenConnection()){
+        con = DatabaseConnection.OpenConnection();
+        if (con != null){
             try{
                 Statement stmt = con.createStatement();
                 ResultSet rs = stmt.executeQuery(
@@ -96,7 +129,7 @@ public class Vo_DAO {
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
             } finally{
-                closeConnection();
+                DatabaseConnection.closeConnection(con);
             }
         }
         return arr;
@@ -104,7 +137,8 @@ public class Vo_DAO {
 
     public boolean updateVo(Vo_DTO vo){
         boolean result = false;
-        if(OpenConnection()){
+        con = DatabaseConnection.OpenConnection();
+        if(con != null){
             try{
                 con.setAutoCommit(false);
                 String query1 = "UPDATE SANPHAM "+
@@ -143,7 +177,7 @@ public class Vo_DAO {
                 catch(SQLException e){
                     System.out.println(e);
                 }
-                closeConnection();
+                DatabaseConnection.closeConnection(con);
             }
         }
         return result;
@@ -151,7 +185,8 @@ public class Vo_DAO {
 
     public boolean addVo(Vo_DTO vo){
         boolean result = false;
-        if (OpenConnection()) {
+        con = DatabaseConnection.OpenConnection();
+        if (con != null) {
             try {                    
                 con.setAutoCommit(false);
                 String query1 = "INSERT INTO SANPHAM VALUES(?,?,?,?)";
@@ -183,7 +218,7 @@ public class Vo_DAO {
                 }catch(SQLException e){
                     System.out.println(e);
                 }
-                closeConnection();  
+                DatabaseConnection.closeConnection(con);  
             } 
         }
         return result;
@@ -191,7 +226,8 @@ public class Vo_DAO {
 
     public boolean removeVo(String id){
         boolean result = false;
-        if (OpenConnection()) {
+        con = DatabaseConnection.OpenConnection();
+        if (con != null) {
             try {              
                 con.setAutoCommit(false);      
                 String query1 = "DELETE FROM SANPHAM WHERE SANPHAM.masp = ?";
@@ -216,14 +252,15 @@ public class Vo_DAO {
                 }catch(SQLException e){
                     System.out.println(e);
                 }
-                closeConnection();  
+                DatabaseConnection.closeConnection(con);  
             } 
         }
         return result;
     }
 
-    public boolean hasVoID(String id){                        
-        if (OpenConnection()) {
+    public boolean hasVoID(String id){     
+        con = DatabaseConnection.OpenConnection();                   
+        if (con != null) {
             try {            
             String sql = "SELECT * FROM VO WHERE VO.masp='"+id+"'";
             Statement stmt = con.createStatement();
@@ -233,7 +270,7 @@ public class Vo_DAO {
             } catch (SQLException ex) {
                 System.out.println(ex);            
             } finally {     
-                closeConnection(); 
+                DatabaseConnection.closeConnection(con); 
             }   
         }
         return false;

@@ -16,30 +16,31 @@ import java.util.Date;
 public class KhachHang_DAO extends JDialog {
     private Connection con;
 
-    public boolean OpenConnection() {
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/ban_van_phong_pham", "root", "");
-            return true;
-        } catch (ClassNotFoundException | SQLException e) {
-            System.out.println(e.getMessage());
-            return false;
-        }
-    }
+    // public boolean OpenConnection() {
+    //     try {
+    //         Class.forName("com.mysql.cj.jdbc.Driver");
+    //         con = DriverManager.getConnection("jdbc:mysql://localhost:3306/ban_van_phong_pham", "root", "");
+    //         return true;
+    //     } catch (ClassNotFoundException | SQLException e) {
+    //         System.out.println(e.getMessage());
+    //         return false;
+    //     }
+    // }
 
-    public void closeConnection() {
-        try {
-            if (con != null){
-                con.close();
-            }
-        }catch (SQLException e){
-            System.out.println(e.getMessage());
-        }
-    }
+    // public void closeConnection() {
+    //     try {
+    //         if (con != null){
+    //             con.close();
+    //         }
+    //     }catch (SQLException e){
+    //         System.out.println(e.getMessage());
+    //     }
+    // }
 
     public ArrayList<KhachHang_DTO> getAllKhachHang(){
         ArrayList<KhachHang_DTO> arr = new  ArrayList<>();
-        if (OpenConnection()){
+        con = DatabaseConnection.OpenConnection();
+        if (con != null){
             try{
                 Statement stmt = con.createStatement();
                 ResultSet rs = stmt.executeQuery("SELECT * FROM KHACHHANG");
@@ -59,14 +60,15 @@ public class KhachHang_DAO extends JDialog {
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
             } finally{
-                closeConnection();
+                DatabaseConnection.closeConnection(con);
             }
         }
         return arr;
     }
 
     public KhachHang_DTO getKhachHangfromID(String id){
-        if (OpenConnection()) {
+        con = DatabaseConnection.OpenConnection();
+        if (con != null) {
             try {            
                 String sql = "SELECT * FROM KHACHHANG WHERE KHACHHANG.makh='"+id+"'";
                 Statement stmt = con.createStatement();
@@ -87,7 +89,7 @@ public class KhachHang_DAO extends JDialog {
             } catch (SQLException ex) {
                 System.out.println(ex);            
             } finally {     
-                closeConnection(); 
+                DatabaseConnection.closeConnection(con); 
             }   
         }
         return null;
@@ -95,7 +97,8 @@ public class KhachHang_DAO extends JDialog {
 
     public boolean addKhachHang(KhachHang_DTO kh){
         boolean result = false;
-        if (OpenConnection()) {
+        con = DatabaseConnection.OpenConnection();
+        if (con != null) {
             try {                    
                 String query1 = "INSERT INTO KHACHHANG VALUES(?,?,?,?,?,?,?,?,?)";
                 PreparedStatement stmt1 = con.prepareStatement(query1);
@@ -114,7 +117,7 @@ public class KhachHang_DAO extends JDialog {
             } catch (SQLException ex) {
                 System.out.println(ex);            
             } finally{
-                closeConnection();  
+                DatabaseConnection.closeConnection(con);  
             } 
         }
         return result;
@@ -122,7 +125,8 @@ public class KhachHang_DAO extends JDialog {
 
     public boolean removeKhachHang(String id){
         boolean result = false;
-        if (OpenConnection()) {
+        con = DatabaseConnection.OpenConnection();
+        if (con != null) {
             try {                    
                 String query1 = "DELETE FROM KHACHHANG WHERE KHACHHANG.makh = ?";
                 PreparedStatement stmt1 = con.prepareStatement(query1);
@@ -133,16 +137,17 @@ public class KhachHang_DAO extends JDialog {
             } catch (SQLException ex) {
                 System.out.println(ex);            
             } finally{
-                closeConnection();  
+                DatabaseConnection.closeConnection(con);  
             } 
         }
         return result;
     }
 
     public boolean hasKhachHangUsername(String username){
-        if (OpenConnection()) {
+        con = DatabaseConnection.OpenConnection();
+        if (con != null) {
             try {            
-                String sql = "SELECT * FROM KHACHHANG WHERE KHACHHANG.username="+username;
+                String sql = "SELECT * FROM KHACHHANG WHERE KHACHHANG.username='"+username+"'";
                 Statement stmt = con.createStatement();
                 ResultSet rs = stmt.executeQuery(sql);
                 if (rs.next())
@@ -150,16 +155,17 @@ public class KhachHang_DAO extends JDialog {
             } catch (SQLException ex) {
                 System.out.println(ex);            
             } finally {     
-                closeConnection(); 
+                DatabaseConnection.closeConnection(con); 
             }   
         }
         return false;
     }
 
-    public boolean hasKhachHangID(String id){                        
-        if (OpenConnection()) {
+    public boolean hasKhachHangID(String id){         
+        con = DatabaseConnection.OpenConnection();               
+        if (con != null) {
             try {            
-                String sql = "SELECT * FROM KHACHHANG WHERE KHACHHANG.makh="+id;
+                String sql = "SELECT * FROM KHACHHANG WHERE KHACHHANG.makh='"+id+"'";
                 Statement stmt = con.createStatement();
                 ResultSet rs = stmt.executeQuery(sql);
                 if (rs.next())
@@ -167,14 +173,15 @@ public class KhachHang_DAO extends JDialog {
             } catch (SQLException ex) {
                 System.out.println(ex);            
             } finally {     
-                closeConnection(); 
+                DatabaseConnection.closeConnection(con); 
             }   
         }
         return false;
     }
 
     public KhachHang_DTO getKhachHangFromAccount(String username, String password){
-        if (OpenConnection()) {
+        con = DatabaseConnection.OpenConnection();
+        if (con != null) {
             try {            
                 String query = "SELECT * FROM KHACHHANG WHERE username = ? AND passwordkh = ?";
                 PreparedStatement prestmt = con.prepareStatement(query);
@@ -197,69 +204,76 @@ public class KhachHang_DAO extends JDialog {
             } catch (SQLException ex) {
                 System.out.println(ex);            
             } finally {     
-                closeConnection(); 
+                DatabaseConnection.closeConnection(con); 
             }   
         }
         return null;
     }
     public void deleteCustomer(String id, DefaultTableModel tableModel, ArrayList<KhachHang_DTO> customerList) {
-        try (Connection conn = DatabaseConnection.getConnection()) {
-    
-            // 1. Lấy tất cả mã đơn hàng của khách hàng
-            String selectOrders = "SELECT madonhang FROM donhang WHERE makh = ?";
-            try (PreparedStatement selectOrderStmt = conn.prepareStatement(selectOrders)) {
-                selectOrderStmt.setString(1, id);
-                ResultSet rs = selectOrderStmt.executeQuery();
-    
-                // 2. Với mỗi đơn hàng, xóa chi tiết đơn hàng
-                while (rs.next()) {
-                    String madh = rs.getString("madonhang");
-    
-                    String deleteChiTiet = "DELETE FROM chitietdonhang WHERE madonhang = ?";
-                    try (PreparedStatement delCTStmt = conn.prepareStatement(deleteChiTiet)) {
-                        delCTStmt.setString(1, madh);
-                        delCTStmt.executeUpdate();
+        con = DatabaseConnection.OpenConnection();
+        if(con != null){
+            try {
+        
+                // 1. Lấy tất cả mã đơn hàng của khách hàng
+                String selectOrders = "SELECT madonhang FROM donhang WHERE makh = ?";
+                try (PreparedStatement selectOrderStmt = con.prepareStatement(selectOrders)) {
+                    selectOrderStmt.setString(1, id);
+                    ResultSet rs = selectOrderStmt.executeQuery();
+        
+                    // 2. Với mỗi đơn hàng, xóa chi tiết đơn hàng
+                    while (rs.next()) {
+                        String madh = rs.getString("madonhang");
+        
+                        String deleteChiTiet = "DELETE FROM chitietdonhang WHERE madonhang = ?";
+                        try (PreparedStatement delCTStmt = con.prepareStatement(deleteChiTiet)) {
+                            delCTStmt.setString(1, madh);
+                            delCTStmt.executeUpdate();
+                        }
                     }
                 }
-            }
-    
-            // 3. Xoá đơn hàng của khách
-            String deleteDonHang = "DELETE FROM donhang WHERE makh = ?";
-            try (PreparedStatement delOrderStmt = conn.prepareStatement(deleteDonHang)) {
-                delOrderStmt.setString(1, id);
-                delOrderStmt.executeUpdate();
-            }
-    
-            // 4. Xoá khách hàng
-            String deleteCustomer = "DELETE FROM khachhang WHERE makh = ?";
-            try (PreparedStatement delCustomerStmt = conn.prepareStatement(deleteCustomer)) {
-                delCustomerStmt.setString(1, id);
-                int affected = delCustomerStmt.executeUpdate();
-    
-                if (affected > 0) {
-                    JOptionPane.showMessageDialog(null, "Đã xóa khách hàng, đơn hàng và chi tiết liên quan.");
-                } else {
-                    JOptionPane.showMessageDialog(null, "Không tìm thấy khách hàng để xóa.");
+        
+                // 3. Xoá đơn hàng của khách
+                String deleteDonHang = "DELETE FROM donhang WHERE makh = ?";
+                try (PreparedStatement delOrderStmt = con.prepareStatement(deleteDonHang)) {
+                    delOrderStmt.setString(1, id);
+                    delOrderStmt.executeUpdate();
                 }
+        
+                // 4. Xoá khách hàng
+                String deleteCustomer = "DELETE FROM khachhang WHERE makh = ?";
+                try (PreparedStatement delCustomerStmt = con.prepareStatement(deleteCustomer)) {
+                    delCustomerStmt.setString(1, id);
+                    int affected = delCustomerStmt.executeUpdate();
+        
+                    if (affected > 0) {
+                        JOptionPane.showMessageDialog(null, "Đã xóa khách hàng, đơn hàng và chi tiết liên quan.");
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Không tìm thấy khách hàng để xóa.");
+                    }
+                }
+        
+                // 5. Cập nhật lại bảng hiển thị
+                loadDataFormDatabase(customerList, tableModel);
+        
+            } catch (SQLException e) {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(null,
+                    "Lỗi khi xóa khách hàng: " + e.getMessage(),
+                    "Lỗi", JOptionPane.ERROR_MESSAGE);
+            } finally {     
+                DatabaseConnection.closeConnection(con); 
             }
-    
-            // 5. Cập nhật lại bảng hiển thị
-            loadDataFormDatabase(customerList, tableModel);
-    
-        } catch (SQLException e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null,
-                "Lỗi khi xóa khách hàng: " + e.getMessage(),
-                "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
     }
     
     
     
     public void loadDataFormDatabase(ArrayList<KhachHang_DTO> customerList,DefaultTableModel tableModel) {
-        try (Connection conn = DatabaseConnection.getConnection()) {
+        con = DatabaseConnection.OpenConnection();
+        if(con != null){
+            try{
                 String queryforcs = "SELECT * FROM KHACHHANG";
-                PreparedStatement pstmt = conn.prepareStatement(queryforcs);
+                PreparedStatement pstmt = con.prepareStatement(queryforcs);
                 ResultSet rs = pstmt.executeQuery();
                 
                 while (rs.next()) {
@@ -271,7 +285,13 @@ public class KhachHang_DAO extends JDialog {
                     customerList.add(kh);
                     tableModel.addRow(new Object[]{id, name, username, phone,"Chi tiết" + "Xóa"});
                 }
-        } catch (Exception e) {}
+            } catch (Exception e) {
+
+            }
+            finally {     
+                DatabaseConnection.closeConnection(con); 
+            }
+        }
     }
     // Kiểm tra SDT đã tồn tại (ngoại trừ khách hàng hiện tại)
     public boolean isCustomerPhoneExist(Connection conn, String phone, String currentUsername) throws SQLException {
@@ -305,52 +325,57 @@ public class KhachHang_DAO extends JDialog {
     public void updateCustomer(KhachHang_DTO kh, JTextField txtName, JTextField txtPhone, JTextField txtUsername,
                            JTextField txtAddress, JTextField txtBirthday, JTextField txtEmail,
                            JComboBox<String> cbGender) throws ParseException {
-        try (Connection conn = DatabaseConnection.getConnection()) {
-            String newPhone = txtPhone.getText();
-            String newEmail = txtEmail.getText();
-            String newUsername = txtUsername.getText();
-            String currentUsername = kh.getUsername();  // Lưu ý: bạn phải có getUsername() trong DTO
+        con = DatabaseConnection.OpenConnection();
+        if(con != null){
+            try {
+                String newPhone = txtPhone.getText();
+                String newEmail = txtEmail.getText();
+                String newUsername = txtUsername.getText();
+                String currentUsername = kh.getUsername();  // Lưu ý: bạn phải có getUsername() trong DTO
 
-            // Kiểm tra trùng dữ liệu
-            if (isCustomerPhoneExist(conn, newPhone, currentUsername)) {
-                JOptionPane.showMessageDialog(null, "Số điện thoại đã tồn tại!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
-                return;
+                // Kiểm tra trùng dữ liệu
+                if (isCustomerPhoneExist(con, newPhone, currentUsername)) {
+                    JOptionPane.showMessageDialog(null, "Số điện thoại đã tồn tại!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+
+                if (isCustomerEmailExist(con, newEmail, currentUsername)) {
+                    JOptionPane.showMessageDialog(null, "Email đã tồn tại!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+
+                if (!newUsername.equals(currentUsername) && isCustomerUsernameExist(con, newUsername)) {
+                    JOptionPane.showMessageDialog(null, "Username đã tồn tại!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+
+                // Nếu không trùng thì cập nhật
+                String query = "UPDATE KHACHHANG SET tenkh = ?, sdt = ?, username = ?, diachikh = ?, ngaysinh = ?, email = ?, gioi = ? WHERE username = ?";
+                PreparedStatement pstmt = con.prepareStatement(query);
+                pstmt.setString(1, txtName.getText());
+                pstmt.setString(2, newPhone);
+                pstmt.setString(3, newUsername);
+                pstmt.setString(4, txtAddress.getText());
+
+                SimpleDateFormat inputFormat = new SimpleDateFormat("dd/MM/yyyy");
+                SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd");
+                Date date = inputFormat.parse(txtBirthday.getText());
+                String formattedDate = outputFormat.format(date);
+
+                pstmt.setString(5, formattedDate);
+                pstmt.setString(6, newEmail);
+                pstmt.setString(7, (String) cbGender.getSelectedItem());
+                pstmt.setString(8, currentUsername);
+
+                pstmt.executeUpdate();
+                JOptionPane.showMessageDialog(null, "Cập nhật thông tin khách hàng thành công!");
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(null, "Lỗi khi cập nhật thông tin: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+            } finally {     
+                DatabaseConnection.closeConnection(con); 
             }
-
-            if (isCustomerEmailExist(conn, newEmail, currentUsername)) {
-                JOptionPane.showMessageDialog(null, "Email đã tồn tại!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
-                return;
-            }
-
-            if (!newUsername.equals(currentUsername) && isCustomerUsernameExist(conn, newUsername)) {
-                JOptionPane.showMessageDialog(null, "Username đã tồn tại!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
-                return;
-            }
-
-            // Nếu không trùng thì cập nhật
-            String query = "UPDATE KHACHHANG SET tenkh = ?, sdt = ?, username = ?, diachikh = ?, ngaysinh = ?, email = ?, gioi = ? WHERE username = ?";
-            PreparedStatement pstmt = conn.prepareStatement(query);
-            pstmt.setString(1, txtName.getText());
-            pstmt.setString(2, newPhone);
-            pstmt.setString(3, newUsername);
-            pstmt.setString(4, txtAddress.getText());
-
-            SimpleDateFormat inputFormat = new SimpleDateFormat("dd/MM/yyyy");
-            SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd");
-            Date date = inputFormat.parse(txtBirthday.getText());
-            String formattedDate = outputFormat.format(date);
-
-            pstmt.setString(5, formattedDate);
-            pstmt.setString(6, newEmail);
-            pstmt.setString(7, (String) cbGender.getSelectedItem());
-            pstmt.setString(8, currentUsername);
-
-            pstmt.executeUpdate();
-            JOptionPane.showMessageDialog(null, "Cập nhật thông tin khách hàng thành công!");
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Lỗi khi cập nhật thông tin: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
     }
 

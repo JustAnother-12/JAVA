@@ -8,30 +8,10 @@ import java.util.ArrayList;
 public class Sach_DAO{
     private Connection con;
 
-    public boolean OpenConnection() {
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/ban_van_phong_pham", "root", "123456789");
-            return true;
-        } catch (ClassNotFoundException | SQLException e) {
-            System.out.println(e.getMessage());
-            return false;
-        }
-    }
-
-    public void closeConnection() {
-        try {
-            if (con != null){
-                con.close();
-            }
-        }catch (SQLException e){
-            System.out.println(e.getMessage());
-        }
-    }
-
     public String getLastestSACHID(){
         String latestID = "";
-        if (OpenConnection()){
+        con = DatabaseConnection.OpenConnection();
+        if (con != null){
             try {
                 String sql = "SELECT masp FROM SACH ORDER BY masp DESC LIMIT 1";
                 PreparedStatement stmt = con.prepareStatement(sql);
@@ -42,7 +22,7 @@ public class Sach_DAO{
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
             } finally{
-                closeConnection();
+                DatabaseConnection.closeConnection(con);
             }
         }
         return latestID;
@@ -70,9 +50,41 @@ public class Sach_DAO{
         return (prefix+nextnumberic).replace(" ", ""); 
     }
 
+    public Sach_DTO getSACHfromID(String id){
+        con = DatabaseConnection.OpenConnection();
+        if (con != null) {
+            try {            
+                String sql ="SELECT * " +
+                            "FROM SACH, SANPHAM" +
+                            "WHERE SANPHAM.masp = SACH.masp " +
+                            "AND SANPHAM.masp ='"+id+"'";
+                Statement stmt = con.createStatement();
+                ResultSet rs = stmt.executeQuery(sql);
+                if (rs.next()){
+                    String idsach = rs.getString("masp");
+                    String ten = rs.getString("tensp");
+                    double gia = rs.getDouble("dongiasp");
+                    int soLuong = rs.getInt("soluongsp");
+                    String tentg = rs.getString("tentacgia");
+                    String theloai = rs.getString("theloai");
+                    String nhaxuatban = rs.getString("nhaxuatban");
+                    int namxuatban = rs.getInt("namxuatban");
+                    Sach_DTO sp = new Sach_DTO(idsach, ten, gia, soLuong, tentg, theloai, nhaxuatban, namxuatban);
+                    return sp;
+                }
+            } catch (SQLException ex) {
+                System.out.println(ex);            
+            } finally {     
+                DatabaseConnection.closeConnection(con); 
+            }   
+        }
+        return null;
+    }
+
     public ArrayList<Sach_DTO> getAllSach(){
         ArrayList<Sach_DTO> arr = new  ArrayList<>();
-        if (OpenConnection()){
+        con = DatabaseConnection.OpenConnection();
+        if (con != null){
             try{
                 Statement stmt = con.createStatement();
                 ResultSet rs = stmt.executeQuery(
@@ -96,7 +108,7 @@ public class Sach_DAO{
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
             } finally{
-                closeConnection();
+                DatabaseConnection.closeConnection(con);
             }
         }
         return arr;
@@ -104,7 +116,8 @@ public class Sach_DAO{
 
     public boolean updateSach(Sach_DTO sach){
         boolean result = false;
-        if(OpenConnection()){
+        con = DatabaseConnection.OpenConnection();
+        if(con != null){
             try{
                 con.setAutoCommit(false);
                 
@@ -143,7 +156,7 @@ public class Sach_DAO{
                 }catch(SQLException e){
                     System.out.println(e);
                 }
-                closeConnection();
+                DatabaseConnection.closeConnection(con);
             }
         }
         return result;
@@ -151,7 +164,8 @@ public class Sach_DAO{
 
     public boolean addSach(Sach_DTO sach){
         boolean result = false;
-        if (OpenConnection()) {
+        con = DatabaseConnection.OpenConnection();
+        if (con != null) {
             try {              
                 con.setAutoCommit(false);   
 
@@ -186,7 +200,7 @@ public class Sach_DAO{
                 catch(SQLException e){
                     System.out.println(e);
                 }
-                closeConnection();  
+                DatabaseConnection.closeConnection(con);  
             } 
         }
         return result;
@@ -194,7 +208,8 @@ public class Sach_DAO{
 
     public boolean removeSach(String id){
         boolean result = false;
-        if (OpenConnection()) {
+        con = DatabaseConnection.OpenConnection();
+        if (con != null) {
             try {                   
                 con.setAutoCommit(false); 
 
@@ -221,14 +236,15 @@ public class Sach_DAO{
                 }catch(SQLException e){
                     System.out.println(e);
                 }
-                closeConnection();  
+                DatabaseConnection.closeConnection(con);  
             } 
         }
         return result;
     }
 
-    public boolean hasSachID(String id){                        
-        if (OpenConnection()) {
+    public boolean hasSachID(String id){      
+        con = DatabaseConnection.OpenConnection();                  
+        if (con != null) {
             try {            
             String sql = "SELECT * FROM SACH WHERE SACH.masp='"+id+"'";
             Statement stmt = con.createStatement();
@@ -238,7 +254,7 @@ public class Sach_DAO{
             } catch (SQLException ex) {
                 System.out.println(ex);            
             } finally {     
-                closeConnection(); 
+                DatabaseConnection.closeConnection(con); 
             }   
         }
         return false;

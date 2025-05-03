@@ -23,10 +23,10 @@ public class ProductForm extends JFrame {
     protected ProdmaFrame parentFrame;
 
     // General info components
-    protected JTextField nameTextField;
-    protected JComboBox<String> categoryComboBox;
-    protected JTextField priceTextField;
-    protected JTextField imagePathTextField;
+    public JTextField nameTextField;
+    public JComboBox<String> categoryComboBox;
+    public JTextField priceTextField;
+    public JTextField imagePathTextField;
     private JLabel productImageLabel;
     private Border inputFieldBorder = BorderFactory.createMatteBorder(0, 0, 2, 0, Color.darkGray);
 
@@ -189,7 +189,7 @@ public class ProductForm extends JFrame {
         continueButton.setFont(new Font("Segoe UI", 0, 14));
         continueButton.setForeground(new Color(255, 255, 255));
         continueButton.addActionListener(e -> {
-            if (checkEmptyFields()) {
+            if (productBLL.checkEmptyFields(this)) {
                 switch ((String)categoryComboBox.getSelectedItem()) {
                     case "Sách":
                         cardLayout.show(cardPanel, "SachForm");
@@ -203,7 +203,6 @@ public class ProductForm extends JFrame {
                     default:
                         break;
                 }
-                
             } else {
                 JOptionPane.showMessageDialog(this, "Vui lòng điền đầy đủ thông tin.", "Error", JOptionPane.ERROR_MESSAGE);
             }
@@ -272,14 +271,6 @@ public class ProductForm extends JFrame {
                         "Lỗi", JOptionPane.ERROR_MESSAGE);
             }
         }
-    }
-
-
-    private boolean checkEmptyFields() {
-        String name = nameTextField.getText().trim();
-        String price = priceTextField.getText().trim();
-        // String img = imagePathTextField.getText().trim();
-        return !(name.isEmpty() || price.isEmpty());
     }
 
 }

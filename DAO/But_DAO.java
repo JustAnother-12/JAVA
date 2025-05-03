@@ -3,35 +3,36 @@ package DAO;
 import java.sql.*;
 import java.util.ArrayList;
 
-import DTO.But_DTO;
+import DTO.*;
 
 public class But_DAO {
     private Connection con;
 
-    public boolean OpenConnection() {
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/ban_van_phong_pham", "root", "123456789");
-            return true;
-        } catch (ClassNotFoundException | SQLException e) {
-            System.out.println(e.getMessage());
-            return false;
-        }
-    }
+    // public boolean OpenConnection() {
+    //     try {
+    //         Class.forName("com.mysql.cj.jdbc.Driver");
+    //         con = DriverManager.getConnection("jdbc:mysql://localhost:3306/ban_van_phong_pham", "root", "123456789");
+    //         return true;
+    //     } catch (ClassNotFoundException | SQLException e) {
+    //         System.out.println(e.getMessage());
+    //         return false;
+    //     }
+    // }
 
-    public void closeConnection() {
-        try {
-            if (con != null){
-                con.close();
-            }
-        }catch (SQLException e){
-            System.out.println(e.getMessage());
-        }
-    }
+    // public void closeConnection() {
+    //     try {
+    //         if (con != null){
+    //             con.close();
+    //         }
+    //     }catch (SQLException e){
+    //         System.out.println(e.getMessage());
+    //     }
+    // }
 
     public String getLastestBUTID(){
         String latestID = "";
-        if (OpenConnection()){
+        con = DatabaseConnection.OpenConnection();
+        if (con != null){
             try {
                 String sql = "SELECT masp FROM BUT ORDER BY masp DESC LIMIT 1";
                 PreparedStatement stmt = con.prepareStatement(sql);
@@ -42,7 +43,7 @@ public class But_DAO {
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
             } finally{
-                closeConnection();
+                DatabaseConnection.closeConnection(con);
             }
         }
         return latestID;
@@ -70,9 +71,41 @@ public class But_DAO {
         return (prefix+nextnumberic).replace(" ", ""); 
     }
 
+    public But_DTO getBUTfromID(String id){
+        con = DatabaseConnection.OpenConnection();
+        if (con != null) {
+            try {            
+                String sql ="SELECT * " +
+                            "FROM BUT, SANPHAM" +
+                            "WHERE SANPHAM.masp = BUT.masp " +
+                            "AND SANPHAM.masp ='"+id+"'";
+                Statement stmt = con.createStatement();
+                ResultSet rs = stmt.executeQuery(sql);
+                if (rs.next()){
+                    String idbut = rs.getString("masp");
+                    String ten = rs.getString("tensp");
+                    double gia = rs.getDouble("dongiasp");
+                    int soLuong = rs.getInt("soluongsp");
+                    String mau = rs.getString("mau");
+                    String loaibut = rs.getString("loaibut");
+                    String nhasanxuat = rs.getString("nhasanxuat");
+                    But_DTO sp = new But_DTO(idbut, ten, gia, soLuong, mau, loaibut, nhasanxuat);
+                    return sp;
+                }
+            } catch (SQLException ex) {
+                System.out.println(ex);            
+            } finally {     
+                DatabaseConnection.closeConnection(con); 
+            }   
+        }
+        return null;
+    }
+
+
     public ArrayList<But_DTO> getAllBut(){
         ArrayList<But_DTO> arr = new  ArrayList<>();
-        if (OpenConnection()){
+        con = DatabaseConnection.OpenConnection();
+        if (con != null){
             try{
                 Statement stmt = con.createStatement();
                 ResultSet rs = stmt.executeQuery(
@@ -95,7 +128,7 @@ public class But_DAO {
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
             } finally{
-                closeConnection();
+                DatabaseConnection.closeConnection(con);
             }
         }
         return arr;
@@ -103,7 +136,8 @@ public class But_DAO {
 
     public boolean updateBut(But_DTO but){
         boolean result = false;
-        if(OpenConnection()){
+        con = DatabaseConnection.OpenConnection();
+        if(con != null){
             try{
                 con.setAutoCommit(false);
                 String query1 = "UPDATE SANPHAM "+
@@ -139,7 +173,7 @@ public class But_DAO {
                 }catch(SQLException e){
                     System.out.println(e);
                 }
-                closeConnection();
+                DatabaseConnection.closeConnection(con);
             }
         }
         return result;
@@ -147,7 +181,8 @@ public class But_DAO {
 
     public boolean addBut(But_DTO but){
         boolean result = false;
-        if (OpenConnection()) {
+        con = DatabaseConnection.OpenConnection();
+        if (con != null) {
             try {               
                 con.setAutoCommit(false);     
                 String query1 = "INSERT INTO SANPHAM VALUES(?,?,?,?)";
@@ -179,7 +214,7 @@ public class But_DAO {
                 }catch(SQLException e){
                     System.out.println(e);
                 }
-                closeConnection();  
+                DatabaseConnection.closeConnection(con);  
             } 
         }
         return result;
@@ -187,7 +222,8 @@ public class But_DAO {
 
     public boolean removeBut(String id){
         boolean result = false;
-        if (OpenConnection()) {
+        con = DatabaseConnection.OpenConnection();
+        if (con != null) {
             try {       
                 con.setAutoCommit(false);             
                 String query1 = "DELETE FROM SANPHAM WHERE SANPHAM.masp = ?";
@@ -212,14 +248,15 @@ public class But_DAO {
                 }catch(SQLException e){
                     System.out.println(e);
                 }
-                closeConnection();  
+                DatabaseConnection.closeConnection(con);  
             } 
         }
         return result;
     }
 
-    public boolean hasButID(String id){                        
-        if (OpenConnection()) {
+    public boolean hasButID(String id){   
+        con = DatabaseConnection.OpenConnection();                     
+        if (con != null) {
             try {            
             String sql = "SELECT * FROM BUT WHERE BUT.masp='"+id+"'";
             Statement stmt = con.createStatement();
@@ -229,7 +266,7 @@ public class But_DAO {
             } catch (SQLException ex) {
                 System.out.println(ex);            
             } finally {     
-                closeConnection(); 
+                DatabaseConnection.closeConnection(con); 
             }   
         }
         return false;
