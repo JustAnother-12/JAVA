@@ -13,7 +13,6 @@ public class Header extends JPanel {
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JToggleButton jToggleButton1;
     private SearchText searchText1;
 
     public interface searchListener{

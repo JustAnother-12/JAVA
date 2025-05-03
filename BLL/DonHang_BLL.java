@@ -12,8 +12,12 @@ import DTO.Order_DTO;
 
 public class DonHang_BLL {
     public void LoadDataToTabel(DefaultTableModel tableModel, ArrayList<Order_DTO> orderList,ArrayList<OrderDetail_DTO> orderDetailList) {
-        Order_DAO order_DAO = new Order_DAO();
-        order_DAO.loadDataFormDatabase(tableModel,orderList,orderDetailList);
+        try {
+            Order_DAO order_DAO = new Order_DAO();
+            order_DAO.loadDataFormDatabase(tableModel,orderList,orderDetailList);
+        } catch (Exception ex) {
+            System.out.println(ex);
+        }
     }
     Order_DAO orderDao = new Order_DAO();
 
@@ -77,5 +81,31 @@ public class DonHang_BLL {
             Logger.getLogger(NhanVien_DAO.class.getName()).log(Level.SEVERE, "General Error deleting staff", ex);
         }
     }
-    
+    public String getCustomerName(String makh) {
+        try {
+            Order_DAO temp = new Order_DAO();
+            return temp.getCustomerName(makh);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return null;
+    }
+    public String getEmployeeInfo(String manv) {
+        try {
+            Order_DAO temp = new Order_DAO();
+            return temp.getEmployeeInfo(manv);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return null;
+    }
+    public String getProductName(String masp) {
+        try {
+            Order_DAO temp = new Order_DAO();
+            return temp.getProductName(masp);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return null;
+    }
 }

@@ -98,13 +98,11 @@ public class NutSuKien_BLL implements TableCellEditor {
     }
     @Override
     public boolean stopCellEditing() {
-        if (table != null) {
-            table.getModel();
-        }
         return true;
     }
     @Override
     public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+        panel.removeAll();
         this.table = table;
         this.selectedRow = row;
         if (formType == FormType.STAFF || formType == FormType.CUSTOMER) {
@@ -209,27 +207,85 @@ public class NutSuKien_BLL implements TableCellEditor {
         }
     }
     private void confirmOrder(DefaultTableModel tableModel) throws SQLException {
-        if (table != null) {
-            String id = table.getValueAt(selectedRow, 0).toString();
-            int confirm = JOptionPane.showConfirmDialog(panel, "Bạn có chắc chắn muốn xóa đơn hàng này?", "Xác nhận xóa", JOptionPane.YES_NO_OPTION);
-            if (confirm == JOptionPane.YES_OPTION) {
-                if (formType == FormType.ORDER) {
-                    DonHang_BLL temp = new DonHang_BLL();
-                //     temp.confirmOrder(id);
-                //     //temp.LoadDataToTabel(tableModel, orderList.getOrderList(), orderList.getOrderDetailList());
-                // }
-                // ((DefaultTableModel) table.getModel()).removeRow(selectedRow);
-                temp.confirmOrder(id);
-                // Xóa hết dữ liệu hiện có trong bảng
-                while (tableModel.getRowCount() > 0) {
-                    tableModel.removeRow(0);
+        if (table == null || selectedRow < 0 || formType != FormType.ORDER || orderList == null) {
+            JOptionPane.showMessageDialog(panel, "Không thể xác nhận đơn hàng. Dữ liệu không hợp lệ.");
+            return;
+        }
+    
+        String id = table.getValueAt(selectedRow, 0).toString();
+        int confirm = JOptionPane.showConfirmDialog(panel, "Bạn có chắc chắn muốn xác nhận đơn hàng này?", "Xác nhận", JOptionPane.YES_NO_OPTION);
+    
+        if (confirm == JOptionPane.YES_OPTION) {
+            DonHang_BLL temp = new DonHang_BLL();
+            String isConfirmed = temp.confirmOrder(id);
+    
+            if ("Duyệt đơn hàng thành công!".equals(isConfirmed)) {
+                orderList.getOrderList().clear();
+                orderList.getOrderDetailList().clear();
+    
+                int columnIndex = -1;
+                try {
+                    columnIndex = table.getColumnModel().getColumnIndex("Tác vụ");
+                } catch (IllegalArgumentException e) {
+                    columnIndex = -1;
                 }
-
-                    // Load lại dữ liệu bằng cách duyệt danh sách mới, thêm từng hàng vào tableModel
-                    temp.LoadDataToTabel(tableModel, orderList.getOrderList(), orderList.getOrderDetailList());
-                    stopCellEditing();
+    
+                DefaultTableModel newTableModel = new DefaultTableModel();
+                for (int i = 0; i < tableModel.getColumnCount(); i++) {
+                    if (i != columnIndex) {
+                        newTableModel.addColumn(tableModel.getColumnName(i));
+                    }
                 }
+                for (int row = 0; row < tableModel.getRowCount(); row++) {
+                    Object[] rowData = new Object[newTableModel.getColumnCount()];
+                    int newColIndex = 0;
+                    for (int i = 0; i < tableModel.getColumnCount(); i++) {
+                        if (i != columnIndex) {
+                            rowData[newColIndex++] = tableModel.getValueAt(row, i);
+                        }
+                    }
+                    newTableModel.addRow(rowData);
+                }
+    
+                table.setModel(newTableModel);
+                tableModel = newTableModel;
+    
+                // ❗️ Xoá toàn bộ dữ liệu bảng cũ
+                tableModel.setRowCount(0);
+    
+                // Load lại dữ liệu
+                temp.LoadDataToTabel(tableModel, orderList.getOrderList(), orderList.getOrderDetailList());
+    
+                // Thêm lại cột "Tác vụ"
+                tableModel.addColumn("Tác vụ");
+                for (int i = 0; i < tableModel.getRowCount(); i++) {
+                    tableModel.setValueAt("Tác vụ", i, tableModel.getColumnCount() - 1);
+                }
+    
+                // Cập nhật lại renderer & editor
+                table.getColumn("Tác vụ").setCellRenderer(new NutGiaoDien_BLL("order", orderList.getOrderList()));
+                table.getColumn("Tác vụ").setCellEditor(new NutSuKien_BLL(orderList, tableModel));
+    
+                // Cập nhật lại kích thước cột
+                table.getColumnModel().getColumn(0).setPreferredWidth(100);
+                table.getColumnModel().getColumn(1).setPreferredWidth(150);
+                table.getColumnModel().getColumn(2).setPreferredWidth(100);
+                table.getColumnModel().getColumn(3).setPreferredWidth(100);
+                table.getColumnModel().getColumn(4).setPreferredWidth(100);
+                table.getColumnModel().getColumn(5).setPreferredWidth(250);
+    
+                table.setDefaultEditor(Object.class, null);
+    
+                if (table.getCellEditor() != null) {
+                    table.getCellEditor().stopCellEditing();
+                }
+    
+                JOptionPane.showMessageDialog(panel, "Xác nhận đơn hàng thành công!");
+            } else {
+                JOptionPane.showMessageDialog(panel, "Xác nhận đơn hàng không thành công.");
             }
         }
     }
+    
+    
 }
