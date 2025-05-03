@@ -5,15 +5,13 @@ import java.sql.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-
 import javax.swing.JComboBox;
-import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import java.util.Date;
 
-public class KhachHang_DAO extends JDialog {
+public class KhachHang_DAO {
     private Connection con;
 
     public boolean OpenConnection() {
@@ -274,7 +272,9 @@ public class KhachHang_DAO extends JDialog {
         } catch (Exception e) {}
     }
     // Kiểm tra SDT đã tồn tại (ngoại trừ khách hàng hiện tại)
-    public boolean isCustomerPhoneExist(Connection conn, String phone, String currentUsername) throws SQLException {
+    // Kiểm tra số điện thoại đã tồn tại (trừ username hiện tại)
+public boolean isCustomerPhoneExist(String phone, String currentUsername) throws SQLException {
+    try (Connection conn = DatabaseConnection.getConnection()) {
         String query = "SELECT * FROM KHACHHANG WHERE sdt = ? AND username <> ?";
         PreparedStatement stmt = conn.prepareStatement(query);
         stmt.setString(1, phone);
@@ -282,9 +282,11 @@ public class KhachHang_DAO extends JDialog {
         ResultSet rs = stmt.executeQuery();
         return rs.next();
     }
+}
 
-    // Kiểm tra email đã tồn tại (ngoại trừ khách hàng hiện tại)
-    public boolean isCustomerEmailExist(Connection conn, String email, String currentUsername) throws SQLException {
+// Kiểm tra email đã tồn tại (trừ username hiện tại)
+public boolean isCustomerEmailExist(String email, String currentUsername) throws SQLException {
+    try (Connection conn = DatabaseConnection.getConnection()) {
         String query = "SELECT * FROM KHACHHANG WHERE email = ? AND username <> ?";
         PreparedStatement stmt = conn.prepareStatement(query);
         stmt.setString(1, email);
@@ -292,66 +294,53 @@ public class KhachHang_DAO extends JDialog {
         ResultSet rs = stmt.executeQuery();
         return rs.next();
     }
+}
 
-    // Kiểm tra username đã tồn tại nếu đổi
-    public boolean isCustomerUsernameExist(Connection conn, String username) throws SQLException {
+// Kiểm tra username đã tồn tại
+public boolean isCustomerUsernameExist(String username) throws SQLException {
+    try (Connection conn = DatabaseConnection.getConnection()) {
         String query = "SELECT * FROM KHACHHANG WHERE username = ?";
         PreparedStatement stmt = conn.prepareStatement(query);
         stmt.setString(1, username);
         ResultSet rs = stmt.executeQuery();
         return rs.next();
     }
+}
 
-    public void updateCustomer(KhachHang_DTO kh, JTextField txtName, JTextField txtPhone, JTextField txtUsername,
-                           JTextField txtAddress, JTextField txtBirthday, JTextField txtEmail,
-                           JComboBox<String> cbGender) throws ParseException {
-        try (Connection conn = DatabaseConnection.getConnection()) {
-            String newPhone = txtPhone.getText();
-            String newEmail = txtEmail.getText();
-            String newUsername = txtUsername.getText();
-            String currentUsername = kh.getUsername();  // Lưu ý: bạn phải có getUsername() trong DTO
+// Cập nhật thông tin khách hàng
+public void updateCustomer(KhachHang_DTO kh, JTextField txtName, JTextField txtPhone, JTextField txtUsername,
+                       JTextField txtAddress, JTextField txtBirthday, JTextField txtEmail,
+                       JComboBox<String> cbGender) throws ParseException {
+    try (Connection conn = DatabaseConnection.getConnection()) {
+        String newPhone = txtPhone.getText();
+        String newEmail = txtEmail.getText();
+        String newUsername = txtUsername.getText();
+        String currentUsername = kh.getUsername();
 
-            // Kiểm tra trùng dữ liệu
-            if (isCustomerPhoneExist(conn, newPhone, currentUsername)) {
-                JOptionPane.showMessageDialog(null, "Số điện thoại đã tồn tại!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
-                return;
-            }
+        String query = "UPDATE KHACHHANG SET tenkh = ?, sdt = ?, username = ?, diachikh = ?, ngaysinh = ?, email = ?, gioi = ? WHERE username = ?";
+        PreparedStatement pstmt = conn.prepareStatement(query);
+        pstmt.setString(1, txtName.getText());
+        pstmt.setString(2, newPhone);
+        pstmt.setString(3, newUsername);
+        pstmt.setString(4, txtAddress.getText());
 
-            if (isCustomerEmailExist(conn, newEmail, currentUsername)) {
-                JOptionPane.showMessageDialog(null, "Email đã tồn tại!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
-                return;
-            }
+        SimpleDateFormat inputFormat = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = inputFormat.parse(txtBirthday.getText());
+        String formattedDate = outputFormat.format(date);
 
-            if (!newUsername.equals(currentUsername) && isCustomerUsernameExist(conn, newUsername)) {
-                JOptionPane.showMessageDialog(null, "Username đã tồn tại!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
-                return;
-            }
+        pstmt.setString(5, formattedDate);
+        pstmt.setString(6, newEmail);
+        pstmt.setString(7, (String) cbGender.getSelectedItem());
+        pstmt.setString(8, currentUsername);
 
-            // Nếu không trùng thì cập nhật
-            String query = "UPDATE KHACHHANG SET tenkh = ?, sdt = ?, username = ?, diachikh = ?, ngaysinh = ?, email = ?, gioi = ? WHERE username = ?";
-            PreparedStatement pstmt = conn.prepareStatement(query);
-            pstmt.setString(1, txtName.getText());
-            pstmt.setString(2, newPhone);
-            pstmt.setString(3, newUsername);
-            pstmt.setString(4, txtAddress.getText());
+        pstmt.executeUpdate();
+        JOptionPane.showMessageDialog(null, "Cập nhật thông tin khách hàng thành công!");
 
-            SimpleDateFormat inputFormat = new SimpleDateFormat("dd/MM/yyyy");
-            SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd");
-            Date date = inputFormat.parse(txtBirthday.getText());
-            String formattedDate = outputFormat.format(date);
-
-            pstmt.setString(5, formattedDate);
-            pstmt.setString(6, newEmail);
-            pstmt.setString(7, (String) cbGender.getSelectedItem());
-            pstmt.setString(8, currentUsername);
-
-            pstmt.executeUpdate();
-            JOptionPane.showMessageDialog(null, "Cập nhật thông tin khách hàng thành công!");
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Lỗi khi cập nhật thông tin: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
-        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(null, "Lỗi khi cập nhật thông tin: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
     }
+}
 
 }
