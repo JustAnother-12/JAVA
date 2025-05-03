@@ -318,6 +318,19 @@ public class ProdmaFrame extends JPanel implements Header.searchListener{
 
 
         // setup layout
+<<<<<<< HEAD
+        // GroupLayout layout = new GroupLayout(getContentPane());
+        // getContentPane().setLayout(layout);
+        // layout.setHorizontalGroup(
+        //     layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+        //     .addComponent(mainPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        // );
+        // layout.setVerticalGroup(
+        //     layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+        //     .addComponent(mainPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        // );
+=======
+>>>>>>> f12552f8c4b649d3ae7ba50ab0c18a3e9098c80f
         GroupLayout layout = new GroupLayout(this);
         setLayout(layout);
         layout.setHorizontalGroup(

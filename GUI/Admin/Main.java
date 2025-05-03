@@ -7,6 +7,8 @@ import java.awt.*;
 import GUI.Admin.customer.CustomerTable;
 import GUI.Admin.order.OrderTable;
 import GUI.Admin.product.ProdmaFrame;
+import GUI.Admin.supplier.SupplierTable;
+import GUI.Admin.importorder.HistoryTable;
 import GUI.Admin.component.Header;
 import GUI.Admin.component.Menu;
 import GUI.Admin.swing.*;
@@ -16,7 +18,9 @@ public class Main extends JFrame {
     CustomerTable customerForm;
     OrderTable orderForm;
     ProdmaFrame productForm;
-
+    SupplierTable supplierForm;
+    HistoryTable historyForm;
+    
     private JPanel contentPanel;
     private Header header;
     private JPanel mainPanel;
@@ -35,6 +39,8 @@ public class Main extends JFrame {
         customerForm = new CustomerTable();
         orderForm = new OrderTable();
         productForm = new ProdmaFrame();
+        supplierForm = new SupplierTable();
+        historyForm =new HistoryTable();
         menu.addEventMenuSelected(new MenuSelectedListener() {
             @Override
             public void menuSelected(int index) {
@@ -59,6 +65,16 @@ public class Main extends JFrame {
                         header.setSearchListener(orderForm);
                         header.getjLabel2().setIcon(new ImageIcon(getClass().getResource("/GUI/Admin/icon/none.jpg")));
                         break;
+                    case 5:
+                        setForm("Suppliers", supplierForm);
+                        header.setSearchListener(supplierForm);
+                        header.getjLabel2().setIcon(new ImageIcon(getClass().getResource("/GUI/Admin/icon/none.jpg")));
+                        break; 
+                    case 6:
+                        setForm("Import", historyForm);
+                        header.setSearchListener(historyForm);
+                        header.getjLabel2().setIcon(new ImageIcon(getClass().getResource("/GUI/Admin/icon/none.jpg")));
+                        break;          
                 }
             }
         });

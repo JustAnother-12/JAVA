@@ -282,6 +282,11 @@ public class Order_DAO {
                 }
             } catch (SQLException ex) {
                 System.out.println(ex);            
+                try {
+                    con.rollback();
+                } catch (SQLException e) {
+                    System.out.println(e);
+                }
             } finally{
                 try{
                     con.setAutoCommit(true);

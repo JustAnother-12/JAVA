@@ -10,6 +10,8 @@ import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
+
+import DAO.KhachHang_DAO;
 import DAO.NhanVien_DAO;
 import DAO.ThemNhanVien_DAO;
 import DTO.NhanVien_DTO;
@@ -54,7 +56,7 @@ public class NhanVien_BLL extends JDialog{
     }
     return false;
    }
-   public boolean addNhanVien(JTextField txtName, JComboBox<String> txtPosition, JTextField txtPhone,
+   public boolean addStaff(JTextField txtName, JComboBox<String> txtPosition, JTextField txtPhone,
                                JTextField txtUsername, JTextField txtPassword, JTextField txtAddress,
                                JTextField txtCCCD, JTextField txtBirthday, JComboBox<String> cbGender,
                                DefaultTableModel tableModel, HashSet<String> existingIDs) {
@@ -113,5 +115,20 @@ public class NhanVien_BLL extends JDialog{
         if (ThemNhanVien_DAO.isSDTExists(phone)) throw new Exception("Số điện thoại đã tồn tại.");
         if (ThemNhanVien_DAO.isCCCDExists(cccd)) throw new Exception("CCCD đã tồn tại.");
         if (ThemNhanVien_DAO.isUserNameExists(username)) throw new Exception("Username đã tồn tại.");
+    }
+    public void deleteStaff(String id, DefaultTableModel tableModel, ArrayList<NhanVien_DTO> staffList) {
+        boolean deleted = NhanVien_DAO.deleteStaff(id, tableModel, staffList);
+        if (deleted) {
+        for (int i = 0; i < tableModel.getRowCount(); i++) {
+            if (tableModel.getValueAt(i, 0).equals(id)) {
+                tableModel.removeRow(i);
+                break;
+            }
+        }
+        staffList.removeIf(nv -> nv.getManv().equals(id));
+        JOptionPane.showMessageDialog(null, "Xóa nhân viên thành công!");
+    } else {
+        JOptionPane.showMessageDialog(null, "Không tìm thấy nhân viên để xóa!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+    }
     }
 }
