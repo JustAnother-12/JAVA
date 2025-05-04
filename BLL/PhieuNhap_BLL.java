@@ -43,7 +43,7 @@ public class PhieuNhap_BLL {
     
     public void loadToTable(DefaultTableModel model, ArrayList<PhieuNhap_DTO> list) {
         list.clear();
-         list.addAll(pnDAO.getAllPhieuNhap());
+        list.addAll(pnDAO.getAllPhieuNhap());
         NhanVien_DAO nvDAO = new NhanVien_DAO();
         NhaCungCap_DAO nccDAO = new NhaCungCap_DAO();
         model.setRowCount(0);
@@ -62,9 +62,7 @@ public class PhieuNhap_BLL {
     public void deleteImport(String id, DefaultTableModel model, ArrayList<PhieuNhap_DTO> list) {
         for (int i = 0; i < list.size(); i++) {
             if (list.get(i).getMaPN().equals(id)) {
-                list.remove(i);
-                model.removeRow(i);
-                pnDAO.deletePhieuNhap(id); 
+                pnDAO.removePhieuNhap(id); 
                 break;
             }
         }

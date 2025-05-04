@@ -28,7 +28,7 @@ import java.text.ParseException;
 import javax.swing.table.DefaultTableModel;
 import java.util.*;
 
-public class NutSuKien_BLL implements TableCellEditor {
+public class NutSuKien implements TableCellEditor {
     private JPanel panel;
     private JButton btnDetail, btnDelete, btnConfirm;
     private int selectedRow;
@@ -42,30 +42,36 @@ public class NutSuKien_BLL implements TableCellEditor {
     private FormType formType;
     private NhanVien_DTO nv;
 
-    public NutSuKien_BLL(NhanVienTable staffList,DefaultTableModel tableModel) {
+    public NutSuKien(NhanVienTable staffList,DefaultTableModel tableModel) {
         this(staffList, null, null,null ,null,FormType.STAFF,tableModel);
     }
 
-    public NutSuKien_BLL(CustomerTable customerList,DefaultTableModel tableModel) {
+    public NutSuKien(CustomerTable customerList,DefaultTableModel tableModel) {
         this(null, customerList, null,null, null,FormType.CUSTOMER,tableModel);
     }
-    public NutSuKien_BLL(OrderTable orderList,DefaultTableModel tableModel, NhanVien_DTO nv) {
+    public NutSuKien(OrderTable orderList,DefaultTableModel tableModel, NhanVien_DTO nv) {
         this(null, null, orderList,null, null,FormType.ORDER,tableModel);
         this.nv = nv;
     }
-    public NutSuKien_BLL(SupplierTable supplierList, DefaultTableModel tableModel) {
+    public NutSuKien(SupplierTable supplierList, DefaultTableModel tableModel) {
     this(null, null, null, supplierList,null, FormType.SUPPLIER, tableModel);
     }
 
-    public NutSuKien_BLL(HistoryTable importList, DefaultTableModel tableModel) {
+    public NutSuKien(HistoryTable importList, DefaultTableModel tableModel) {
     this(null, null, null, null, importList, FormType.IMPORT, tableModel);
     }
 
-public NutSuKien_BLL(NhanVienTable accountList, CustomerTable customerList,OrderTable orderList,SupplierTable supplierList,HistoryTable importList, FormType type,DefaultTableModel tableModel) {
+public NutSuKien(NhanVienTable accountList, CustomerTable customerList,OrderTable orderList,SupplierTable supplierList,HistoryTable importList, FormType type,DefaultTableModel tableModel) {
     panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 5));
     btnDetail = new JButton("Chi tiết");
+    btnDetail.setBackground(new Color(255, 153, 0));
+    btnDetail.setForeground(Color.WHITE);
     btnDelete = new JButton("Xóa");
+    btnDelete.setBackground(Color.RED);
+    btnDelete.setForeground(Color.WHITE);
     btnConfirm = new JButton("Xử lý");
+    btnConfirm.setBackground(new Color(255, 153, 0));
+    btnConfirm.setForeground(Color.WHITE);
     this.staffList = accountList;
     this.customerList = customerList;
     this.orderList = orderList;
@@ -342,8 +348,8 @@ public NutSuKien_BLL(NhanVienTable accountList, CustomerTable customerList,Order
                 }
     
                 // Cập nhật lại renderer & editor
-                table.getColumn("Tác vụ").setCellRenderer(new NutGiaoDien_BLL("order", orderList.getOrderList()));
-                table.getColumn("Tác vụ").setCellEditor(new NutSuKien_BLL(orderList, tableModel, nv));
+                table.getColumn("Tác vụ").setCellRenderer(new NutGiaoDien("order", orderList.getOrderList()));
+                table.getColumn("Tác vụ").setCellEditor(new NutSuKien(orderList, tableModel, nv));
     
                 // Cập nhật lại kích thước cột
                 table.getColumnModel().getColumn(0).setPreferredWidth(100);
@@ -424,8 +430,8 @@ public NutSuKien_BLL(NhanVienTable accountList, CustomerTable customerList,Order
                 }
     
                 // Cập nhật lại renderer & editor
-                table.getColumn("Tác vụ").setCellRenderer(new NutGiaoDien_BLL("order", orderList.getOrderList()));
-                table.getColumn("Tác vụ").setCellEditor(new NutSuKien_BLL(orderList, tableModel, nv));
+                table.getColumn("Tác vụ").setCellRenderer(new NutGiaoDien("order", orderList.getOrderList()));
+                table.getColumn("Tác vụ").setCellEditor(new NutSuKien(orderList, tableModel, nv));
     
                 // Cập nhật lại kích thước cột
                 table.getColumnModel().getColumn(0).setPreferredWidth(100);

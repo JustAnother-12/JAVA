@@ -1,6 +1,6 @@
-package GUI.Admin.swing;
+package utils;
 
-public class FormatDate_BLL {
+public class FormatDate {
     public static String convertDateFormat(String inputDate) {
         java.text.SimpleDateFormat inputFormat = new java.text.SimpleDateFormat("yyyy-MM-dd");
         java.text.SimpleDateFormat outputFormat = new java.text.SimpleDateFormat("dd/MM/yyyy");

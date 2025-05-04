@@ -12,7 +12,6 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import DTO.Product_Item_DTO;
 import utils.MyButton;
 
 public class ProductItem extends JPanel {
@@ -29,11 +28,11 @@ public class ProductItem extends JPanel {
         return ID;
     }
 
-    public ProductItem(Product_Item_DTO data) {
+    public ProductItem(Product_Item_Model data) {
         initComponents(data);
     }
 
-    private void initComponents(Product_Item_DTO data) {
+    private void initComponents(Product_Item_Model data) {
         setBackground(Color.WHITE);
         setPreferredSize(new Dimension(200, 300)); 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));

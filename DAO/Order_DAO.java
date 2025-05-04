@@ -1,14 +1,13 @@
 package DAO;
 
 import DTO.*;
+import utils.FormatDate;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
 import javax.swing.table.DefaultTableModel;
-
-import GUI.Admin.swing.FormatDate_BLL;
 
 public class Order_DAO {
     private Connection con;
@@ -50,7 +49,7 @@ public class Order_DAO {
                         orderList.add(order);
 
                         // Hiển thị lên bảng (chỉ 1 lần)
-                        FormatDate_BLL temp = new FormatDate_BLL();
+                        FormatDate temp = new FormatDate();
                         String Date = temp.convertDateFormat(ngaydat);
                         tableModel.addRow(new Object[]{madonhang, tenkh, tinhtrang, Date, tongtien, "Tác vụ"});
 

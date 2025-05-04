@@ -15,7 +15,7 @@ import javax.swing.table.DefaultTableModel;
 import DAO.KhachHang_DAO;
 import DAO.NhanVien_DAO;
 import DTO.KhachHang_DTO;
-import GUI.Admin.swing.CheckFailInput_BLL;
+import GUI.Admin.swing.CheckFailInput;
 
 public class KhachHang_BLL extends JDialog{
     KhachHang_DAO khachhangDao = new KhachHang_DAO();
@@ -67,7 +67,7 @@ public class KhachHang_BLL extends JDialog{
        }
     public boolean updateCustomer(JTextField txtName,JTextField txtPhone,JTextField txtUsername,JTextField txtAddress,JTextField txtBirthday, JTextField txtEmail,JComboBox<String> cbGender, boolean isCustomer, KhachHang_DTO kh) {
         KhachHang_DAO KhachHang_DAO = new KhachHang_DAO();
-        CheckFailInput_BLL checkFailInput_BLL = new CheckFailInput_BLL();
+        CheckFailInput checkFailInput_BLL = new CheckFailInput();
         if (checkFailInput_BLL.validateFields(isCustomer, txtName, txtPhone, txtUsername, txtAddress, txtBirthday, txtEmail, null, null)) {
             try {
                 

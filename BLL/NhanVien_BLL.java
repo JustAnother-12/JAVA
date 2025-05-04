@@ -16,7 +16,7 @@ import DAO.NhanVien_DAO;
 import DAO.ThemNhanVien_DAO;
 import DTO.NhanVien_DTO;
 import GUI.Admin.staff.ChiTietNhanVien;
-import GUI.Admin.swing.CheckFailInput_BLL;
+import GUI.Admin.swing.CheckFailInput;
 
 public class NhanVien_BLL extends JDialog{
     public void loadDataToTable(DefaultTableModel tableModel,ArrayList<NhanVien_DTO> staffList){
@@ -24,7 +24,7 @@ public class NhanVien_BLL extends JDialog{
         nhanVien_DAO.loadDataFormDatabase(tableModel, staffList);
    }
    private NhanVien_DAO NhanVien_DAO = new NhanVien_DAO();
-   private CheckFailInput_BLL checkFailInput_BLL = new CheckFailInput_BLL();
+   private CheckFailInput checkFailInput_BLL = new CheckFailInput();
    private ThemNhanVien_DAO ThemNhanVien_DAO = new ThemNhanVien_DAO();
 
    public boolean updateStaff(JTextField txtName,JTextField txtPhone,JTextField txtUsername,JTextField txtAddress,JTextField txtBirthday, JComboBox<String> txtPosition, JComboBox<String> cbGender, JTextField txtCCCD, boolean isCustomer, NhanVien_DTO nv) {

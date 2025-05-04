@@ -11,15 +11,15 @@ import javax.swing.table.*;
 
 import BLL.NhaCungCap_BLL;
 import DTO.NhaCungCap_DTO;
-import GUI.Admin.swing.NutGiaoDien_BLL;
-import GUI.Admin.swing.NutSuKien_BLL;
+import GUI.Admin.swing.NutGiaoDien;
+import GUI.Admin.swing.NutSuKien;
 import utils.*;
 
 public class SupplierTable extends javax.swing.JPanel implements GUI.Admin.component.Header.searchListener {
     private DefaultTableModel tableModel;
     private JTable table;
     private ArrayList<NhaCungCap_DTO> supplierList = new ArrayList<>();
-    private NutSuKien_BLL nsk;
+    private NutSuKien nsk;
 
     // Regex cho email
     private static final String EMAIL_PATTERN = 
@@ -90,8 +90,8 @@ public class SupplierTable extends javax.swing.JPanel implements GUI.Admin.compo
 
         NhaCungCap_BLL nccBLL = new NhaCungCap_BLL();
         nccBLL.LoadDataToTabel(tableModel, supplierList);
-        table.getColumn("Tác vụ").setCellRenderer(new NutGiaoDien_BLL("supplier"));
-        nsk = new NutSuKien_BLL(this, tableModel);
+        table.getColumn("Tác vụ").setCellRenderer(new NutGiaoDien("supplier"));
+        nsk = new NutSuKien(this, tableModel);
         table.getColumn("Tác vụ").setCellEditor(nsk);
         table.setDefaultEditor(Object.class, null);
 

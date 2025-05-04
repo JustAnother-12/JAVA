@@ -1,5 +1,5 @@
 
-package DTO;
+package GUI.user;
 
 import java.awt.Image;
 
@@ -8,7 +8,7 @@ import javax.swing.ImageIcon;
 
 
 
-public class Product_Item_DTO {
+public class Product_Item_Model {
 
     /**
      * @return the Title
@@ -53,10 +53,10 @@ public class Product_Item_DTO {
     }
 
 
-    public Product_Item_DTO() {
+    public Product_Item_Model() {
     }
 
-    public Product_Item_DTO(String id, String Title, String Image, String price) {
+    public Product_Item_Model(String id, String Title, String Image, String price) {
         this.ID = id;
         this.Title = Title;
         this.Imageicon = Image;

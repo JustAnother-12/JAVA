@@ -1,4 +1,4 @@
-package DTO;
+package GUI.Admin.swing;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 

@@ -62,46 +62,54 @@ public class Main extends JFrame {
             public void menuSelected(int index) {
                 switch (index) {
                     case 0:
+                        dashboard = new thongkeTongHop();
                         setForm("DashBoard", dashboard);
                         header.setVisible(false);
                         break;
                     case 1:
+                        productForm = new ProdmaFrame(profile.nv);
                         setForm("Product", productForm);
                         header.setSearchListener(productForm);
                         header.getjLabel2().setIcon(new ImageIcon(getClass().getResource("/GUI/Admin/icon/none.jpg")));
                         header.setVisible(true);
                         break;
                     case 2:
+                        supplierForm = new SupplierTable();
                         setForm("Suppliers", supplierForm);
                         header.setSearchListener(supplierForm);
                         header.getjLabel2().setIcon(new ImageIcon(getClass().getResource("/GUI/Admin/icon/none.jpg")));
                         header.setVisible(true);
                         break;
                     case 3:
+                        accountForm = new NhanVienTable();
                         setForm("Account", accountForm);
                         header.setSearchListener(accountForm);
                         header.getjLabel2().setIcon(new ImageIcon(getClass().getResource("/GUI/Admin/icon/menu.png")));
                         header.setVisible(true);
                         break;
                     case 4:
+                        customerForm = new CustomerTable();
                         setForm("Customer", customerForm);
                         header.setSearchListener(customerForm);
                         header.getjLabel2().setIcon(new ImageIcon(getClass().getResource("/GUI/Admin/icon/none.jpg")));
                         header.setVisible(true);
                         break;
                     case 5:
+                        orderForm = new OrderTable(profile.nv);
                         setForm("Order", orderForm);
                         header.setSearchListener(orderForm);
                         header.getjLabel2().setIcon(new ImageIcon(getClass().getResource("/GUI/Admin/icon/none.jpg")));
                         header.setVisible(true);
                         break; 
                     case 6:
+                        historyForm = new HistoryTable();
                         setForm("Import", historyForm);
                         header.setSearchListener(historyForm);
                         header.getjLabel2().setIcon(new ImageIcon(getClass().getResource("/GUI/Admin/icon/none.jpg")));
                         header.setVisible(true);
                         break;   
                     case 10:
+                        profile = new ProfilePanel();
                         setForm("Profile", profile);
                         header.setVisible(false);
                         break;

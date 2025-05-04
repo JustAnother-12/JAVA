@@ -16,7 +16,6 @@ import javax.swing.ScrollPaneConstants;
 import BLL.Cart_BLL;
 import BLL.SanPham_BLL;
 import DTO.But_DTO;
-import DTO.Product_Item_DTO;
 import DTO.Sach_DTO;
 import DTO.SanPham_DTO;
 import DTO.Vo_DTO;
@@ -111,7 +110,7 @@ public class ProductPanel extends JScrollPane {
             String ten = sach.getTen_SanPham();
             double gia = sach.getGia_SanPham();
 
-        ProductItem item = new ProductItem(new Product_Item_DTO(id, ten, id, String.valueOf(new BigDecimal(gia))));
+        ProductItem item = new ProductItem(new Product_Item_Model(id, ten, id, String.valueOf(new BigDecimal(gia))));
             ProductList.add(item);
             ItemPanel.add(item);
             SachDescriptionList.add(sach);
@@ -128,7 +127,7 @@ public class ProductPanel extends JScrollPane {
             String ten = Vo.getTen_SanPham();
             double gia = Vo.getGia_SanPham();
 
-        ProductItem item = new ProductItem(new Product_Item_DTO(id, ten, id, String.valueOf(new BigDecimal(gia))));
+        ProductItem item = new ProductItem(new Product_Item_Model(id, ten, id, String.valueOf(new BigDecimal(gia))));
             ProductList.add(item);
             ItemPanel.add(item);
             VoDescriptionList.add(Vo);
@@ -145,7 +144,7 @@ public class ProductPanel extends JScrollPane {
             String ten = But.getTen_SanPham();
             double gia = But.getGia_SanPham();
 
-        ProductItem item = new ProductItem(new Product_Item_DTO(id, ten, id, String.valueOf(new BigDecimal(gia))));
+        ProductItem item = new ProductItem(new Product_Item_Model(id, ten, id, String.valueOf(new BigDecimal(gia))));
             ProductList.add(item);
             ItemPanel.add(item);
             ButDescriptionList.add(But);
@@ -166,7 +165,7 @@ public class ProductPanel extends JScrollPane {
                 ten = sp.getTen_SanPham();
                 gia = sp.getGia_SanPham();
 
-            ProductItem item = new ProductItem(new Product_Item_DTO(id, ten, id, String.valueOf(new BigDecimal(gia))));
+            ProductItem item = new ProductItem(new Product_Item_Model(id, ten, id, String.valueOf(new BigDecimal(gia))));
                 ProductList.add(item);
                 ItemPanel.add(item);
 
@@ -190,7 +189,7 @@ public class ProductPanel extends JScrollPane {
                         ten = sph.getTen_SanPham();
                         gia = sph.getGia_SanPham();
 
-                    ProductItem item = new ProductItem(new Product_Item_DTO(id, ten, id, String.valueOf(new BigDecimal(gia))));
+                    ProductItem item = new ProductItem(new Product_Item_Model(id, ten, id, String.valueOf(new BigDecimal(gia))));
                         ProductList.add(item);
                         ItemPanel.add(item);
 
@@ -226,7 +225,7 @@ public class ProductPanel extends JScrollPane {
                     ten = sp.getTen_SanPham();
                     gia = sp.getGia_SanPham();
 
-                ProductItem item = new ProductItem(new Product_Item_DTO(id, ten, id, String.valueOf(new BigDecimal(gia))));
+                ProductItem item = new ProductItem(new Product_Item_Model(id, ten, id, String.valueOf(new BigDecimal(gia))));
                     ProductList.add(item);
                     ItemPanel.add(item);
 
@@ -250,7 +249,7 @@ public class ProductPanel extends JScrollPane {
                         ten = sph.getTen_SanPham();
                         gia = sph.getGia_SanPham();
 
-                    ProductItem item = new ProductItem(new Product_Item_DTO(id, ten, id, String.valueOf(new BigDecimal(gia))));
+                    ProductItem item = new ProductItem(new Product_Item_Model(id, ten, id, String.valueOf(new BigDecimal(gia))));
                         ProductList.add(item);
                         ItemPanel.add(item);
 

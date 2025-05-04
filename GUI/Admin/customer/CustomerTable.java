@@ -11,8 +11,8 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 
 import BLL.KhachHang_BLL;
-import GUI.Admin.swing.NutGiaoDien_BLL;
-import GUI.Admin.swing.NutSuKien_BLL;
+import GUI.Admin.swing.NutGiaoDien;
+import GUI.Admin.swing.NutSuKien;
 import utils.*;
 import DTO.KhachHang_DTO;
 
@@ -63,8 +63,8 @@ public class CustomerTable extends javax.swing.JPanel implements GUI.Admin.compo
         KhachHang_BLL.LoadDataToTabel(tableModel, customerList);
         KhachHang_BLL.LoadDataToTabel(null, customerList);
         // Cột "Tác vụ" có 2 nút "Chi tiết" và "Xóa"
-        table.getColumn("Tác vụ").setCellRenderer(new NutGiaoDien_BLL("customer"));
-        table.getColumn("Tác vụ").setCellEditor(new NutSuKien_BLL(this,tableModel));
+        table.getColumn("Tác vụ").setCellRenderer(new NutGiaoDien("customer"));
+        table.getColumn("Tác vụ").setCellEditor(new NutSuKien(this,tableModel));
         table.setDefaultEditor(Object.class, null);
 
         // ScrollPane chứa bảng

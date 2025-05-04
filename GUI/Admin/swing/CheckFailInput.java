@@ -6,7 +6,7 @@ import javax.swing.JTextField;
 import javax.swing.JComboBox;
 import javax.swing.table.DefaultTableModel;
 import java.util.*;
-public class CheckFailInput_BLL extends javax.swing.JDialog {
+public class CheckFailInput extends javax.swing.JDialog {
         public void loadExistingIDs(DefaultTableModel tableModel,HashSet<String> existingIDs) {
             for (int i = 0; i < tableModel.getRowCount(); i++) {
                 existingIDs.add(tableModel.getValueAt(i, 0).toString()); // Giả sử ID ở cột 0
@@ -31,10 +31,6 @@ public class CheckFailInput_BLL extends javax.swing.JDialog {
             return false;
         }
         if (!isCustomer) {
-            // if (!isValidName(txtPosition.getText())) {
-            //     JOptionPane.showMessageDialog(this, "Chức vụ phải là chữ!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-            //     return false;
-            // }
             if (!isNumeric(txtCCCD.getText()) || txtCCCD.getText().length() != 12) {
                 JOptionPane.showMessageDialog(this, "Căn cước phải là 12 số!", "Lỗi", JOptionPane.ERROR_MESSAGE);
                 return false;

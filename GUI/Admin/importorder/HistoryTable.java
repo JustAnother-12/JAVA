@@ -10,8 +10,8 @@ import javax.swing.table.*;
 
 import BLL.PhieuNhap_BLL;
 import DTO.PhieuNhap_DTO;
-import GUI.Admin.swing.NutGiaoDien_BLL;
-import GUI.Admin.swing.NutSuKien_BLL;
+import GUI.Admin.swing.NutGiaoDien;
+import GUI.Admin.swing.NutSuKien;
 import utils.MyButton;
 import utils.MyScrollBarUI;
 
@@ -58,8 +58,8 @@ public class HistoryTable extends JPanel implements GUI.Admin.component.Header.s
         PhieuNhap_BLL bll = new PhieuNhap_BLL();
         bll.loadToTable(tableModel, importList);
 
-        table.getColumn("Tác vụ").setCellRenderer(new NutGiaoDien_BLL("import"));
-        table.getColumn("Tác vụ").setCellEditor(new NutSuKien_BLL(this, tableModel));
+        table.getColumn("Tác vụ").setCellRenderer(new NutGiaoDien("import"));
+        table.getColumn("Tác vụ").setCellEditor(new NutSuKien(this, tableModel));
         table.setDefaultEditor(Object.class, null);
 
         JScrollPane scrollPane = new JScrollPane(table);

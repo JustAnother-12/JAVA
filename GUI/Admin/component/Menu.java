@@ -7,10 +7,10 @@ import java.awt.event.MouseMotionAdapter;
 
 import javax.swing.*;
 
-import DTO.Model_Menu;
 import DTO.NhanVien_DTO;
 import GUI.Admin.swing.ListMenu;
 import GUI.Admin.swing.MenuSelectedListener;
+import GUI.Admin.swing.Model_Menu;
 import helper.CurrentUser;
 
 

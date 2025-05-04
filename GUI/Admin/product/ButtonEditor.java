@@ -9,10 +9,10 @@ import utils.MyButton;
 
 public class ButtonEditor extends AbstractCellEditor implements TableCellEditor {
     private JPanel panel;
-    private MyButton detailButton;
-    private MyButton editButton;
-    private MyButton deleteButton;
-    private MyButton importButton;
+    private JButton detailButton;
+    private JButton editButton;
+    private JButton deleteButton;
+    private JButton importButton;
 
     private int currentRow;
 
@@ -21,7 +21,7 @@ public class ButtonEditor extends AbstractCellEditor implements TableCellEditor 
         panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
         panel.setOpaque(true);
 
-        importButton = new MyButton("Nhập hàng");
+        importButton = new JButton("Nhập hàng");
         importButton.setFont(new Font("Segoe UI", 0, 12));
         importButton.setBackground(new Color(255, 153, 0));
         importButton.setForeground(Color.WHITE);
@@ -31,7 +31,7 @@ public class ButtonEditor extends AbstractCellEditor implements TableCellEditor 
             parent.addToImportList(currentRow);
         });
 
-        detailButton = new MyButton("Chi tiết");
+        detailButton = new JButton("Chi tiết");
         detailButton.setFont(new Font("Segoe UI", 0, 12));
         detailButton.setBackground(new Color(255, 153, 0));
         detailButton.setForeground(Color.WHITE);
@@ -41,7 +41,7 @@ public class ButtonEditor extends AbstractCellEditor implements TableCellEditor 
             parent.detailButtonActionPerformed(currentRow);
         });
 
-        editButton = new MyButton("Sửa");
+        editButton = new JButton("Sửa");
         editButton.setFont(new Font("Segoe UI", 0, 12));
         editButton.setBackground(new Color(255, 153, 0));
         editButton.setForeground(Color.WHITE);
@@ -51,7 +51,7 @@ public class ButtonEditor extends AbstractCellEditor implements TableCellEditor 
             parent.editButtonActionPerformed(currentRow);
         });
 
-        deleteButton = new MyButton("Xóa");
+        deleteButton = new JButton("Xóa");
         deleteButton.setFont(new Font("Segoe UI", 0, 12));
         deleteButton.setBackground(Color.RED);
         deleteButton.setForeground(Color.WHITE);

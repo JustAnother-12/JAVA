@@ -14,8 +14,8 @@ import javax.swing.table.TableRowSorter;
 import java.awt.*;
 
 import BLL.NhanVien_BLL;
-import GUI.Admin.swing.NutGiaoDien_BLL;
-import GUI.Admin.swing.NutSuKien_BLL;
+import GUI.Admin.swing.NutGiaoDien;
+import GUI.Admin.swing.NutSuKien;
 import GUI.Admin.swing.SapXepTangGiam;
 import utils.MyButton;
 import utils.MyScrollBarUI;
@@ -97,8 +97,8 @@ public class NhanVienTable extends JPanel  implements GUI.Admin.component.Header
         NhanVien_BLL NhanVien_BLL = new NhanVien_BLL();
         NhanVien_BLL.loadDataToTable(tableModel, staffList);
         // Cột "Tác vụ" có 2 nút "Chi tiết" và "Xóa"
-        table.getColumn("Tác vụ").setCellRenderer(new NutGiaoDien_BLL("staff"));
-        table.getColumn("Tác vụ").setCellEditor(new NutSuKien_BLL(this,tableModel));
+        table.getColumn("Tác vụ").setCellRenderer(new NutGiaoDien("staff"));
+        table.getColumn("Tác vụ").setCellEditor(new NutSuKien(this,tableModel));
         table.setDefaultEditor(Object.class, null);
         // ScrollPane chứa bảng
         JScrollPane scrollPane = new JScrollPane(table);

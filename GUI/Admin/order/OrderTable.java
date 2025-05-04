@@ -10,8 +10,8 @@ import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import javax.swing.table.*;
-import GUI.Admin.swing.NutGiaoDien_BLL;
-import GUI.Admin.swing.NutSuKien_BLL;
+import GUI.Admin.swing.NutGiaoDien;
+import GUI.Admin.swing.NutSuKien;
 import utils.MyButton;
 import utils.MyScrollBarUI;
 import BLL.DonHang_BLL;
@@ -81,8 +81,8 @@ public class OrderTable extends javax.swing.JPanel implements Header.searchListe
         // Thêm dữ liệu mẫu
         DonHang_BLL.LoadDataToTabel(tableModel, orderList, orderDetailList);
         // Cột "Tác vụ" có 3 nút "Xác nhận" "Chi tiết" và "Xóa"
-        table.getColumn("Tác vụ").setCellRenderer(new NutGiaoDien_BLL("order",orderList));
-        table.getColumn("Tác vụ").setCellEditor(new NutSuKien_BLL(this, tableModel, nv));
+        table.getColumn("Tác vụ").setCellRenderer(new NutGiaoDien("order",orderList));
+        table.getColumn("Tác vụ").setCellEditor(new NutSuKien(this, tableModel, nv));
         table.getColumnModel().getColumn(0).setPreferredWidth(100); // Mã đơn hàng
         table.getColumnModel().getColumn(1).setPreferredWidth(150); // Tên khách hàng
         table.getColumnModel().getColumn(2).setPreferredWidth(100); // Tình trạng

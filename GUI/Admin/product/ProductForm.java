@@ -27,7 +27,7 @@ public class ProductForm extends JFrame {
     public JComboBox<String> categoryComboBox;
     public JTextField priceTextField;
     public JTextField imagePathTextField;
-    private JLabel productImageLabel;
+    public JLabel productImageLabel;
     private Border inputFieldBorder = BorderFactory.createMatteBorder(0, 0, 2, 0, Color.darkGray);
 
 
@@ -258,10 +258,21 @@ public class ProductForm extends JFrame {
                 File destFile = new File(destinationDir, id + ".png");
         
                 // Đọc ảnh từ file gốc
-                BufferedImage bufferedImage = ImageIO.read(selectedImage);
-        
+                BufferedImage originalImage = ImageIO.read(selectedImage);
+                
+                // Kích thước mới mong muốn
+                int newWidth = 140;
+                int newHeight = 180;
+
+                // Resize ảnh
+                Image tmp = originalImage.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
+                BufferedImage resizedImage = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_ARGB);
+
+                Graphics2D g2d = resizedImage.createGraphics();
+                g2d.drawImage(tmp, 0, 0, null);
+                g2d.dispose();
                 // Ghi ảnh mới với đuôi PNG
-                ImageIO.write(bufferedImage, "png", destFile);
+                ImageIO.write(resizedImage, "png", destFile);
         
                 // Cập nhật đường dẫn
                 imagePathTextField.setText(destFile.getAbsolutePath());

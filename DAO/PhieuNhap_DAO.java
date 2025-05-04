@@ -214,21 +214,22 @@ public class PhieuNhap_DAO {
             try{
                 con.setAutoCommit(false);
 
-                String query1 = "DELETE FROM CHITETPHIEUNHAP WHERE maphieu = ?";
+                String query1 = "DELETE FROM CHITIETPHIEUNHAP WHERE maphieu = ?";
                 String query2 = "DELETE FROM PHIEUNHAP WHERE maphieu = ?";
                 PreparedStatement stmt1 = con.prepareStatement(query1);
                 PreparedStatement stmt2 = con.prepareStatement(query2);
                 
-                // Xóa chi tiết phiếu nhập
+                // Đúng thứ tự: Xóa chi tiết trước
                 stmt1.setString(1, id);
-                // Xóa phiếu nhập
                 stmt2.setString(1, id);
 
-                if (stmt2.executeUpdate() >=1 &&  stmt1.executeUpdate() >= 1){
+                stmt1.executeUpdate(); // Xóa chi tiết phiếu nhập
+                int rowsMain   = stmt2.executeUpdate(); // Sau đó xóa phiếu nhập
+                
+                if (rowsMain >= 1) {
                     con.commit();
                     return true;
-                }
-                else{
+                } else {
                     con.rollback();
                 }
             } catch (SQLException e) {
@@ -332,22 +333,22 @@ public class PhieuNhap_DAO {
         }
         return false;
     }
-    public boolean deletePhieuNhap(String id) {
-        boolean result = false;
-        con = DatabaseConnection.OpenConnection();
-        if (con != null) {
-            try {
-                String sql = "DELETE FROM PHIEUNHAP WHERE maphieu = ?";
-                PreparedStatement stmt = con.prepareStatement(sql);
-                stmt.setString(1, id);
-                int rowsAffected = stmt.executeUpdate();
-                result = rowsAffected > 0;
-            } catch (SQLException e) {
-                System.out.println(e.getMessage());
-            } finally {
-                DatabaseConnection.closeConnection(con);
-            }
-        }
-        return result;
-    }
+    // public boolean deletePhieuNhap(String id) {
+    //     boolean result = false;
+    //     con = DatabaseConnection.OpenConnection();
+    //     if (con != null) {
+    //         try {
+    //             String sql = "DELETE FROM PHIEUNHAP WHERE maphieu = ?";
+    //             PreparedStatement stmt = con.prepareStatement(sql);
+    //             stmt.setString(1, id);
+    //             int rowsAffected = stmt.executeUpdate();
+    //             result = rowsAffected > 0;
+    //         } catch (SQLException e) {
+    //             System.out.println(e.getMessage());
+    //         } finally {
+    //             DatabaseConnection.closeConnection(con);
+    //         }
+    //     }
+    //     return result;
+    // }
 }
