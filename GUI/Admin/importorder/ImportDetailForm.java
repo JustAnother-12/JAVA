@@ -48,6 +48,7 @@ public class ImportDetailForm extends JDialog {
         panel.add(scrollPane, BorderLayout.CENTER);
 
         add(panel);
+        setVisible(true);
     }
 }
 
