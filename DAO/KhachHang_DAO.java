@@ -19,7 +19,7 @@ import javax.swing.table.DefaultTableModel;
 
 import DTO.KhachHang_DTO;
 
-public class KhachHang_DAO extends JDialog {
+public class KhachHang_DAO {
     private Connection con;
 
     public boolean OpenConnection() {
@@ -53,7 +53,7 @@ public class KhachHang_DAO extends JDialog {
                     String id = rs.getString("makh");
                     String ten = rs.getString("tenkh");
                     String sdt = rs.getString("sdt");
-                    String gioitinh = rs.getString("gioitinh");
+                    String gioitinh = rs.getString("gioi");
                     String emailkh = rs.getString("email");
                     String date = rs.getString("ngaysinh");
                     String diachi = rs.getString("diachikh");
@@ -280,32 +280,59 @@ public class KhachHang_DAO extends JDialog {
         } catch (Exception e) {}
     }
     // Kiểm tra SDT đã tồn tại (ngoại trừ khách hàng hiện tại)
-    public boolean isCustomerPhoneExist(Connection conn, String phone, String currentUsername) throws SQLException {
-        String query = "SELECT * FROM KHACHHANG WHERE sdt = ? AND username <> ?";
-        PreparedStatement stmt = conn.prepareStatement(query);
-        stmt.setString(1, phone);
-        stmt.setString(2, currentUsername);
-        ResultSet rs = stmt.executeQuery();
-        return rs.next();
+    public boolean isCustomerPhoneExist(String phone, String currentUsername) throws SQLException {
+        if(OpenConnection()){
+            try {
+                String query = "SELECT * FROM KHACHHANG WHERE sdt = ? AND username <> ?";
+                PreparedStatement stmt = con.prepareStatement(query);
+                stmt.setString(1, phone);
+                stmt.setString(2, currentUsername);
+                ResultSet rs = stmt.executeQuery();
+                return rs.next();
+            } catch (SQLException ex) {
+                System.out.println(ex);            
+            } finally {     
+                closeConnection(); 
+            }    
+        }
+        return false;
     }
 
     // Kiểm tra email đã tồn tại (ngoại trừ khách hàng hiện tại)
-    public boolean isCustomerEmailExist(Connection conn, String email, String currentUsername) throws SQLException {
-        String query = "SELECT * FROM KHACHHANG WHERE email = ? AND username <> ?";
-        PreparedStatement stmt = conn.prepareStatement(query);
-        stmt.setString(1, email);
-        stmt.setString(2, currentUsername);
-        ResultSet rs = stmt.executeQuery();
-        return rs.next();
+    public boolean isCustomerEmailExist(String email, String currentUsername) throws SQLException {
+        if(OpenConnection()){
+            try {
+                String query = "SELECT * FROM KHACHHANG WHERE email = ? AND username <> ?";
+                PreparedStatement stmt = con.prepareStatement(query);
+                stmt.setString(1, email);
+                stmt.setString(2, currentUsername);
+                ResultSet rs = stmt.executeQuery();
+                return rs.next();
+            } catch (SQLException ex) {
+                System.out.println(ex);            
+            } finally {     
+                closeConnection(); 
+            }    
+        }
+        return false;
     }
 
     // Kiểm tra username đã tồn tại nếu đổi
-    public boolean isCustomerUsernameExist(Connection conn, String username) throws SQLException {
-        String query = "SELECT * FROM KHACHHANG WHERE username = ?";
-        PreparedStatement stmt = conn.prepareStatement(query);
-        stmt.setString(1, username);
-        ResultSet rs = stmt.executeQuery();
-        return rs.next();
+    public boolean isCustomerUsernameExist(String username) throws SQLException {
+        if(OpenConnection()){
+            try {
+                String query = "SELECT * FROM KHACHHANG WHERE username = ?";
+                PreparedStatement stmt = con.prepareStatement(query);
+                stmt.setString(1, username);
+                ResultSet rs = stmt.executeQuery();
+                return rs.next();
+            } catch (SQLException ex) {
+                System.out.println(ex);            
+            } finally {     
+                closeConnection(); 
+            }    
+        }
+        return false;
     }
 
     public void updateCustomer(KhachHang_DTO kh, JTextField txtName, JTextField txtPhone, JTextField txtUsername,
@@ -316,22 +343,6 @@ public class KhachHang_DAO extends JDialog {
             String newEmail = txtEmail.getText();
             String newUsername = txtUsername.getText();
             String currentUsername = kh.getUsername();  // Lưu ý: bạn phải có getUsername() trong DTO
-
-            // Kiểm tra trùng dữ liệu
-            if (isCustomerPhoneExist(conn, newPhone, currentUsername)) {
-                JOptionPane.showMessageDialog(null, "Số điện thoại đã tồn tại!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
-                return;
-            }
-
-            if (isCustomerEmailExist(conn, newEmail, currentUsername)) {
-                JOptionPane.showMessageDialog(null, "Email đã tồn tại!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
-                return;
-            }
-
-            if (!newUsername.equals(currentUsername) && isCustomerUsernameExist(conn, newUsername)) {
-                JOptionPane.showMessageDialog(null, "Username đã tồn tại!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
-                return;
-            }
 
             // Nếu không trùng thì cập nhật
             String query = "UPDATE KHACHHANG SET tenkh = ?, sdt = ?, username = ?, diachikh = ?, ngaysinh = ?, email = ?, gioi = ? WHERE username = ?";

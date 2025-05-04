@@ -71,17 +71,17 @@ public class KhachHang_BLL extends JDialog{
         if (checkFailInput_BLL.validateFields(isCustomer, txtName, txtPhone, txtUsername, txtAddress, txtBirthday, txtEmail, null, null)) {
             try {
                 
-                if (KhachHang_DAO.isCustomerPhoneExist(null, txtPhone.getText(), kh.getUsername())) {
+                if (KhachHang_DAO.isCustomerPhoneExist(txtPhone.getText(), kh.getUsername())) {
                     JOptionPane.showMessageDialog(null, "Số điện thoại đã tồn tại!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
                     return false;
                 }
 
-                if (KhachHang_DAO.isCustomerEmailExist(null, txtEmail.getText(), kh.getUsername())) {
+                if (KhachHang_DAO.isCustomerEmailExist(txtEmail.getText(), kh.getUsername())) {
                     JOptionPane.showMessageDialog(null, "Email đã tồn tại!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
                     return false;
                 }
 
-                if (!txtUsername.getText().equals(kh.getUsername()) && KhachHang_DAO.isCustomerUsernameExist(null, txtUsername.getText())) {
+                if (!txtUsername.getText().equals(kh.getUsername()) && KhachHang_DAO.isCustomerUsernameExist(txtUsername.getText())) {
                     JOptionPane.showMessageDialog(null, "Username đã tồn tại!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
                     return false;
                 }
