@@ -1,11 +1,15 @@
 package DAO;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
-import java.sql.*;
 
 public class DatabaseConnection {
     private static final String DB_URL = "jdbc:mysql://localhost:3306/ban_van_phong_pham"; // Địa chỉ cơ sở dữ liệu
     private static final String USER = "root"; // Tên người dùng
-    private static final String PASS = "123456789";
+    private static final String PASS = "1234";
 
     public static Connection OpenConnection() {
         try {

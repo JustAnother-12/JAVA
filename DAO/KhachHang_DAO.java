@@ -1,44 +1,51 @@
 package DAO;
 
-import DTO.*;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
-import java.util.Date;
 
-public class KhachHang_DAO {
+import DTO.KhachHang_DTO;
+
+public class KhachHang_DAO extends JDialog {
     private Connection con;
 
-    // public boolean OpenConnection() {
-    //     try {
-    //         Class.forName("com.mysql.cj.jdbc.Driver");
-    //         con = DriverManager.getConnection("jdbc:mysql://localhost:3306/ban_van_phong_pham", "root", "");
-    //         return true;
-    //     } catch (ClassNotFoundException | SQLException e) {
-    //         System.out.println(e.getMessage());
-    //         return false;
-    //     }
-    // }
+    public boolean OpenConnection() {
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/ban_van_phong_pham", "root", "1234");
+            return true;
+        } catch (ClassNotFoundException | SQLException e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
+    }
 
-    // public void closeConnection() {
-    //     try {
-    //         if (con != null){
-    //             con.close();
-    //         }
-    //     }catch (SQLException e){
-    //         System.out.println(e.getMessage());
-    //     }
-    // }
+    public void closeConnection() {
+        try {
+            if (con != null){
+                con.close();
+            }
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+    }
 
     public ArrayList<KhachHang_DTO> getAllKhachHang(){
         ArrayList<KhachHang_DTO> arr = new  ArrayList<>();
-        con = DatabaseConnection.OpenConnection();
-        if (con != null){
+        if (OpenConnection()){
             try{
                 Statement stmt = con.createStatement();
                 ResultSet rs = stmt.executeQuery("SELECT * FROM KHACHHANG");
@@ -58,15 +65,14 @@ public class KhachHang_DAO {
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
             } finally{
-                DatabaseConnection.closeConnection(con);
+                closeConnection();
             }
         }
         return arr;
     }
 
     public KhachHang_DTO getKhachHangfromID(String id){
-        con = DatabaseConnection.OpenConnection();
-        if (con != null) {
+        if (OpenConnection()) {
             try {            
                 String sql = "SELECT * FROM KHACHHANG WHERE KHACHHANG.makh='"+id+"'";
                 Statement stmt = con.createStatement();
@@ -87,7 +93,7 @@ public class KhachHang_DAO {
             } catch (SQLException ex) {
                 System.out.println(ex);            
             } finally {     
-                DatabaseConnection.closeConnection(con); 
+                closeConnection(); 
             }   
         }
         return null;
@@ -95,8 +101,7 @@ public class KhachHang_DAO {
 
     public boolean addKhachHang(KhachHang_DTO kh){
         boolean result = false;
-        con = DatabaseConnection.OpenConnection();
-        if (con != null) {
+        if (OpenConnection()) {
             try {                    
                 String query1 = "INSERT INTO KHACHHANG VALUES(?,?,?,?,?,?,?,?,?)";
                 PreparedStatement stmt1 = con.prepareStatement(query1);
@@ -115,7 +120,7 @@ public class KhachHang_DAO {
             } catch (SQLException ex) {
                 System.out.println(ex);            
             } finally{
-                DatabaseConnection.closeConnection(con);  
+                closeConnection();  
             } 
         }
         return result;
@@ -123,8 +128,7 @@ public class KhachHang_DAO {
 
     public boolean removeKhachHang(String id){
         boolean result = false;
-        con = DatabaseConnection.OpenConnection();
-        if (con != null) {
+        if (OpenConnection()) {
             try {                    
                 String query1 = "DELETE FROM KHACHHANG WHERE KHACHHANG.makh = ?";
                 PreparedStatement stmt1 = con.prepareStatement(query1);
@@ -135,17 +139,16 @@ public class KhachHang_DAO {
             } catch (SQLException ex) {
                 System.out.println(ex);            
             } finally{
-                DatabaseConnection.closeConnection(con);  
+                closeConnection();  
             } 
         }
         return result;
     }
 
     public boolean hasKhachHangUsername(String username){
-        con = DatabaseConnection.OpenConnection();
-        if (con != null) {
+        if (OpenConnection()) {
             try {            
-                String sql = "SELECT * FROM KHACHHANG WHERE KHACHHANG.username='"+username+"'";
+                String sql = "SELECT * FROM KHACHHANG WHERE KHACHHANG.username="+username;
                 Statement stmt = con.createStatement();
                 ResultSet rs = stmt.executeQuery(sql);
                 if (rs.next())
@@ -153,17 +156,16 @@ public class KhachHang_DAO {
             } catch (SQLException ex) {
                 System.out.println(ex);            
             } finally {     
-                DatabaseConnection.closeConnection(con); 
+                closeConnection(); 
             }   
         }
         return false;
     }
 
-    public boolean hasKhachHangID(String id){         
-        con = DatabaseConnection.OpenConnection();               
-        if (con != null) {
+    public boolean hasKhachHangID(String id){                        
+        if (OpenConnection()) {
             try {            
-                String sql = "SELECT * FROM KHACHHANG WHERE KHACHHANG.makh='"+id+"'";
+                String sql = "SELECT * FROM KHACHHANG WHERE KHACHHANG.makh="+id;
                 Statement stmt = con.createStatement();
                 ResultSet rs = stmt.executeQuery(sql);
                 if (rs.next())
@@ -171,15 +173,14 @@ public class KhachHang_DAO {
             } catch (SQLException ex) {
                 System.out.println(ex);            
             } finally {     
-                DatabaseConnection.closeConnection(con); 
+                closeConnection(); 
             }   
         }
         return false;
     }
 
     public KhachHang_DTO getKhachHangFromAccount(String username, String password){
-        con = DatabaseConnection.OpenConnection();
-        if (con != null) {
+        if (OpenConnection()) {
             try {            
                 String query = "SELECT * FROM KHACHHANG WHERE username = ? AND passwordkh = ?";
                 PreparedStatement prestmt = con.prepareStatement(query);
@@ -202,76 +203,69 @@ public class KhachHang_DAO {
             } catch (SQLException ex) {
                 System.out.println(ex);            
             } finally {     
-                DatabaseConnection.closeConnection(con); 
+                closeConnection(); 
             }   
         }
         return null;
     }
     public void deleteCustomer(String id, DefaultTableModel tableModel, ArrayList<KhachHang_DTO> customerList) {
-        con = DatabaseConnection.OpenConnection();
-        if(con != null){
-            try {
-        
-                // 1. Lấy tất cả mã đơn hàng của khách hàng
-                String selectOrders = "SELECT madonhang FROM donhang WHERE makh = ?";
-                try (PreparedStatement selectOrderStmt = con.prepareStatement(selectOrders)) {
-                    selectOrderStmt.setString(1, id);
-                    ResultSet rs = selectOrderStmt.executeQuery();
-        
-                    // 2. Với mỗi đơn hàng, xóa chi tiết đơn hàng
-                    while (rs.next()) {
-                        String madh = rs.getString("madonhang");
-        
-                        String deleteChiTiet = "DELETE FROM chitietdonhang WHERE madonhang = ?";
-                        try (PreparedStatement delCTStmt = con.prepareStatement(deleteChiTiet)) {
-                            delCTStmt.setString(1, madh);
-                            delCTStmt.executeUpdate();
-                        }
+        try (Connection conn = DatabaseConnection.getConnection()) {
+    
+            // 1. Lấy tất cả mã đơn hàng của khách hàng
+            String selectOrders = "SELECT madonhang FROM donhang WHERE makh = ?";
+            try (PreparedStatement selectOrderStmt = conn.prepareStatement(selectOrders)) {
+                selectOrderStmt.setString(1, id);
+                ResultSet rs = selectOrderStmt.executeQuery();
+    
+                // 2. Với mỗi đơn hàng, xóa chi tiết đơn hàng
+                while (rs.next()) {
+                    String madh = rs.getString("madonhang");
+    
+                    String deleteChiTiet = "DELETE FROM chitietdonhang WHERE madonhang = ?";
+                    try (PreparedStatement delCTStmt = conn.prepareStatement(deleteChiTiet)) {
+                        delCTStmt.setString(1, madh);
+                        delCTStmt.executeUpdate();
                     }
                 }
-        
-                // 3. Xoá đơn hàng của khách
-                String deleteDonHang = "DELETE FROM donhang WHERE makh = ?";
-                try (PreparedStatement delOrderStmt = con.prepareStatement(deleteDonHang)) {
-                    delOrderStmt.setString(1, id);
-                    delOrderStmt.executeUpdate();
-                }
-        
-                // 4. Xoá khách hàng
-                String deleteCustomer = "DELETE FROM khachhang WHERE makh = ?";
-                try (PreparedStatement delCustomerStmt = con.prepareStatement(deleteCustomer)) {
-                    delCustomerStmt.setString(1, id);
-                    int affected = delCustomerStmt.executeUpdate();
-        
-                    if (affected > 0) {
-                        JOptionPane.showMessageDialog(null, "Đã xóa khách hàng, đơn hàng và chi tiết liên quan.");
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Không tìm thấy khách hàng để xóa.");
-                    }
-                }
-        
-                // 5. Cập nhật lại bảng hiển thị
-                loadDataFormDatabase(customerList, tableModel);
-        
-            } catch (SQLException e) {
-                e.printStackTrace();
-                JOptionPane.showMessageDialog(null,
-                    "Lỗi khi xóa khách hàng: " + e.getMessage(),
-                    "Lỗi", JOptionPane.ERROR_MESSAGE);
-            } finally {     
-                DatabaseConnection.closeConnection(con); 
             }
+    
+            // 3. Xoá đơn hàng của khách
+            String deleteDonHang = "DELETE FROM donhang WHERE makh = ?";
+            try (PreparedStatement delOrderStmt = conn.prepareStatement(deleteDonHang)) {
+                delOrderStmt.setString(1, id);
+                delOrderStmt.executeUpdate();
+            }
+    
+            // 4. Xoá khách hàng
+            String deleteCustomer = "DELETE FROM khachhang WHERE makh = ?";
+            try (PreparedStatement delCustomerStmt = conn.prepareStatement(deleteCustomer)) {
+                delCustomerStmt.setString(1, id);
+                int affected = delCustomerStmt.executeUpdate();
+    
+                if (affected > 0) {
+                    JOptionPane.showMessageDialog(null, "Đã xóa khách hàng, đơn hàng và chi tiết liên quan.");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Không tìm thấy khách hàng để xóa.");
+                }
+            }
+    
+            // 5. Cập nhật lại bảng hiển thị
+            loadDataFormDatabase(customerList, tableModel);
+    
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null,
+                "Lỗi khi xóa khách hàng: " + e.getMessage(),
+                "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
     }
     
     
     
     public void loadDataFormDatabase(ArrayList<KhachHang_DTO> customerList,DefaultTableModel tableModel) {
-        con = DatabaseConnection.OpenConnection();
-        if(con != null){
-            try{
+        try (Connection conn = DatabaseConnection.getConnection()) {
                 String queryforcs = "SELECT * FROM KHACHHANG";
-                PreparedStatement pstmt = con.prepareStatement(queryforcs);
+                PreparedStatement pstmt = conn.prepareStatement(queryforcs);
                 ResultSet rs = pstmt.executeQuery();
                 
                 while (rs.next()) {
@@ -283,18 +277,10 @@ public class KhachHang_DAO {
                     customerList.add(kh);
                     tableModel.addRow(new Object[]{id, name, username, phone,"Chi tiết" + "Xóa"});
                 }
-            } catch (Exception e) {
-
-            }
-            finally {     
-                DatabaseConnection.closeConnection(con); 
-            }
-        }
+        } catch (Exception e) {}
     }
     // Kiểm tra SDT đã tồn tại (ngoại trừ khách hàng hiện tại)
-    // Kiểm tra số điện thoại đã tồn tại (trừ username hiện tại)
-public boolean isCustomerPhoneExist(String phone, String currentUsername) throws SQLException {
-    try (Connection conn = DatabaseConnection.getConnection()) {
+    public boolean isCustomerPhoneExist(Connection conn, String phone, String currentUsername) throws SQLException {
         String query = "SELECT * FROM KHACHHANG WHERE sdt = ? AND username <> ?";
         PreparedStatement stmt = conn.prepareStatement(query);
         stmt.setString(1, phone);
@@ -302,11 +288,9 @@ public boolean isCustomerPhoneExist(String phone, String currentUsername) throws
         ResultSet rs = stmt.executeQuery();
         return rs.next();
     }
-}
 
-// Kiểm tra email đã tồn tại (trừ username hiện tại)
-public boolean isCustomerEmailExist(String email, String currentUsername) throws SQLException {
-    try (Connection conn = DatabaseConnection.getConnection()) {
+    // Kiểm tra email đã tồn tại (ngoại trừ khách hàng hiện tại)
+    public boolean isCustomerEmailExist(Connection conn, String email, String currentUsername) throws SQLException {
         String query = "SELECT * FROM KHACHHANG WHERE email = ? AND username <> ?";
         PreparedStatement stmt = conn.prepareStatement(query);
         stmt.setString(1, email);
@@ -314,53 +298,95 @@ public boolean isCustomerEmailExist(String email, String currentUsername) throws
         ResultSet rs = stmt.executeQuery();
         return rs.next();
     }
-}
 
-// Kiểm tra username đã tồn tại
-public boolean isCustomerUsernameExist(String username) throws SQLException {
-    try (Connection conn = DatabaseConnection.getConnection()) {
+    // Kiểm tra username đã tồn tại nếu đổi
+    public boolean isCustomerUsernameExist(Connection conn, String username) throws SQLException {
         String query = "SELECT * FROM KHACHHANG WHERE username = ?";
         PreparedStatement stmt = conn.prepareStatement(query);
         stmt.setString(1, username);
         ResultSet rs = stmt.executeQuery();
         return rs.next();
     }
-}
 
-// Cập nhật thông tin khách hàng
-public void updateCustomer(KhachHang_DTO kh, JTextField txtName, JTextField txtPhone, JTextField txtUsername,
-                       JTextField txtAddress, JTextField txtBirthday, JTextField txtEmail,
-                       JComboBox<String> cbGender) throws ParseException {
-    try (Connection conn = DatabaseConnection.getConnection()) {
-        String newPhone = txtPhone.getText();
-        String newEmail = txtEmail.getText();
-        String newUsername = txtUsername.getText();
-        String currentUsername = kh.getUsername();
+    public void updateCustomer(KhachHang_DTO kh, JTextField txtName, JTextField txtPhone, JTextField txtUsername,
+                           JTextField txtAddress, JTextField txtBirthday, JTextField txtEmail,
+                           JComboBox<String> cbGender) throws ParseException {
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            String newPhone = txtPhone.getText();
+            String newEmail = txtEmail.getText();
+            String newUsername = txtUsername.getText();
+            String currentUsername = kh.getUsername();  // Lưu ý: bạn phải có getUsername() trong DTO
 
-        String query = "UPDATE KHACHHANG SET tenkh = ?, sdt = ?, username = ?, diachikh = ?, ngaysinh = ?, email = ?, gioi = ? WHERE username = ?";
-        PreparedStatement pstmt = conn.prepareStatement(query);
-        pstmt.setString(1, txtName.getText());
-        pstmt.setString(2, newPhone);
-        pstmt.setString(3, newUsername);
-        pstmt.setString(4, txtAddress.getText());
+            // Kiểm tra trùng dữ liệu
+            if (isCustomerPhoneExist(conn, newPhone, currentUsername)) {
+                JOptionPane.showMessageDialog(null, "Số điện thoại đã tồn tại!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
 
-        SimpleDateFormat inputFormat = new SimpleDateFormat("dd/MM/yyyy");
-        SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd");
-        Date date = inputFormat.parse(txtBirthday.getText());
-        String formattedDate = outputFormat.format(date);
+            if (isCustomerEmailExist(conn, newEmail, currentUsername)) {
+                JOptionPane.showMessageDialog(null, "Email đã tồn tại!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
 
-        pstmt.setString(5, formattedDate);
-        pstmt.setString(6, newEmail);
-        pstmt.setString(7, (String) cbGender.getSelectedItem());
-        pstmt.setString(8, currentUsername);
+            if (!newUsername.equals(currentUsername) && isCustomerUsernameExist(conn, newUsername)) {
+                JOptionPane.showMessageDialog(null, "Username đã tồn tại!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
 
-        pstmt.executeUpdate();
-        JOptionPane.showMessageDialog(null, "Cập nhật thông tin khách hàng thành công!");
+            // Nếu không trùng thì cập nhật
+            String query = "UPDATE KHACHHANG SET tenkh = ?, sdt = ?, username = ?, diachikh = ?, ngaysinh = ?, email = ?, gioi = ? WHERE username = ?";
+            PreparedStatement pstmt = conn.prepareStatement(query);
+            pstmt.setString(1, txtName.getText());
+            pstmt.setString(2, newPhone);
+            pstmt.setString(3, newUsername);
+            pstmt.setString(4, txtAddress.getText());
 
-    } catch (SQLException e) {
-        e.printStackTrace();
-        JOptionPane.showMessageDialog(null, "Lỗi khi cập nhật thông tin: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+            SimpleDateFormat inputFormat = new SimpleDateFormat("dd/MM/yyyy");
+            SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date date = inputFormat.parse(txtBirthday.getText());
+            String formattedDate = outputFormat.format(date);
+
+            pstmt.setString(5, formattedDate);
+            pstmt.setString(6, newEmail);
+            pstmt.setString(7, (String) cbGender.getSelectedItem());
+            pstmt.setString(8, currentUsername);
+
+            pstmt.executeUpdate();
+            JOptionPane.showMessageDialog(null, "Cập nhật thông tin khách hàng thành công!");
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Lỗi khi cập nhật thông tin: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+        }
     }
-}
+
+    // ===== BỔ SUNG: Hàm checkLogin dùng cho phân quyền đăng nhập (LoginForm.java) =====
+    public static KhachHang_DTO checkLogin(String username, String password) {
+        KhachHang_DTO kh = null;
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            String sql = "SELECT * FROM KHACHHANG WHERE username = ? AND passwordkh = ?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, username);
+            stmt.setString(2, password);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                kh = new KhachHang_DTO();
+                kh.setId_KhachHang(rs.getString("makh"));
+                kh.setTen_KhachHang(rs.getString("tenkh"));
+                kh.setSdt_KhachHang(rs.getString("sdt"));
+                kh.setGioiTinh_KhachHang(rs.getString("gioitinh")); // hoặc \"gioi\" tùy DB
+                kh.setEmail(rs.getString("email"));
+                kh.setNgaySinh_KhachHang(rs.getString("ngaysinh"));
+                kh.setDiaChi_KhachHang(rs.getString("diachikh"));
+                kh.setUsername(rs.getString("username"));
+                kh.setPass_KhachHang(rs.getString("passwordkh"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return kh;
+    }
+
 
 }

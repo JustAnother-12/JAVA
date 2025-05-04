@@ -1,12 +1,25 @@
 package GUI.Admin.component;
 
+import java.awt.Color;
+import java.awt.GradientPaint;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.Window;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
+
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
+
 import DTO.Model_Menu;
+import GUI.Admin.Main;
+import GUI.Admin.ProfilePanel;
 import GUI.Admin.swing.ListMenu;
 import GUI.Admin.swing.MenuSelectedListener;
-
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
 
 
 public class Menu extends JPanel {
@@ -34,16 +47,34 @@ public class Menu extends JPanel {
         listMenu1.addItem(new Model_Menu("8", "Staff", Model_Menu.MenuType.MENU));
         listMenu1.addItem(new Model_Menu("2", "Customer", Model_Menu.MenuType.MENU));
         listMenu1.addItem(new Model_Menu("5", "Order", Model_Menu.MenuType.MENU));
-        listMenu1.addItem(new Model_Menu("9", "Suppliers", Model_Menu.MenuType.MENU));
-        listMenu1.addItem(new Model_Menu("9", "Import", Model_Menu.MenuType.MENU));
-        listMenu1.addItem(new Model_Menu("", "", Model_Menu.MenuType.EMPTY));
+        listMenu1.addItem(new Model_Menu("", " ", Model_Menu.MenuType.EMPTY));
 
-        listMenu1.addItem(new Model_Menu("", "Profile", Model_Menu.MenuType.TITLE));
+        listMenu1.addItem(new Model_Menu("", "Pofile", Model_Menu.MenuType.TITLE));
         listMenu1.addItem(new Model_Menu("", " ", Model_Menu.MenuType.EMPTY));
         listMenu1.addItem(new Model_Menu("7", "User", Model_Menu.MenuType.MENU));
         listMenu1.addItem(new Model_Menu("4", "Logout", Model_Menu.MenuType.MENU));
         listMenu1.addItem(new Model_Menu("", "", Model_Menu.MenuType.EMPTY));
         listMenu1.setSelectedIndex(0);
+      // Thêm sự kiện xử lý riêng cho User & Logout
+        listMenu1.addEventMenuSelected(new MenuSelectedListener() {
+            @Override
+            public void menuSelected(int index) {
+                if (index == 8) {  // "User"
+                    Main mainFrame = (Main) SwingUtilities.getWindowAncestor(Menu.this);
+                    mainFrame.setMainPanel(new ProfilePanel());
+                } else if (index == 9) {  // "Logout"
+                    helper.CurrentUser.nhanVien = null;
+                    new GUI.Login.LoginForm().setVisible(true);
+                    Window w = SwingUtilities.getWindowAncestor(Menu.this);
+                    if (w != null) w.dispose();
+                }
+
+                // Gọi sự kiện gốc nếu có
+                if (event != null) {
+                    event.menuSelected(index);
+                }
+            }
+        });
     }
 
     private void initComponents() {

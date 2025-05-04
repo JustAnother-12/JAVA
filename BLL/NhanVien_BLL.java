@@ -2,6 +2,7 @@ package BLL;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -11,13 +12,11 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
-import DAO.KhachHang_DAO;
 import DAO.NhanVien_DAO;
 import DAO.ThemNhanVien_DAO;
 import DTO.NhanVien_DTO;
 import GUI.Admin.staff.ChiTietNhanVien;
 import GUI.Admin.swing.CheckFailInput_BLL;
-import java.util.HashSet;
 
 public class NhanVien_BLL extends JDialog{
     public void loadDataToTable(DefaultTableModel tableModel,ArrayList<NhanVien_DTO> staffList){
@@ -32,19 +31,19 @@ public class NhanVien_BLL extends JDialog{
     if (checkFailInput_BLL.validateFields(isCustomer, txtName, txtPhone, txtUsername, txtAddress, txtBirthday, null, txtPosition, txtCCCD)) {
         try {
             // Kiểm tra số điện thoại
-            if (NhanVien_DAO.isPhoneExist(txtPhone.getText(), nv.getUsername())) {
+            if (NhanVien_DAO.isPhoneExist(null, txtPhone.getText(), nv.getUsername())) {
                 JOptionPane.showMessageDialog(null, "Số điện thoại đã tồn tại!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
                 return false;
             }
 
             // Kiểm tra CCCD
-            if (NhanVien_DAO.isCCCDExist(txtCCCD.getText(), nv.getUsername())) {
+            if (NhanVien_DAO.isCCCDExist(null, txtCCCD.getText(), nv.getUsername())) {
                 JOptionPane.showMessageDialog(null, "CCCD đã tồn tại!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
                 return false;
             }
 
             // Kiểm tra username mới
-            if (!nv.getUsername().equals(txtUsername.getText()) && NhanVien_DAO.isUsernameExist(txtUsername.getText())) {
+            if (!nv.getUsername().equals(txtUsername.getText()) && NhanVien_DAO.isUsernameExist(null, txtUsername.getText())) {
                 JOptionPane.showMessageDialog(null, "Username đã tồn tại!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
                 return false;
             }
