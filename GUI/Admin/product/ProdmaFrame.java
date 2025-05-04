@@ -21,6 +21,7 @@ import GUI.user.ButDescription;
 import GUI.user.SachDescription;
 import GUI.user.VoDescription;
 import GUI.Admin.component.Header;
+import GUI.Admin.swing.SapXepTangGiam;
 import utils.*;
 
 public class ProdmaFrame extends JPanel implements Header.searchListener{
@@ -166,10 +167,39 @@ public class ProdmaFrame extends JPanel implements Header.searchListener{
         JPanel topPanel = new JPanel(new BorderLayout());
         topPanel.setBackground(new Color(255, 255, 255));
 
-        // Left side: Search
+        // Left side:
         JPanel leftPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
         leftPanel.setBackground(Color.WHITE);
 
+        // Nút sắp xếp tăng
+        MyButton btnSortAsc = new MyButton("Sắp xếp Tăng");
+        btnSortAsc.setFont(new Font("Segoe UI", 0, 14));
+        btnSortAsc.setBackground(Color.decode("#00B4DB"));
+        btnSortAsc.setPreferredSize(new Dimension(150,30));
+        leftPanel.add(btnSortAsc);
+
+        // Nút sắp xếp giảm
+        MyButton btnSortDesc = new MyButton("Sắp xếp Giảm");
+        btnSortDesc.setFont(new Font("Segoe UI", 0, 14));
+        btnSortDesc.setBackground(Color.decode("#00B4DB"));
+        btnSortDesc.setPreferredSize(new Dimension(150,30));
+        leftPanel.add(btnSortDesc);
+        
+        btnSortAsc.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                SapXepTangGiam sortTable = new SapXepTangGiam();
+                sortTable.sortTable(true,(DefaultTableModel)productTable.getModel(),productTable); // Sắp xếp tăng
+            }
+        });
+
+        btnSortDesc.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                SapXepTangGiam sortTable = new SapXepTangGiam();
+                sortTable.sortTable(false,(DefaultTableModel)productTable.getModel(),productTable); // Sắp xếp giảm
+            }
+        });
 
         FilterComboBox = new JComboBox<>(new String[] { "Tất cả", "Sách", "Vở", "Bút" });
         FilterComboBox.setBackground(Color.WHITE);

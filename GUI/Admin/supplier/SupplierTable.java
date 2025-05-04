@@ -1,27 +1,18 @@
 package GUI.Admin.supplier;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.*;
+import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.RowFilter;
-import javax.swing.RowSorter;
-import javax.swing.SortOrder;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableRowSorter;
+import javax.swing.*;
+import javax.swing.table.*;
 
 import BLL.NhaCungCap_BLL;
 import DTO.NhaCungCap_DTO;
 import GUI.Admin.swing.NutGiaoDien_BLL;
 import GUI.Admin.swing.NutSuKien_BLL;
+import utils.*;
 
 public class SupplierTable extends javax.swing.JPanel implements GUI.Admin.component.Header.searchListener {
     private DefaultTableModel tableModel;
@@ -35,15 +26,23 @@ public class SupplierTable extends javax.swing.JPanel implements GUI.Admin.compo
         setBackground(Color.WHITE);
         this.setName("supplier");
 
-        JButton btnSortAsc = new JButton("Sắp xếp Tăng");
+        // Nút sắp xếp tăng
+        MyButton btnSortAsc = new MyButton("Sắp xếp Tăng");
+        btnSortAsc.setFont(new Font("Segoe UI", 0, 14));
+        btnSortAsc.setBackground(Color.decode("#00B4DB"));
         btnSortAsc.setBounds(20, 0, 150, 30);
         add(btnSortAsc);
 
-        JButton btnSortDesc = new JButton("Sắp xếp Giảm");
+        // Nút sắp xếp giảm
+        MyButton btnSortDesc = new MyButton("Sắp xếp Giảm");
+        btnSortDesc.setFont(new Font("Segoe UI", 0, 14));
+        btnSortDesc.setBackground(Color.decode("#00B4DB"));
         btnSortDesc.setBounds(200, 0, 150, 30);
         add(btnSortDesc);
         
-        JButton btnThemNCC = new JButton("Thêm NCC");
+        MyButton btnThemNCC = new MyButton("Thêm nhà cung cấp");
+        btnThemNCC.setFont(new Font("Segoe UI", 0, 14));
+        btnThemNCC.setBackground(new Color(255, 153, 0));
         btnThemNCC.setBounds(380, 0, 150, 30);
         add(btnThemNCC);
         btnThemNCC.addActionListener(new ActionListener() {
@@ -73,6 +72,8 @@ public class SupplierTable extends javax.swing.JPanel implements GUI.Admin.compo
         table.setDefaultEditor(Object.class, null);
 
         JScrollPane scrollPane = new JScrollPane(table);
+        scrollPane.getVerticalScrollBar().setUI(new MyScrollBarUI());
+        scrollPane.getVerticalScrollBar().setPreferredSize(new Dimension(10,0));
         scrollPane.setBounds(2, 40, 860, 570);
         add(scrollPane);
         revalidate();

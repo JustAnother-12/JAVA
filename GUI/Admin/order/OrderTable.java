@@ -11,6 +11,8 @@ import java.util.Collections;
 import javax.swing.table.*;
 import GUI.Admin.swing.NutGiaoDien_BLL;
 import GUI.Admin.swing.NutSuKien_BLL;
+import utils.MyButton;
+import utils.MyScrollBarUI;
 import BLL.DonHang_BLL;
 
 
@@ -29,12 +31,16 @@ public class OrderTable extends javax.swing.JPanel implements Header.searchListe
         this.setName("order");
 
         // Nút sắp xếp tăng
-        JButton btnSortAsc = new JButton("Sắp xếp Tăng");
+        MyButton btnSortAsc = new MyButton("Sắp xếp Tăng");
+        btnSortAsc.setFont(new Font("Segoe UI", 0, 14));
+        btnSortAsc.setBackground(Color.decode("#00B4DB"));
         btnSortAsc.setBounds(20, 0, 150, 30);
         add(btnSortAsc);
 
         // Nút sắp xếp giảm
-        JButton btnSortDesc = new JButton("Sắp xếp Giảm");
+        MyButton btnSortDesc = new MyButton("Sắp xếp Giảm");
+        btnSortDesc.setFont(new Font("Segoe UI", 0, 14));
+        btnSortDesc.setBackground(Color.decode("#00B4DB"));
         btnSortDesc.setBounds(200, 0, 150, 30);
         add(btnSortDesc);
         
@@ -85,6 +91,8 @@ public class OrderTable extends javax.swing.JPanel implements Header.searchListe
         table.setDefaultEditor(Object.class, null);
         // ScrollPane chứa bảng
         JScrollPane scrollPane = new JScrollPane(table);
+        scrollPane.getVerticalScrollBar().setUI(new MyScrollBarUI());
+        scrollPane.getVerticalScrollBar().setPreferredSize(new Dimension(10,0));
         scrollPane.setBounds(2, 40 , 860, 570);
         add(scrollPane);
         revalidate();

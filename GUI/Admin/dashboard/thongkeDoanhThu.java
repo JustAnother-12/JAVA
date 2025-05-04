@@ -107,7 +107,7 @@ public class thongkeDoanhThu extends JPanel{
         DefaultTableModel model = new DefaultTableModel();
         model.addColumn("Ngày");
         model.addColumn("Danh mục");
-        model.addColumn("Tổng Doanh Thu");
+        model.addColumn("Doanh thu trong ngày");
 
         for (ThongKeDoanhThu_DTO dto : doanhthulist) {
             model.addRow(new Object[]{dto.getNgay(), dto.getDanhMuc(), dto.getTongDoanhThu()});

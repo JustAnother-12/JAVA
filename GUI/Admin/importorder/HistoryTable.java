@@ -1,28 +1,19 @@
 package GUI.Admin.importorder;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.*;
+import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.RowFilter;
-import javax.swing.RowSorter;
-import javax.swing.SortOrder;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableRowSorter;
+import javax.swing.*;
+import javax.swing.table.*;
 
 import BLL.PhieuNhap_BLL;
 import DTO.PhieuNhap_DTO;
 import GUI.Admin.swing.NutGiaoDien_BLL;
 import GUI.Admin.swing.NutSuKien_BLL;
+import utils.MyButton;
+import utils.MyScrollBarUI;
 
 public class HistoryTable extends JPanel implements GUI.Admin.component.Header.searchListener {
     private DefaultTableModel tableModel;
@@ -36,11 +27,17 @@ public class HistoryTable extends JPanel implements GUI.Admin.component.Header.s
         setBackground(Color.WHITE);
         this.setName("import");
 
-        JButton btnSortAsc = new JButton("Sắp xếp Tăng");
+        // Nút sắp xếp tăng
+        MyButton btnSortAsc = new MyButton("Sắp xếp Tăng");
+        btnSortAsc.setFont(new Font("Segoe UI", 0, 14));
+        btnSortAsc.setBackground(Color.decode("#00B4DB"));
         btnSortAsc.setBounds(20, 0, 150, 30);
         add(btnSortAsc);
 
-        JButton btnSortDesc = new JButton("Sắp xếp Giảm");
+        // Nút sắp xếp giảm
+        MyButton btnSortDesc = new MyButton("Sắp xếp Giảm");
+        btnSortDesc.setFont(new Font("Segoe UI", 0, 14));
+        btnSortDesc.setBackground(Color.decode("#00B4DB"));
         btnSortDesc.setBounds(200, 0, 150, 30);
         add(btnSortDesc);
 
@@ -66,6 +63,8 @@ public class HistoryTable extends JPanel implements GUI.Admin.component.Header.s
         table.setDefaultEditor(Object.class, null);
 
         JScrollPane scrollPane = new JScrollPane(table);
+        scrollPane.getVerticalScrollBar().setUI(new MyScrollBarUI());
+        scrollPane.getVerticalScrollBar().setPreferredSize(new Dimension(10,0));
         scrollPane.setBounds(2, 40, 860, 570);
         add(scrollPane);
         revalidate();

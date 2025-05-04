@@ -17,6 +17,8 @@ import BLL.NhanVien_BLL;
 import GUI.Admin.swing.NutGiaoDien_BLL;
 import GUI.Admin.swing.NutSuKien_BLL;
 import GUI.Admin.swing.SapXepTangGiam;
+import utils.MyButton;
+import utils.MyScrollBarUI;
 import DTO.NhanVien_DTO;
 import DAO.NhanVien_DAO;
 import java.awt.event.ActionListener;
@@ -33,7 +35,9 @@ public class NhanVienTable extends JPanel  implements GUI.Admin.component.Header
         setBackground(Color.WHITE);
         this.setName("staff");
         // Nút "Thêm tài khoản" ở góc trên bên phải
-        JButton btnAdd = new JButton("Thêm tài khoản");
+        MyButton btnAdd = new MyButton("Thêm tài khoản");
+        btnAdd.setFont(new Font("Segoe UI", 0, 14));
+        btnAdd.setBackground(new Color(255, 153, 0));
         btnAdd.setBounds(620, 5, 150, 30);
         add(btnAdd);
         btnAdd.addActionListener(new ActionListener() {
@@ -43,12 +47,16 @@ public class NhanVienTable extends JPanel  implements GUI.Admin.component.Header
             }
         });
         // Nút sắp xếp tăng
-        JButton btnSortAsc = new JButton("Sắp xếp Tăng");
+        MyButton btnSortAsc = new MyButton("Sắp xếp Tăng");
+        btnSortAsc.setFont(new Font("Segoe UI", 0, 14));
+        btnSortAsc.setBackground(Color.decode("#00B4DB"));
         btnSortAsc.setBounds(20, 0, 150, 30);
         add(btnSortAsc);
 
         // Nút sắp xếp giảm
-        JButton btnSortDesc = new JButton("Sắp xếp Giảm");
+        MyButton btnSortDesc = new MyButton("Sắp xếp Giảm");
+        btnSortDesc.setFont(new Font("Segoe UI", 0, 14));
+        btnSortDesc.setBackground(Color.decode("#00B4DB"));
         btnSortDesc.setBounds(200, 0, 150, 30);
         add(btnSortDesc);
         
@@ -94,6 +102,8 @@ public class NhanVienTable extends JPanel  implements GUI.Admin.component.Header
         table.setDefaultEditor(Object.class, null);
         // ScrollPane chứa bảng
         JScrollPane scrollPane = new JScrollPane(table);
+        scrollPane.getVerticalScrollBar().setUI(new MyScrollBarUI());
+        scrollPane.getVerticalScrollBar().setPreferredSize(new Dimension(10,0));
         scrollPane.setBounds(2, 40 , 860, 570);
         add(scrollPane);
         revalidate();

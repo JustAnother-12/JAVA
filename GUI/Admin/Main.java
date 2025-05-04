@@ -50,12 +50,9 @@ public class Main extends JFrame {
         menu.addEventMenuSelected(new MenuSelectedListener() {
             @Override
             public void menuSelected(int index) {
-                System.out.println(index);
                 switch (index) {
                     case 0:
                         setForm("DashBoard", dashboard);
-                        // header.setSearchListener(dashboard);
-                        // header.getjLabel2().setIcon(new ImageIcon(getClass().getResource("/GUI/Admin/icon/none.jpg")));
                         header.setVisible(false);
                         break;
                     case 1:
