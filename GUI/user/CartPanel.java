@@ -6,6 +6,8 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
@@ -13,11 +15,13 @@ import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 
 import BLL.Cart_BLL;
+import BLL.DonHang_BLL;
 import DTO.CartItemDTO;
 import DTO.KhachHang_DTO;
 
@@ -25,6 +29,9 @@ public class CartPanel extends JPanel {
     private JPanel contentPanel;
     private JLabel tongTienLabel;
     private KhachHang_DTO khachHang;
+    private DonHang_BLL orderBLL = new DonHang_BLL();
+    private Cart_BLL cartBLL = new Cart_BLL();
+    private ArrayList<CartItemDTO> items;
 
     public CartPanel(KhachHang_DTO khachHang) {
         this.khachHang = khachHang;
@@ -43,12 +50,17 @@ public class CartPanel extends JPanel {
         thongTinPanel.add(new JLabel("SĐT: " + khachHang.getSdt_KhachHang()));
         thongTinPanel.add(new JLabel("Địa chỉ: " + khachHang.getDiaChi_KhachHang()));
         
-        tongTienLabel = new JLabel("Tổng tiền: " + Cart_BLL.tinhTongTien() + "₫");
+        tongTienLabel = new JLabel("Tổng tiền: " + cartBLL.tinhTongTien() + "₫");
         tongTienLabel.setFont(new Font("Arial", Font.BOLD, 16));
         thongTinPanel.add(tongTienLabel);
 
         JButton muaHangBtn = new JButton("Mua Hàng");
         thongTinPanel.add(muaHangBtn);
+        muaHangBtn.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt){
+                muaHangActionPerform();
+            }
+        });
         
 
         add(thongTinPanel, BorderLayout.EAST);
@@ -56,7 +68,7 @@ public class CartPanel extends JPanel {
 
     private void loadCartItems() {
         contentPanel.removeAll();
-        ArrayList<CartItemDTO> items = Cart_BLL.layDanhSach();
+        items = cartBLL.layDanhSach();
 
         for (CartItemDTO item : items) {
             JPanel itemPanel = new JPanel(new BorderLayout());
@@ -85,16 +97,16 @@ public class CartPanel extends JPanel {
             minusBtn.addActionListener(e -> {
                 int sl = item.getSoLuong();
                 if (sl > 1) {
-                    Cart_BLL.capNhatSoLuong(item.getMaSanPham(), sl - 1);
+                    cartBLL.capNhatSoLuong(item.getMaSanPham(), sl - 1);
                     refresh();
                 }
             });
             plusBtn.addActionListener(e -> {
-                Cart_BLL.capNhatSoLuong(item.getMaSanPham(), item.getSoLuong() + 1);
+                cartBLL.capNhatSoLuong(item.getMaSanPham(), item.getSoLuong() + 1);
                 refresh();
             });
             xoaBtn.addActionListener(e -> {
-                Cart_BLL.xoaKhoiGio(item.getMaSanPham());
+                cartBLL.xoaKhoiGio(item.getMaSanPham());
                 refresh();
             });
             buttonPanel.add(minusBtn);
@@ -110,8 +122,25 @@ public class CartPanel extends JPanel {
         contentPanel.repaint();
     }
 
+    private void muaHangActionPerform(){
+        if(!items.isEmpty()){
+            String message = orderBLL.addOrder(cartBLL.createOrder(khachHang.getDiaChi_KhachHang(), khachHang.getId_KhachHang()), cartBLL.createDetails());
+            if(message.contains("thành công!")){
+                JOptionPane.showMessageDialog(this, "Đặt hàng thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+                cartBLL.xoaTatCa();
+                refresh();
+                contentPanel.revalidate();
+                contentPanel.repaint();
+            }else{
+                JOptionPane.showMessageDialog(this, "Đặt hàng thất bại!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+            }
+        }else{
+            JOptionPane.showMessageDialog(this, "Giỏ hàng trống!", "Thông báo", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
     private void refresh() {
         loadCartItems();
-        tongTienLabel.setText("Tổng tiền: " + Cart_BLL.tinhTongTien() + "₫");
+        tongTienLabel.setText("Tổng tiền: " + cartBLL.tinhTongTien() + "₫");
     }
 }

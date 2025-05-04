@@ -25,14 +25,6 @@ public class SachForm extends JPanel{
         this.sp = sp;
     }
 
-    // private boolean checkAdditionalFields() {
-    //     String author = authorTextField.getText().trim();
-    //     String genre = genreTextField.getText().trim();
-    //     String publisher = publisherTextField.getText().trim();
-    //     String publicationYear = publicationYearTextField.getText().trim();
-    //     return !(author.isEmpty() || genre.isEmpty() || publisher.isEmpty() || publicationYear.isEmpty());
-    // }
-
     private void saveProduct() {
         String name = parent.nameTextField.getText().trim();
         int quantity = 0;

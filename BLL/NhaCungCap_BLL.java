@@ -37,17 +37,9 @@ public class NhaCungCap_BLL {
     }
 
     public void deleteSupplier(String id, DefaultTableModel model, ArrayList<NhaCungCap_DTO> list) {
-        System.out.println(list.size());
         for (int i = 0; i < list.size(); i++) {
-            System.out.println(list.get(i).getEmailNCC());
             if (list.get(i).getMaNCC().equals(id)) {
-                if(nccDAO.deleteNCC(id)){
-                    list.remove(i);
-                    model.removeRow(i);
-                }
-                else{
-                    System.out.println("Error");
-                }
+                nccDAO.deleteNCC(id);
                 break;
             }
         }

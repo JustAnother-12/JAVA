@@ -176,7 +176,7 @@ public class HeaderPanel extends JPanel {
                     dangnhapFrame.dispose();
                     
                 } else {
-                    JOptionPane.showMessageDialog(dangnhapFrame, "Sai email hoặc mật khẩu!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(dangnhapFrame, "Sai tài khoản hoặc mật khẩu!", "Lỗi", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
@@ -204,7 +204,7 @@ public class HeaderPanel extends JPanel {
         logoPanel.setPreferredSize(new Dimension(200, 100));
         logoPanel.setOpaque(false);
 
-        logoIcon = new JLabel(new ImageIcon("GUI/user/Icon/logo.png")); 
+        logoIcon = new JLabel(new ImageIcon("GUI/user/Icon/home.png")); 
         logoIcon.setBounds(100, 30, 30, 40);
         logoPanel.add(logoIcon);
         

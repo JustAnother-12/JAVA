@@ -1,16 +1,8 @@
 package GUI.user;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.*;
+import java.awt.event.*;
 
-import javax.swing.BoxLayout;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
+import javax.swing.*;
 
 
 public class TrangChu extends JFrame{
@@ -115,7 +107,6 @@ public class TrangChu extends JFrame{
                 catalogPanel.paintLabel("BÚT");
             }
             
-            // Revalidate and repaint the ContentPanel to reflect changes
             ContentPanel.revalidate();
             ContentPanel.repaint();
         }
@@ -163,24 +154,19 @@ public class TrangChu extends JFrame{
     public void SwitchToUserMenu(){
         ContentPanel.removeAll();
 
-        // UserMenu.UsernameLabel.setText(header.accountLabel.getText().toUpperCase());
-        // for(JLabel lb : UserMenu.OptionList){
-        //     lb.addMouseListener(mouseListener);
-        // }
+        
         ContentPanel.setLayout(new BoxLayout(ContentPanel, BoxLayout.Y_AXIS));
 
         UserInfo = new UserInfoPanel();
-        UserInfo.NameInfo.setText(header.khachhang.getTen_KhachHang());
-        UserInfo.PhoneInfo.setText(header.khachhang.getSdt_KhachHang());
-        UserInfo.GioiTinhInfo.setText(header.khachhang.getGioiTinh_KhachHang());
-        UserInfo.EmailInfo.setText(header.khachhang.getEmail());
-        UserInfo.AddressInfo.setText(header.khachhang.getDiaChi_KhachHang());
-        UserInfo.NgaySinhInfo.setText((header.khachhang.getNgaySinh_KhachHang()).replace("-", "/"));
-        UserInfo.UsernameInfo.setText(header.khachhang.getUsername());
-        UserInfo.PasswordInfo.setText(header.khachhang.getPass_KhachHang());
+        UserInfo.NameInfo.setText(HeaderPanel.khachhang.getTen_KhachHang());
+        UserInfo.PhoneInfo.setText(HeaderPanel.khachhang.getSdt_KhachHang());
+        UserInfo.GioiTinhInfo.setText(HeaderPanel.khachhang.getGioiTinh_KhachHang());
+        UserInfo.EmailInfo.setText(HeaderPanel.khachhang.getEmail());
+        UserInfo.AddressInfo.setText(HeaderPanel.khachhang.getDiaChi_KhachHang());
+        UserInfo.NgaySinhInfo.setText((HeaderPanel.khachhang.getNgaySinh_KhachHang()).replace("-", "/"));
+        UserInfo.UsernameInfo.setText(HeaderPanel.khachhang.getUsername());
+        UserInfo.PasswordInfo.setText(HeaderPanel.khachhang.getPass_KhachHang());
 
-        // ContentPanel.add(UserMenu);
-        // ContentPanel.add(Box.createHorizontalStrut(20));
         ContentPanel.add(UserInfo);
         ContentPanel.revalidate();
         ContentPanel.repaint();

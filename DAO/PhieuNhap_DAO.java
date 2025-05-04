@@ -145,53 +145,6 @@ public class PhieuNhap_DAO {
         return arr;
     }
 
-    // public boolean updatePhieuNhap(PhieuNhap_DTO pn){
-    //     boolean result = false;
-    //     con = DatabaseConnection.OpenConnection();
-    //     if(con != null){
-    //         try{
-    //             con.setAutoCommit(false);
-                
-    //             String query1 = "UPDATE PHIEUNHAP "+
-    //                             "SET mancc = ?, manv = ?, ngaynhap = ? "+
-    //                             "WHERE maphieu = ?";
-    //             String query2 = "UPDATE CHITIETPHIEUNHAP "+
-    //                             "SET tentacgia = ?, theloai = ?, nhaxuatban = ?, namxuatban= ? "+
-    //                             "WHERE masp = ?";
-    //             PreparedStatement stmt1 = con.prepareStatement(query1);
-    //             PreparedStatement stmt2 = con.prepareStatement(query2);
-    //             stmt1.setString(1, sach.getTen_SanPham());
-    //             stmt1.setDouble(2, sach.getGia_SanPham());
-    //             stmt1.setInt(3, sach.getSoLuong_SanPham());
-    //             stmt1.setString(4, sach.getID_SanPham());
-
-    //             stmt2.setString(1,sach.getTenTacGia());
-    //             stmt2.setString(2, sach.getTheLoai());
-    //             stmt2.setString(3, sach.getNhaXuatBan());
-    //             stmt2.setInt(4, sach.getNamXuatBan());
-    //             stmt2.setString(5, sach.getID_SanPham());
-
-    //             if(stmt1.executeUpdate() >=1 && stmt2.executeUpdate() >=1){
-    //                 con.commit();
-    //                 result = true;
-    //             }
-    //             else{
-    //                 con.rollback();
-    //             }
-    //         }
-    //         catch(SQLException e){
-    //             System.out.println(e);
-    //         } finally{
-    //             try{
-    //                 con.setAutoCommit(true);
-    //             }catch(SQLException e){
-    //                 System.out.println(e);
-    //             }
-    //             DatabaseConnection.closeConnection(con);
-    //         }
-    //     }
-    //     return result;
-    // }
 
     public boolean addPhieuNhap(PhieuNhap_DTO pn){
         boolean result = false;

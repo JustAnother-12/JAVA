@@ -74,7 +74,7 @@ public class Order_DAO {
                 DatabaseConnection.closeConnection(con);
             }
         }
-}
+    }
 
 
     public ArrayList<Order_DTO> getAllOrder(){
@@ -206,15 +206,73 @@ public class Order_DAO {
         return false;
     }
 
-    public boolean AddOrder(Order_DTO order, OrderDetail_DTO details){
+    // public boolean AddOrder(Order_DTO order, ArrayList<OrderDetail_DTO> details){
+    //     con = DatabaseConnection.OpenConnection();
+    //     if (con != null) {
+    //         try {                    
+    //             String query1 = "INSERT INTO DONHANG VALUES(?,?,?,?,?,?,?)";
+    //             String query2 = "INSERT INTO CHITIETDONHANG VALUES(?,?,?,?,?)";
+    //             PreparedStatement stmt1 = con.prepareStatement(query1);
+    //             PreparedStatement stmt2 = con.prepareStatement(query2);
+    //             stmt1.setString(1, order.getMadonhang());
+    //             stmt1.setString(2, order.getDiachidat());
+    //             stmt1.setString(3, order.getNgaydat());
+    //             stmt1.setString(4, order.getTinhtrang());
+    //             stmt1.setDouble(5, order.getTongtien());
+    //             stmt1.setString(6, order.getManv());
+    //             stmt1.setString(7, order.getMakh());
+
+    //             stmt2.setString(1, details.getMadonhang());
+    //             stmt2.setString(2, details.getMasp());
+    //             stmt2.setInt(3, details.getSoluong());
+    //             stmt2.setDouble(4, details.getDongia());
+    //             stmt2.setDouble(5, details.getThanhtien());
+
+    //             if (stmt1.executeUpdate()>=1 && stmt2.executeUpdate()>=1)
+    //                 return true;
+    //         } catch (SQLException ex) {
+    //             System.out.println(ex);            
+    //         } finally{
+    //             DatabaseConnection.closeConnection(con);  
+    //         } 
+    //     }
+    //     return false;
+    // }
+
+    public String getNextORDERID(Connection con){
+        String latestID = "";
+        try {
+            String sql = "SELECT madonhang FROM DONHANG ORDER BY madonhang DESC LIMIT 1";
+            PreparedStatement stmt = con.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                latestID = rs.getString("madonhang");
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        String prefix = latestID.replaceAll("\\d+", "");
+        String numberic = latestID.replaceAll("[^\\d]", "");
+
+        int number = Integer.parseInt(numberic);
+        number++;
+        String nextnumberic = String.format("%03d", number);
+        return (prefix+nextnumberic).replace(" ", ""); 
+    }
+
+    public boolean AddOrder(Order_DTO order, ArrayList<OrderDetail_DTO> details){
+        boolean result = false;
+        int success_count = 0;
         con = DatabaseConnection.OpenConnection();
         if (con != null) {
-            try {                    
+            try {      
+                con.setAutoCommit(false);
+
                 String query1 = "INSERT INTO DONHANG VALUES(?,?,?,?,?,?,?)";
-                String query2 = "INSERT INTO CHITIETDONHANG VALUES(?,?,?,?,?)";
                 PreparedStatement stmt1 = con.prepareStatement(query1);
-                PreparedStatement stmt2 = con.prepareStatement(query2);
-                stmt1.setString(1, order.getMadonhang());
+                String DonHangID = getNextORDERID(con);
+                stmt1.setString(1, DonHangID);
                 stmt1.setString(2, order.getDiachidat());
                 stmt1.setString(3, order.getNgaydat());
                 stmt1.setString(4, order.getTinhtrang());
@@ -222,21 +280,48 @@ public class Order_DAO {
                 stmt1.setString(6, order.getManv());
                 stmt1.setString(7, order.getMakh());
 
-                stmt2.setString(1, details.getMadonhang());
-                stmt2.setString(2, details.getMasp());
-                stmt2.setInt(3, details.getSoluong());
-                stmt2.setDouble(4, details.getDongia());
-                stmt2.setDouble(5, details.getThanhtien());
+                if(stmt1.executeUpdate()>=1){
+                    for(OrderDetail_DTO detail : details){
+                        try{
+                            String query2 = "INSERT INTO CHITIETDONHANG VALUES(?,?,?,?,?)";
+                            PreparedStatement stmt2 = con.prepareStatement(query2);
 
-                if (stmt1.executeUpdate()>=1 && stmt2.executeUpdate()>=1)
-                    return true;
+                            stmt2.setString(1, DonHangID);
+                            stmt2.setString(2, detail.getMasp());
+                            stmt2.setInt(3, detail.getSoluong());
+                            stmt2.setDouble(4, detail.getDongia());
+                            stmt2.setDouble(5, detail.getThanhtien());
+
+                            if(stmt2.executeUpdate()>=1)
+                                success_count++;
+                        } catch (SQLException ex) {
+                            System.out.println(ex);
+                        } 
+                    }
+                    if (success_count == details.size()){
+                        con.commit();
+                        result = true;
+                    }else{
+                        con.rollback();
+                    }
+                }
+                else{
+                    con.rollback();
+                    result = false;
+                }
             } catch (SQLException ex) {
                 System.out.println(ex);            
             } finally{
-                DatabaseConnection.closeConnection(con);  
+                try{
+                    con.setAutoCommit(true);
+                }
+                catch(SQLException e){
+                    System.out.println(e);
+                }
+                DatabaseConnection.closeConnection(con);   
             } 
         }
-        return false;
+        return result;
     }
 
     public boolean DeleteOrder(String id){
