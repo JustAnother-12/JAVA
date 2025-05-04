@@ -253,6 +253,26 @@ public class NhaCungCap_DAO {
         }
         return result;
     }
+    public String getTenNCC(String id) {
+        String tenNCC = null;
+        con = DatabaseConnection.OpenConnection();
+        if (con != null) {
+            try {
+                String sql = "SELECT tenncc FROM NHACUNGCAP WHERE mancc = ?";
+                PreparedStatement stmt = con.prepareStatement(sql);
+                stmt.setString(1, id);
+                ResultSet rs = stmt.executeQuery();
+                if (rs.next()) {
+                    tenNCC = rs.getString("tenncc");
+                }
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
+            } finally {
+                DatabaseConnection.closeConnection(con);
+            }
+        }
+        return tenNCC;
+    }
 }
 
 
