@@ -63,11 +63,22 @@ public class DonHang_BLL {
         return "Xóa đơn hàng thất bại!";
     }
 
-    public String confirmOrder(String id){
+    public String cancelOrder(String id, String nvid){
         if(!orderDao.hasOrderID(id)){
             return "Đơn hàng không tồn tại!";
         }
-        if(orderDao.ConfirmOrder(id)){
+        if(orderDao.CancelOrder(id, nvid)){
+            return "Hủy đơn hàng thành công!";
+        }
+
+        return "Hủy đơn hàng thất bại!";
+    }
+
+    public String confirmOrder(String id, String nvid){
+        if(!orderDao.hasOrderID(id)){
+            return "Đơn hàng không tồn tại!";
+        }
+        if(orderDao.ConfirmOrder(id, nvid)){
             return "Duyệt đơn hàng thành công!";
         }
 

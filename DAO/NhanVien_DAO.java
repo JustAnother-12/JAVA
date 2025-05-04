@@ -193,8 +193,8 @@ public class NhanVien_DAO extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(null, "Lỗi khi cập nhật thông tin: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
     }
-        // ===== BỔ SUNG: Hàm checkLogin dùng cho phân quyền đăng nhập (LoginForm.java) =====
-    public static NhanVien_DTO checkLogin(String username, String password) {
+
+    public NhanVien_DTO checkLogin(String username, String password) {
         NhanVien_DTO nv = null;
         try (Connection conn = DatabaseConnection.getConnection()) {
             String sql = "SELECT * FROM NHANVIEN WHERE username = ? AND passwordnv = ?";

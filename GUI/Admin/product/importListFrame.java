@@ -8,6 +8,7 @@ import BLL.NhaCungCap_BLL;
 import BLL.PhieuNhap_BLL;
 import DTO.ChiTietPhieuNhap_DTO;
 import DTO.NhaCungCap_DTO;
+import DTO.NhanVien_DTO;
 import DTO.PhieuNhap_DTO;
 import utils.*;
 
@@ -36,8 +37,10 @@ public class importListFrame extends JFrame{
     private ArrayList<NhaCungCap_DTO> danhSachNCC;
     private double TotalValue;
     private int position = -1;
+    private NhanVien_DTO currentNV;
 
-    public importListFrame(ArrayList<ChiTietPhieuNhap_DTO> importList){
+    public importListFrame(ArrayList<ChiTietPhieuNhap_DTO> importList, NhanVien_DTO currentNV){
+        this.currentNV = currentNV;
         this.importList = importList;
         initComponents();
         showImports(importList);
@@ -271,7 +274,7 @@ public class importListFrame extends JFrame{
             }
         }
         if (nhacungcap != null && !importList.isEmpty()){
-            PhieuNhap_DTO pn = new PhieuNhap_DTO("",nhacungcap.getMaNCC(), "NV001", getCurrentDay(), importList);
+            PhieuNhap_DTO pn = new PhieuNhap_DTO("",nhacungcap.getMaNCC(), currentNV.getManv(), getCurrentDay(), importList);
             JOptionPane.showMessageDialog(this, pnBLL.addPhieuNhap(pn), "Thông báo", JOptionPane.INFORMATION_MESSAGE);
             importList.clear();
             showImports(importList);

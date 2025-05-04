@@ -26,6 +26,7 @@ public class NhanVien_BLL extends JDialog{
    private NhanVien_DAO NhanVien_DAO = new NhanVien_DAO();
    private CheckFailInput_BLL checkFailInput_BLL = new CheckFailInput_BLL();
    private ThemNhanVien_DAO ThemNhanVien_DAO = new ThemNhanVien_DAO();
+
    public boolean updateStaff(JTextField txtName,JTextField txtPhone,JTextField txtUsername,JTextField txtAddress,JTextField txtBirthday, JComboBox<String> txtPosition, JComboBox<String> cbGender, JTextField txtCCCD, boolean isCustomer, NhanVien_DTO nv) {
     // Cập nhật thông tin
     if (checkFailInput_BLL.validateFields(isCustomer, txtName, txtPhone, txtUsername, txtAddress, txtBirthday, null, txtPosition, txtCCCD)) {
@@ -108,6 +109,10 @@ public class NhanVien_BLL extends JDialog{
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
             return false;
         }
+    }
+
+    public NhanVien_DTO checkLogin(String username, String password){
+        return NhanVien_DAO.checkLogin(username,password);
     }
 
     private void validateUniqueFields(String phone, String cccd, String username) throws Exception {

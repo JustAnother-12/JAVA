@@ -1,4 +1,4 @@
-// File: GUI/LoginForm.java
+
 package GUI.Login;
 
 import java.awt.GridLayout;
@@ -15,25 +15,24 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
-import DAO.KhachHang_DAO;
-import DAO.NhanVien_DAO;
-import DTO.KhachHang_DTO;
+import BLL.NhanVien_BLL;
 import DTO.NhanVien_DTO;
 import GUI.Admin.Main;
-import GUI.user.TrangChu;
 import helper.CurrentUser;
 
 public class LoginForm extends JFrame {
     private JTextField txtUsername;
     private JPasswordField txtPassword;
     private JButton btnLogin;
+    private NhanVien_BLL nvBLL = new NhanVien_BLL();
 
     public LoginForm() {
+        init();
         setTitle("Đăng nhập hệ thống");
         setSize(400, 250);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
-        init();
+        
     }
 
     private void init() {
@@ -65,18 +64,10 @@ public class LoginForm extends JFrame {
         String username = txtUsername.getText().trim();
         String password = new String(txtPassword.getPassword());
 
-        NhanVien_DTO nv = NhanVien_DAO.checkLogin(username, password);
+        NhanVien_DTO nv = nvBLL.checkLogin(username, password);
         if (nv != null) {
             CurrentUser.setNhanVien(nv);
             new Main().setVisible(true);
-            dispose();
-            return;
-        }
-
-        KhachHang_DTO kh = KhachHang_DAO.checkLogin(username, password);
-        if (kh != null) {
-            CurrentUser.setKhachHang(kh);
-            new TrangChu().setVisible(true);
             dispose();
             return;
         }

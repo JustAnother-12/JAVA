@@ -16,6 +16,7 @@ import DTO.Sach_DTO;
 import DTO.SanPham_DTO;
 import DTO.Vo_DTO;
 import DTO.ChiTietPhieuNhap_DTO;
+import DTO.NhanVien_DTO;
 import DTO.OrderDetail_DTO;
 import GUI.user.ButDescription;
 import GUI.user.SachDescription;
@@ -30,14 +31,11 @@ public class ProdmaFrame extends JPanel implements Header.searchListener{
     private MyButton importListButton;
     private MyButton restartButton;
     private MyButton addButton;
-    private MyButton firstButton;
-    private MyButton lastButton;
-    private MyButton nextButton;
-    private MyButton previousButton;
     private JPanel mainPanel;
     private JScrollPane productTableScrollPane;
     private JTable productTable;
     private ProductForm productForm;
+    public NhanVien_DTO nv;
 
     Border mainPanelBorder = BorderFactory.createMatteBorder(1, 1, 1, 1, Color.darkGray);
     ArrayList<SanPham_DTO> products = new ArrayList<>();
@@ -55,7 +53,8 @@ public class ProdmaFrame extends JPanel implements Header.searchListener{
 
     protected ArrayList<ChiTietPhieuNhap_DTO> importList = new ArrayList<>();
 
-    public ProdmaFrame() {
+    public ProdmaFrame(NhanVien_DTO nv) {
+        this.nv = nv;
         initComponents();
         getSPandDetails("Tất cả");
         showProducts(products);
@@ -111,10 +110,6 @@ public class ProdmaFrame extends JPanel implements Header.searchListener{
         productTable = new JTable();
         restartButton = new MyButton();
         addButton = new MyButton();
-        firstButton = new MyButton();
-        previousButton = new MyButton();
-        nextButton = new MyButton();
-        lastButton = new MyButton();
         importListButton = new MyButton();
 
 
@@ -249,7 +244,7 @@ public class ProdmaFrame extends JPanel implements Header.searchListener{
         importListButton.setPreferredSize(new Dimension(140, 30));
         importListButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
-                new importListFrame(importList);
+                new importListFrame(importList, nv);
             }
         });
         rightPanel.add(importListButton);
@@ -258,68 +253,12 @@ public class ProdmaFrame extends JPanel implements Header.searchListener{
         topPanel.add(leftPanel, BorderLayout.WEST);
         topPanel.add(rightPanel, BorderLayout.EAST);
 
-
-        // buttonPanel components
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.setBackground(new Color(255, 255, 255));
-        buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
-
-        firstButton.setBackground(new Color(51, 51, 51));
-        firstButton.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        firstButton.setForeground(new Color(255, 255, 255));
-        firstButton.setText("<<");
-        firstButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                firstButtonActionPerformed(evt);
-            }
-        });
-
-        buttonPanel.add(firstButton);
-
-        previousButton.setBackground(new Color(51, 51, 51));
-        previousButton.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        previousButton.setForeground(new Color(255, 255, 255));
-        previousButton.setText("<");
-        previousButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                previousButtonActionPerformed(evt);
-            }
-        });
-
-        buttonPanel.add(previousButton);
-
-        nextButton.setBackground(new Color(51, 51, 51));
-        nextButton.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        nextButton.setForeground(new Color(255, 255, 255));
-        nextButton.setText(">");
-        nextButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                nextButtonActionPerformed(evt);
-            }
-        });
-
-        buttonPanel.add(nextButton);
-
-        lastButton.setBackground(new Color(51, 51, 51));
-        lastButton.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        lastButton.setForeground(new Color(255, 255, 255));
-        lastButton.setText(">>");
-        lastButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                lastButtonActionPerformed(evt);
-            }
-        });
-
-        buttonPanel.add(lastButton);
-
-
         
         mainPanel.setBackground(new Color(255, 255, 255));
         mainPanel.setPreferredSize(new Dimension(900, 650));
         mainPanel.setLayout(new BorderLayout(10, 10));
         mainPanel.add(topPanel, BorderLayout.NORTH);
         mainPanel.add(productTableScrollPane, BorderLayout.CENTER);
-        mainPanel.add(buttonPanel, BorderLayout.SOUTH);
 
 
         // setup layout
@@ -476,40 +415,6 @@ public class ProdmaFrame extends JPanel implements Header.searchListener{
                 }
             }
         }
-    }
-
-    private void firstButtonActionPerformed(ActionEvent evt) {
-        position = 0;
-        productTable.setRowSelectionInterval(position, position);
-        moveScrollBar();
-    }
-
-    private void previousButtonActionPerformed(ActionEvent evt) {
-        position--;
-        if (position < 0)
-            position = 0;
-        productTable.setRowSelectionInterval(position, position);
-        moveScrollBar();
-    }
-
-    private void nextButtonActionPerformed(ActionEvent evt) {
-        position++;
-        if (position > products.size() - 1)
-            position = products.size() - 1;
-        productTable.setRowSelectionInterval(position, position);
-        moveScrollBar();
-    }
-
-    private void lastButtonActionPerformed(ActionEvent evt) {
-        position = products.size() - 1;
-        productTable.setRowSelectionInterval(position, position);
-        moveScrollBar();
-    }
-
-    private void moveScrollBar(){
-        SwingUtilities.invokeLater(()->{
-            productTable.scrollRectToVisible(productTable.getCellRect(position,0,true));
-        });
     }
 
     public void refreshProducts() {

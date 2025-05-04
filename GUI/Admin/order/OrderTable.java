@@ -1,6 +1,7 @@
 package GUI.Admin.order;
 
 import DTO.Order_DTO;
+import DTO.NhanVien_DTO;
 import DTO.OrderDetail_DTO;
 import GUI.Admin.component.Header;
 import java.awt.event.*;
@@ -23,7 +24,7 @@ public class OrderTable extends javax.swing.JPanel implements Header.searchListe
     private ArrayList<OrderDetail_DTO> orderDetailList = new ArrayList<>();
     private DonHang_BLL DonHang_BLL = new DonHang_BLL();
 
-    public OrderTable() {
+    public OrderTable(NhanVien_DTO nv) {
         initComponents();
         setLayout(null);
         setBounds(0,0, 900, 650);
@@ -81,7 +82,7 @@ public class OrderTable extends javax.swing.JPanel implements Header.searchListe
         DonHang_BLL.LoadDataToTabel(tableModel, orderList, orderDetailList);
         // Cột "Tác vụ" có 3 nút "Xác nhận" "Chi tiết" và "Xóa"
         table.getColumn("Tác vụ").setCellRenderer(new NutGiaoDien_BLL("order",orderList));
-        table.getColumn("Tác vụ").setCellEditor(new NutSuKien_BLL(this, tableModel));
+        table.getColumn("Tác vụ").setCellEditor(new NutSuKien_BLL(this, tableModel, nv));
         table.getColumnModel().getColumn(0).setPreferredWidth(100); // Mã đơn hàng
         table.getColumnModel().getColumn(1).setPreferredWidth(150); // Tên khách hàng
         table.getColumnModel().getColumn(2).setPreferredWidth(100); // Tình trạng

@@ -47,34 +47,37 @@ public class Menu extends JPanel {
         listMenu1.addItem(new Model_Menu("8", "Staff", Model_Menu.MenuType.MENU));
         listMenu1.addItem(new Model_Menu("2", "Customer", Model_Menu.MenuType.MENU));
         listMenu1.addItem(new Model_Menu("5", "Order", Model_Menu.MenuType.MENU));
+        listMenu1.addItem(new Model_Menu("7", "Supplier", Model_Menu.MenuType.MENU));
+        listMenu1.addItem(new Model_Menu("9", "History", Model_Menu.MenuType.MENU));
         listMenu1.addItem(new Model_Menu("", " ", Model_Menu.MenuType.EMPTY));
 
         listMenu1.addItem(new Model_Menu("", "Pofile", Model_Menu.MenuType.TITLE));
         listMenu1.addItem(new Model_Menu("", " ", Model_Menu.MenuType.EMPTY));
-        listMenu1.addItem(new Model_Menu("7", "User", Model_Menu.MenuType.MENU));
+        listMenu1.addItem(new Model_Menu("8", "User", Model_Menu.MenuType.MENU));
         listMenu1.addItem(new Model_Menu("4", "Logout", Model_Menu.MenuType.MENU));
         listMenu1.addItem(new Model_Menu("", "", Model_Menu.MenuType.EMPTY));
         listMenu1.setSelectedIndex(0);
+        
       // Thêm sự kiện xử lý riêng cho User & Logout
-        listMenu1.addEventMenuSelected(new MenuSelectedListener() {
-            @Override
-            public void menuSelected(int index) {
-                if (index == 8) {  // "User"
-                    Main mainFrame = (Main) SwingUtilities.getWindowAncestor(Menu.this);
-                    mainFrame.setMainPanel(new ProfilePanel());
-                } else if (index == 9) {  // "Logout"
-                    helper.CurrentUser.nhanVien = null;
-                    new GUI.Login.LoginForm().setVisible(true);
-                    Window w = SwingUtilities.getWindowAncestor(Menu.this);
-                    if (w != null) w.dispose();
-                }
+        // listMenu1.addEventMenuSelected(new MenuSelectedListener() {
+        //     @Override
+        //     public void menuSelected(int index) {
+        //         if (index == 8) {  // "User"
+        //             Main mainFrame = (Main) SwingUtilities.getWindowAncestor(Menu.this);
+        //             mainFrame.setMainPanel(new ProfilePanel());
+        //         } else if (index == 9) {  // "Logout"
+        //             helper.CurrentUser.nhanVien = null;
+        //             new GUI.Login.LoginForm().setVisible(true);
+        //             Window w = SwingUtilities.getWindowAncestor(Menu.this);
+        //             if (w != null) w.dispose();
+        //         }
 
-                // Gọi sự kiện gốc nếu có
-                if (event != null) {
-                    event.menuSelected(index);
-                }
-            }
-        });
+        //         // Gọi sự kiện gốc nếu có
+        //         if (event != null) {
+        //             event.menuSelected(index);
+        //         }
+        //     }
+        // });
     }
 
     private void initComponents() {

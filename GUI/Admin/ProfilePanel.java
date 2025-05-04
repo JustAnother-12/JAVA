@@ -11,12 +11,14 @@ import DTO.NhanVien_DTO;
 import helper.CurrentUser;
 
 public class ProfilePanel extends JPanel {
+    public NhanVien_DTO nv;
+
     public ProfilePanel() {
         setLayout(new GridLayout(6, 1, 10, 10));
         setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         setBackground(Color.WHITE);
 
-        NhanVien_DTO nv = CurrentUser.nhanVien;
+        nv = CurrentUser.nhanVien;
 
         if (nv != null) {
             add(new JLabel("Mã nhân viên: " + nv.getManv()));

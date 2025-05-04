@@ -40,6 +40,7 @@ public class NutSuKien_BLL implements TableCellEditor {
     private HistoryTable importList;
     public enum FormType { STAFF, CUSTOMER ,ORDER,SUPPLIER,IMPORT}
     private FormType formType;
+    private NhanVien_DTO nv;
 
     public NutSuKien_BLL(NhanVienTable staffList,DefaultTableModel tableModel) {
         this(staffList, null, null,null ,null,FormType.STAFF,tableModel);
@@ -48,8 +49,9 @@ public class NutSuKien_BLL implements TableCellEditor {
     public NutSuKien_BLL(CustomerTable customerList,DefaultTableModel tableModel) {
         this(null, customerList, null,null, null,FormType.CUSTOMER,tableModel);
     }
-    public NutSuKien_BLL(OrderTable orderList,DefaultTableModel tableModel) {
+    public NutSuKien_BLL(OrderTable orderList,DefaultTableModel tableModel, NhanVien_DTO nv) {
         this(null, null, orderList,null, null,FormType.ORDER,tableModel);
+        this.nv = nv;
     }
     public NutSuKien_BLL(SupplierTable supplierList, DefaultTableModel tableModel) {
     this(null, null, null, supplierList,null, FormType.SUPPLIER, tableModel);
@@ -63,7 +65,7 @@ public NutSuKien_BLL(NhanVienTable accountList, CustomerTable customerList,Order
     panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 5));
     btnDetail = new JButton("Chi tiết");
     btnDelete = new JButton("Xóa");
-    btnConfirm = new JButton("Xác nhận");
+    btnConfirm = new JButton("Xử lý");
     this.staffList = accountList;
     this.customerList = customerList;
     this.orderList = orderList;
@@ -87,11 +89,7 @@ public NutSuKien_BLL(NhanVienTable accountList, CustomerTable customerList,Order
         }
     });
     btnConfirm.addActionListener(e -> {
-        try {
-            confirmOrder(tableModel);
-        } catch (SQLException e1) {
-            e1.printStackTrace();
-        }
+       Choice(tableModel);
     });
 }
 
@@ -147,7 +145,7 @@ public NutSuKien_BLL(NhanVienTable accountList, CustomerTable customerList,Order
         String tableName = table.getName();
         if ("customer".equals(tableName) || "staff".equals(tableName) || "supplier".equals(tableName) || "import".equals(tableName)) 
             return "Chi tiết   Xóa";
-        return "Xác nhận   Chi tiết   Xóa";
+        return "Xử lý   Chi tiết   Xóa";
     }
 
     private void showDetailDialog(String title, String message) {
@@ -158,6 +156,30 @@ public NutSuKien_BLL(NhanVienTable accountList, CustomerTable customerList,Order
         textArea.setWrapStyleWord(true);
         
         JOptionPane.showMessageDialog(null, new JScrollPane(textArea), title, JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    private void Choice(DefaultTableModel tableModel){
+        int choice = JOptionPane.showOptionDialog(null, 
+                                        "Hãy chọn tác vụ", 
+                                        "Xử lý", 
+                                        JOptionPane.YES_NO_OPTION, 
+                                        JOptionPane.INFORMATION_MESSAGE, 
+                                        null, 
+                                        new Object[] {"Xác nhận","Hủy"}, null);
+        if(choice == 0){
+            try {
+                confirmOrder(tableModel);
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
+        }
+        else if(choice == 1){
+            try {
+                cancelOrder(tableModel);
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
+        }
     }
 
     private void showDetail() throws ParseException {
@@ -262,6 +284,89 @@ public NutSuKien_BLL(NhanVienTable accountList, CustomerTable customerList,Order
             }
         }
     }
+    private void cancelOrder(DefaultTableModel tableModel) throws SQLException {
+        if (table == null || selectedRow < 0 || formType != FormType.ORDER || orderList == null) {
+            JOptionPane.showMessageDialog(panel, "Không thể hủy đơn hàng. Dữ liệu không hợp lệ.");
+            return;
+        }
+    
+        String id = table.getValueAt(selectedRow, 0).toString();
+        int confirm = JOptionPane.showConfirmDialog(panel, "Bạn có chắc chắn muốn hủy đơn hàng này?", "Hủy", JOptionPane.YES_NO_OPTION);
+    
+        if (confirm == JOptionPane.YES_OPTION) {
+            DonHang_BLL temp = new DonHang_BLL();
+            String isConfirmed = temp.cancelOrder(id, nv.getManv());
+            System.out.println(isConfirmed);
+    
+            if ("Hủy đơn hàng thành công!".equals(isConfirmed)) {
+                orderList.getOrderList().clear();
+                orderList.getOrderDetailList().clear();
+    
+                int columnIndex = -1;
+                try {
+                    columnIndex = table.getColumnModel().getColumnIndex("Tác vụ");
+                } catch (IllegalArgumentException e) {
+                    columnIndex = -1;
+                }
+    
+                DefaultTableModel newTableModel = new DefaultTableModel();
+                for (int i = 0; i < tableModel.getColumnCount(); i++) {
+                    if (i != columnIndex) {
+                        newTableModel.addColumn(tableModel.getColumnName(i));
+                    }
+                }
+                for (int row = 0; row < tableModel.getRowCount(); row++) {
+                    Object[] rowData = new Object[newTableModel.getColumnCount()];
+                    int newColIndex = 0;
+                    for (int i = 0; i < tableModel.getColumnCount(); i++) {
+                        if (i != columnIndex) {
+                            rowData[newColIndex++] = tableModel.getValueAt(row, i);
+                        }
+                    }
+                    newTableModel.addRow(rowData);
+                }
+    
+                table.setModel(newTableModel);
+                tableModel = newTableModel;
+    
+                // Xoá toàn bộ dữ liệu bảng cũ
+                tableModel.setRowCount(0);
+    
+                // Load lại dữ liệu
+                temp.LoadDataToTabel(tableModel, orderList.getOrderList(), orderList.getOrderDetailList());
+    
+                // Thêm lại cột "Tác vụ"
+                tableModel.addColumn("Tác vụ");
+                for (int i = 0; i < tableModel.getRowCount(); i++) {
+                    tableModel.setValueAt("Tác vụ", i, tableModel.getColumnCount() - 1);
+                }
+    
+                // Cập nhật lại renderer & editor
+                table.getColumn("Tác vụ").setCellRenderer(new NutGiaoDien_BLL("order", orderList.getOrderList()));
+                table.getColumn("Tác vụ").setCellEditor(new NutSuKien_BLL(orderList, tableModel, nv));
+    
+                // Cập nhật lại kích thước cột
+                table.getColumnModel().getColumn(0).setPreferredWidth(100);
+                table.getColumnModel().getColumn(1).setPreferredWidth(150);
+                table.getColumnModel().getColumn(2).setPreferredWidth(100);
+                table.getColumnModel().getColumn(3).setPreferredWidth(100);
+                table.getColumnModel().getColumn(4).setPreferredWidth(100);
+                table.getColumnModel().getColumn(5).setPreferredWidth(250);
+    
+                table.setDefaultEditor(Object.class, null);
+    
+                if (table.getCellEditor() != null) {
+                    table.getCellEditor().stopCellEditing();
+                }
+    
+                JOptionPane.showMessageDialog(panel, "Hủy đơn hàng thành công!");
+            } else {
+                JOptionPane.showMessageDialog(panel, "Hủy đơn hàng không thành công.");
+            }
+        }
+    }
+
+
     private void confirmOrder(DefaultTableModel tableModel) throws SQLException {
         if (table == null || selectedRow < 0 || formType != FormType.ORDER || orderList == null) {
             JOptionPane.showMessageDialog(panel, "Không thể xác nhận đơn hàng. Dữ liệu không hợp lệ.");
@@ -273,7 +378,7 @@ public NutSuKien_BLL(NhanVienTable accountList, CustomerTable customerList,Order
     
         if (confirm == JOptionPane.YES_OPTION) {
             DonHang_BLL temp = new DonHang_BLL();
-            String isConfirmed = temp.confirmOrder(id);
+            String isConfirmed = temp.confirmOrder(id, nv.getManv());
     
             if ("Duyệt đơn hàng thành công!".equals(isConfirmed)) {
                 orderList.getOrderList().clear();
@@ -320,7 +425,7 @@ public NutSuKien_BLL(NhanVienTable accountList, CustomerTable customerList,Order
     
                 // Cập nhật lại renderer & editor
                 table.getColumn("Tác vụ").setCellRenderer(new NutGiaoDien_BLL("order", orderList.getOrderList()));
-                table.getColumn("Tác vụ").setCellEditor(new NutSuKien_BLL(orderList, tableModel));
+                table.getColumn("Tác vụ").setCellEditor(new NutSuKien_BLL(orderList, tableModel, nv));
     
                 // Cập nhật lại kích thước cột
                 table.getColumnModel().getColumn(0).setPreferredWidth(100);

@@ -13,88 +13,67 @@ import GUI.Admin.swing.FormatDate_BLL;
 public class Order_DAO {
     private Connection con;
 
-    // public boolean OpenConnection() {
-    //     try {
-    //         Class.forName("com.mysql.cj.jdbc.Driver");
-    //         con = DriverManager.getConnection("jdbc:mysql://localhost:3306/ban_van_phong_pham", "root", "");
-    //         return true;
-    //     } catch (ClassNotFoundException | SQLException e) {
-    //         System.out.println(e.getMessage());
-    //         return false;
-    //     }
-    // }
-
-    // public void closeConnection() {
-    //     try {
-    //         if (con != null){
-    //             con.close();
-    //         }
-    //     }catch (SQLException e){
-    //         System.out.println(e.getMessage());
-    //     }
-    // }
-
     public void loadDataFormDatabase(DefaultTableModel tableModel, ArrayList<Order_DTO> orderList, ArrayList<OrderDetail_DTO> orderDetailList) {
         con = DatabaseConnection.OpenConnection();
         if(con != null){
-        try {
-            String query = "SELECT d.madonhang, d.diachidat, d.ngaydat, d.tinhtrang, d.tongtien, d.manv, d.makh, ct.masp, ct.soluong, ct.dongia, ct.thanhtien FROM DONHANG d JOIN CHITIETDONHANG ct ON d.madonhang = ct.madonhang";
-            PreparedStatement pstmt = con.prepareStatement(query);
-            ResultSet rs = pstmt.executeQuery();
+            try {
+                String query = "SELECT d.madonhang, d.diachidat, d.ngaydat, d.tinhtrang, d.tongtien, d.manv, d.makh, ct.masp, ct.soluong, ct.dongia, ct.thanhtien FROM DONHANG d JOIN CHITIETDONHANG ct ON d.madonhang = ct.madonhang";
+                PreparedStatement pstmt = con.prepareStatement(query);
+                ResultSet rs = pstmt.executeQuery();
 
-            Set<String> addedOrderIds = new HashSet<>();
+                Set<String> addedOrderIds = new HashSet<>();
 
-            while (rs.next()) {
-                // Lấy dữ liệu đơn hàng
-                String madonhang = rs.getString("madonhang");
-                String diachidat = rs.getString("diachidat");
-                String ngaydat = rs.getString("ngaydat");
-                String tinhtrang = rs.getString("tinhtrang");
-                double tongtien = rs.getDouble("tongtien");
-                String manv = rs.getString("manv");
-                String makh = rs.getString("makh");
+                while (rs.next()) {
+                    // Lấy dữ liệu đơn hàng
+                    String madonhang = rs.getString("madonhang");
+                    String diachidat = rs.getString("diachidat");
+                    String ngaydat = rs.getString("ngaydat");
+                    String tinhtrang = rs.getString("tinhtrang");
+                    double tongtien = rs.getDouble("tongtien");
+                    String manv = rs.getString("manv");
+                    String makh = rs.getString("makh");
 
-                // Chỉ thêm vào orderList 1 lần
-                if (!addedOrderIds.contains(madonhang)) {
-                    String tenkh = "";
-                    String queryFindUser = "SELECT tenkh FROM KHACHHANG WHERE makh = ?";
-                    try (PreparedStatement findName = con.prepareStatement(queryFindUser)) {
-                        findName.setString(1, makh);
-                        ResultSet rsTenKH = findName.executeQuery();
-                        if (rsTenKH.next()) {
-                            tenkh = rsTenKH.getString("tenkh");
+                    // Chỉ thêm vào orderList 1 lần
+                    if (!addedOrderIds.contains(madonhang)) {
+                        String tenkh = "";
+                        String queryFindUser = "SELECT tenkh FROM KHACHHANG WHERE makh = ?";
+                        try (PreparedStatement findName = con.prepareStatement(queryFindUser)) {
+                            findName.setString(1, makh);
+                            ResultSet rsTenKH = findName.executeQuery();
+                            if (rsTenKH.next()) {
+                                tenkh = rsTenKH.getString("tenkh");
+                            }
                         }
+
+                        // Tạo đối tượng Order và thêm vào danh sách
+                        Order_DTO order = new Order_DTO(madonhang, diachidat, ngaydat, tinhtrang, tongtien, manv, makh);
+                        orderList.add(order);
+
+                        // Hiển thị lên bảng (chỉ 1 lần)
+                        FormatDate_BLL temp = new FormatDate_BLL();
+                        String Date = temp.convertDateFormat(ngaydat);
+                        tableModel.addRow(new Object[]{madonhang, tenkh, tinhtrang, Date, tongtien, "Tác vụ"});
+
+                        addedOrderIds.add(madonhang);
                     }
 
-                    // Tạo đối tượng Order và thêm vào danh sách
-                    Order_DTO order = new Order_DTO(madonhang, diachidat, ngaydat, tinhtrang, tongtien, manv, makh);
-                    orderList.add(order);
+                    // Dữ liệu chi tiết đơn hàng
+                    String masp = rs.getString("masp");
+                    int soluong = rs.getInt("soluong");
+                    double dongia = rs.getDouble("dongia");
+                    double thanhtien = rs.getDouble("thanhtien");
 
-                    // Hiển thị lên bảng (chỉ 1 lần)
-                    FormatDate_BLL temp = new FormatDate_BLL();
-                    String Date = temp.convertDateFormat(ngaydat);
-                    tableModel.addRow(new Object[]{madonhang, tenkh, tinhtrang, Date, tongtien, "Tác vụ"});
-
-                    addedOrderIds.add(madonhang);
+                    // Thêm chi tiết
+                    OrderDetail_DTO detail = new OrderDetail_DTO(madonhang, masp, soluong, dongia, thanhtien);
+                    orderDetailList.add(detail);
                 }
-
-                // Dữ liệu chi tiết đơn hàng
-                String masp = rs.getString("masp");
-                int soluong = rs.getInt("soluong");
-                double dongia = rs.getDouble("dongia");
-                double thanhtien = rs.getDouble("thanhtien");
-
-                // Thêm chi tiết
-                OrderDetail_DTO detail = new OrderDetail_DTO(madonhang, masp, soluong, dongia, thanhtien);
-                orderDetailList.add(detail);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+            finally{
+                DatabaseConnection.closeConnection(con);
+            }
         }
-        finally{
-            DatabaseConnection.closeConnection(con);
-        }
-    }
 }
 
 
@@ -185,13 +164,37 @@ public class Order_DAO {
         return arr;
     }
 
-    public boolean ConfirmOrder(String id){
+    public boolean CancelOrder(String id, String nvid){
         con = DatabaseConnection.OpenConnection();
         if (con != null){
             try{
-                String query = "Update donhang set tinhtrang = 'Đã xử lý' where madonhang = ?";
+                String query = "UPDATE DONHANG "+
+                                "SET tinhtrang = 'Đã hủy', manv = ? "+
+                                "WHERE madonhang = ?";
                 PreparedStatement stmt = con.prepareStatement(query);
-                stmt.setString(1,id);
+                stmt.setString(1,nvid);
+                stmt.setString(2, id);
+                if (stmt.executeUpdate()>=1)
+                    return true;
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            } finally{
+                DatabaseConnection.closeConnection(con);
+            }
+        }
+        return false;
+    }
+
+    public boolean ConfirmOrder(String id, String nvid){
+        con = DatabaseConnection.OpenConnection();
+        if (con != null){
+            try{
+                String query = "UPDATE DONHANG "+
+                                "SET tinhtrang = 'Đã xử lý', manv = ? "+
+                                "WHERE madonhang = ?";
+                PreparedStatement stmt = con.prepareStatement(query);
+                stmt.setString(1,nvid);
+                stmt.setString(2, id);
                 if (stmt.executeUpdate()>=1)
                     return true;
             } catch (SQLException e) {

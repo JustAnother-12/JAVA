@@ -2,12 +2,10 @@ package GUI.Admin.order;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.sql.*;
 import java.util.ArrayList;
 import javax.swing.*;
 
 import BLL.DonHang_BLL;
-import DAO.DatabaseConnection;
 import DTO.Order_DTO;
 import DTO.OrderDetail_DTO;
 
