@@ -51,7 +51,7 @@ public class Menu extends JPanel {
         listMenu1.addItem(new Model_Menu("9", "History", Model_Menu.MenuType.MENU));
         listMenu1.addItem(new Model_Menu("", " ", Model_Menu.MenuType.EMPTY));
 
-        listMenu1.addItem(new Model_Menu("", "Pofile", Model_Menu.MenuType.TITLE));
+        listMenu1.addItem(new Model_Menu("", "Profile", Model_Menu.MenuType.TITLE));
         listMenu1.addItem(new Model_Menu("", " ", Model_Menu.MenuType.EMPTY));
         listMenu1.addItem(new Model_Menu("8", "User", Model_Menu.MenuType.MENU));
         listMenu1.addItem(new Model_Menu("4", "Logout", Model_Menu.MenuType.MENU));

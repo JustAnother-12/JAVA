@@ -7,10 +7,30 @@ import java.util.ArrayList;
 public class NhaCungCap_DAO {
     private Connection con;
 
+    public String getLastestNCCID(){
+        String latestID = "";
+        con = DatabaseConnection.OpenConnection();
+        if (con != null){
+            try {
+                String sql = "SELECT mancc FROM NHACUNGCAP ORDER BY mancc DESC LIMIT 1";
+                PreparedStatement stmt = con.prepareStatement(sql);
+                ResultSet rs = stmt.executeQuery();
+                if (rs.next()) {
+                    latestID = rs.getString("mancc");
+                }
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            } finally{
+                DatabaseConnection.closeConnection(con);
+            }
+        }
+        return latestID;
+    }
+
     public String getNextNCCID(Connection con){
         String latestID = "";
         try {
-            String sql = "SELECT masp FROM NHACUNGCAP ORDER BY mancc DESC LIMIT 1";
+            String sql = "SELECT mancc FROM NHACUNGCAP ORDER BY mancc DESC LIMIT 1";
             PreparedStatement stmt = con.prepareStatement(sql);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
@@ -25,7 +45,7 @@ public class NhaCungCap_DAO {
 
         int number = Integer.parseInt(numberic);
         number++;
-        String nextnumberic = String.format("%03d", number);
+        String nextnumberic = String.format("%02d", number);
         return (prefix+nextnumberic).replace(" ", ""); 
     }
 
@@ -174,7 +194,7 @@ public class NhaCungCap_DAO {
             try {
                 String sql = "INSERT INTO NHACUNGCAP(mancc, tenncc, sdt, email) VALUES (?, ?, ?, ?)";
                 PreparedStatement stmt = con.prepareStatement(sql);
-                stmt.setString(1, ncc.getMaNCC());
+                stmt.setString(1, getNextNCCID(con));
                 stmt.setString(2, ncc.getTenNCC());
                 stmt.setString(3, ncc.getSdtNCC());
                 stmt.setString(4, ncc.getEmailNCC());
@@ -222,7 +242,9 @@ public class NhaCungCap_DAO {
                 PreparedStatement stmt = con.prepareStatement(sql);
                 stmt.setString(1, maNCC);
 
-                result = stmt.executeUpdate() > 0;
+                if(stmt.executeUpdate() > 0){
+                    result = true;
+                }
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
             } finally {
