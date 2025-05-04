@@ -58,7 +58,7 @@ public class NhanVien_DAO extends javax.swing.JPanel {
                 }
         } catch (Exception e) {}
     }
-    public void deleteStaff(String id, DefaultTableModel tableModel,ArrayList<NhanVien_DTO> staffList) {
+    public boolean deleteStaff(String id, DefaultTableModel tableModel,ArrayList<NhanVien_DTO> staffList) {
         try (Connection conn = DatabaseConnection.getConnection()) {
                 String checkQuery = "SELECT COUNT(*) FROM NHANVIEN WHERE manv = ?";
                 PreparedStatement checkStmt = conn.prepareStatement(checkQuery);
@@ -74,7 +74,7 @@ public class NhanVien_DAO extends javax.swing.JPanel {
                 } else {
                     // Nếu không tìm thấy ID trong cả hai bảng
                     JOptionPane.showMessageDialog(this, "Không tìm thấy tài khoản với ID: " + id, "Lỗi", JOptionPane.ERROR_MESSAGE);
-                    return;
+                    return false;
                 }
             // Cập nhật lại bảng
             //loadDataFormDatabase(tableModel, staffList);
@@ -82,6 +82,7 @@ public class NhanVien_DAO extends javax.swing.JPanel {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Lỗi khi xóa tài khoản: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
+        return false;
     }
     public NhanVien_DTO getDataOfStaff(NhanVien_DTO nv) {
         NhanVien_DTO a = null; // Khởi tạo a với giá trị null

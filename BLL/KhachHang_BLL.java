@@ -1,18 +1,21 @@
 package BLL;
 
-import DTO.KhachHang_DTO;
-import GUI.Admin.swing.CheckFailInput_BLL;
-import DAO.KhachHang_DAO;
-import DAO.NhanVien_DAO;
-
-import java.util.ArrayList;
-import javax.swing.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.sql.SQLException;
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import javax.swing.JComboBox;
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
+
+import DAO.KhachHang_DAO;
+import DAO.NhanVien_DAO;
+import DTO.KhachHang_DTO;
+import GUI.Admin.swing.CheckFailInput_BLL;
 
 public class KhachHang_BLL extends JDialog{
     KhachHang_DAO khachhangDao = new KhachHang_DAO();
@@ -68,17 +71,17 @@ public class KhachHang_BLL extends JDialog{
         if (checkFailInput_BLL.validateFields(isCustomer, txtName, txtPhone, txtUsername, txtAddress, txtBirthday, txtEmail, null, null)) {
             try {
                 
-                if (KhachHang_DAO.isCustomerPhoneExist(txtPhone.getText(), kh.getUsername())) {
+                if (KhachHang_DAO.isCustomerPhoneExist(null, txtPhone.getText(), kh.getUsername())) {
                     JOptionPane.showMessageDialog(null, "Số điện thoại đã tồn tại!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
                     return false;
                 }
 
-                if (KhachHang_DAO.isCustomerEmailExist(txtEmail.getText(), kh.getUsername())) {
+                if (KhachHang_DAO.isCustomerEmailExist(null, txtEmail.getText(), kh.getUsername())) {
                     JOptionPane.showMessageDialog(null, "Email đã tồn tại!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
                     return false;
                 }
 
-                if (!txtUsername.getText().equals(kh.getUsername()) && KhachHang_DAO.isCustomerUsernameExist(txtUsername.getText())) {
+                if (!txtUsername.getText().equals(kh.getUsername()) && KhachHang_DAO.isCustomerUsernameExist(null, txtUsername.getText())) {
                     JOptionPane.showMessageDialog(null, "Username đã tồn tại!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
                     return false;
                 }
