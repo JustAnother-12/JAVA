@@ -2,6 +2,8 @@ package BLL;
 
 import DTO.PhieuNhap_DTO;
 import DTO.ChiTietPhieuNhap_DTO;
+import DAO.NhaCungCap_DAO;
+import DAO.NhanVien_DAO;
 import DAO.PhieuNhap_DAO;
 import java.util.ArrayList;
 
@@ -41,14 +43,17 @@ public class PhieuNhap_BLL {
     
     public void loadToTable(DefaultTableModel model, ArrayList<PhieuNhap_DTO> list) {
         list.clear();
-        list.addAll(new PhieuNhap_DAO().getAllPhieuNhap());
-
+         list.addAll(pnDAO.getAllPhieuNhap());
+        NhanVien_DAO nvDAO = new NhanVien_DAO();
+        NhaCungCap_DAO nccDAO = new NhaCungCap_DAO();
         model.setRowCount(0);
         for (PhieuNhap_DTO pn : list) {
+            String tenNV = nvDAO.getTenNhanVien(pn.getMaNV());
+            String tenNCC = nccDAO.getTenNCC(pn.getMaNCC());
             model.addRow(new Object[]{
                 pn.getMaPN(),
-                pn.getMaNCC(),
-                pn.getMaNV(),
+                tenNCC,
+                tenNV,
                 pn.getNgayNhap(),
                 "Chi tiết | Sửa | Xoá"
             });
