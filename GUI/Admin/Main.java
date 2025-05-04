@@ -72,26 +72,26 @@ public class Main extends JFrame {
                         header.setVisible(true);
                         break;
                     case 2:
+                        setForm("Suppliers", supplierForm);
+                        header.setSearchListener(supplierForm);
+                        header.getjLabel2().setIcon(new ImageIcon(getClass().getResource("/GUI/Admin/icon/none.jpg")));
+                        header.setVisible(true);
+                        break;
+                    case 3:
                         setForm("Account", accountForm);
                         header.setSearchListener(accountForm);
                         header.getjLabel2().setIcon(new ImageIcon(getClass().getResource("/GUI/Admin/icon/menu.png")));
                         header.setVisible(true);
                         break;
-                    case 3:
+                    case 4:
                         setForm("Customer", customerForm);
                         header.setSearchListener(customerForm);
                         header.getjLabel2().setIcon(new ImageIcon(getClass().getResource("/GUI/Admin/icon/none.jpg")));
                         header.setVisible(true);
                         break;
-                    case 4:
+                    case 5:
                         setForm("Order", orderForm);
                         header.setSearchListener(orderForm);
-                        header.getjLabel2().setIcon(new ImageIcon(getClass().getResource("/GUI/Admin/icon/none.jpg")));
-                        header.setVisible(true);
-                        break;
-                    case 5:
-                        setForm("Suppliers", supplierForm);
-                        header.setSearchListener(supplierForm);
                         header.getjLabel2().setIcon(new ImageIcon(getClass().getResource("/GUI/Admin/icon/none.jpg")));
                         header.setVisible(true);
                         break; 

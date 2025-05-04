@@ -81,7 +81,7 @@ public class KhachHang_DAO {
                     String idkh = rs.getString("makh");
                     String ten = rs.getString("tenkh");
                     String sdt = rs.getString("sdt");
-                    String gioitinh = rs.getString("gioi");
+                    String gioitinh = rs.getString("gioitinh");
                     String emailkh = rs.getString("email");
                     String date = rs.getString("ngaysinh");
                     String diachi = rs.getString("diachikh");

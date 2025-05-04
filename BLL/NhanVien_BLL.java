@@ -111,6 +111,10 @@ public class NhanVien_BLL extends JDialog{
         }
     }
 
+    public NhanVien_DTO getDataOfStaff(NhanVien_DTO nv){
+        return NhanVien_DAO.getDataOfStaff(nv);
+    }
+
     public NhanVien_DTO checkLogin(String username, String password){
         return NhanVien_DAO.checkLogin(username,password);
     }

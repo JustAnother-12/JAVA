@@ -26,8 +26,8 @@ public class ChiTietNhanVien extends JDialog {
         setTitle("Chi tiết Khách Hàng");
         setSize(400, 400);
         setLayout(new GridLayout(8, 2));
-        KhachHang_DAO a = new KhachHang_DAO();
-        KhachHang_DTO b = a.getKhachHangfromID(kh.getId_KhachHang());
+        KhachHang_BLL a = new KhachHang_BLL();
+        KhachHang_DTO b = a.getKhachHangFromID(kh.getId_KhachHang());
         // Tạo các trường nhập liệu cho khách hàng
         txtName = new JTextField(b.getTen_KhachHang());
         txtPhone = new JTextField(b.getSdt_KhachHang());
@@ -96,7 +96,7 @@ public class ChiTietNhanVien extends JDialog {
         setTitle("Chi tiết Nhân Viên");
         setSize(400, 400);
         setLayout(new GridLayout(9, 2));
-        NhanVien_DAO a = new NhanVien_DAO();
+        NhanVien_BLL a = new NhanVien_BLL();
         NhanVien_DTO b = a.getDataOfStaff(nv);
         // Tạo các trường nhập liệu cho nhân viên
         txtName = new JTextField(b.getTennv());
