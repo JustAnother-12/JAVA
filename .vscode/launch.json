@@ -8,6 +8,12 @@
             "type": "java",
             "name": "LoginForm",
             "request": "launch",
+            "mainClass": "GUI.Login.LoginForm"
+        },
+        {
+            "type": "java",
+            "name": "LoginForm",
+            "request": "launch",
             "mainClass": "GUI.Login.LoginForm",
             "projectName": "JAVA_1c7fabf8"
         },

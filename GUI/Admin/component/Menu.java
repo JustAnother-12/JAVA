@@ -16,13 +16,16 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 import DTO.Model_Menu;
+import DTO.NhanVien_DTO;
 import GUI.Admin.Main;
 import GUI.Admin.ProfilePanel;
 import GUI.Admin.swing.ListMenu;
 import GUI.Admin.swing.MenuSelectedListener;
+import helper.CurrentUser;
 
 
 public class Menu extends JPanel {
+    private NhanVien_DTO nv;
     private javax.swing.JLabel jLabel1;
     private ListMenu<String> listMenu1;
     private javax.swing.JPanel panelMoving;
@@ -40,14 +43,23 @@ public class Menu extends JPanel {
         this.event = event;
         listMenu1.addEventMenuSelected(event);
     }
- 
     private void init() {
-        listMenu1.addItem(new Model_Menu("1", "Dashboard", Model_Menu.MenuType.MENU));
-        listMenu1.addItem(new Model_Menu("3", "Product", Model_Menu.MenuType.MENU));
-        listMenu1.addItem(new Model_Menu("8", "Staff", Model_Menu.MenuType.MENU));
-        listMenu1.addItem(new Model_Menu("2", "Customer", Model_Menu.MenuType.MENU));
-        listMenu1.addItem(new Model_Menu("5", "Order", Model_Menu.MenuType.MENU));
-        listMenu1.addItem(new Model_Menu("7", "Supplier", Model_Menu.MenuType.MENU));
+        nv = CurrentUser.nhanVien;
+        if(nv != null) {
+            listMenu1.addItem(new Model_Menu("1", "Dashboard", Model_Menu.MenuType.MENU));
+            if( nv.getChucvu() == "Quản lý kho") {
+                listMenu1.addItem(new Model_Menu("3", "Product", Model_Menu.MenuType.MENU));
+                listMenu1.addItem(new Model_Menu("7", "Supplier", Model_Menu.MenuType.MENU));
+            }
+            if( nv.getChucvu().equals("Quản lý nhân viên")) {
+                listMenu1.addItem(new Model_Menu("8", "Staff", Model_Menu.MenuType.MENU));
+            }
+            if( nv.getChucvu().equals("Quản lý khách hàng")) {   
+                listMenu1.addItem(new Model_Menu("2", "Customer", Model_Menu.MenuType.MENU));
+            }
+            if ( nv.getCCCD().equals("Quản lý đơn hàng")) {
+                listMenu1.addItem(new Model_Menu("5", "Order", Model_Menu.MenuType.MENU));
+            }
         listMenu1.addItem(new Model_Menu("9", "History", Model_Menu.MenuType.MENU));
         listMenu1.addItem(new Model_Menu("", " ", Model_Menu.MenuType.EMPTY));
 
@@ -57,7 +69,7 @@ public class Menu extends JPanel {
         listMenu1.addItem(new Model_Menu("4", "Logout", Model_Menu.MenuType.MENU));
         listMenu1.addItem(new Model_Menu("", "", Model_Menu.MenuType.EMPTY));
         listMenu1.setSelectedIndex(0);
-        
+        }
       // Thêm sự kiện xử lý riêng cho User & Logout
         // listMenu1.addEventMenuSelected(new MenuSelectedListener() {
         //     @Override

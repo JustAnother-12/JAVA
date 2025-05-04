@@ -11,6 +11,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
+import DTO.NhanVien_DTO;
 import GUI.Admin.component.Header;
 import GUI.Admin.component.Menu;
 import GUI.Admin.customer.CustomerTable;
@@ -21,6 +22,7 @@ import GUI.Admin.product.ProdmaFrame;
 import GUI.Admin.staff.NhanVienTable;
 import GUI.Admin.supplier.SupplierTable;
 import GUI.Admin.swing.MenuSelectedListener;
+import helper.CurrentUser;
 
 public class Main extends JFrame {
     NhanVienTable accountForm;
@@ -31,15 +33,13 @@ public class Main extends JFrame {
     SupplierTable supplierForm;
     HistoryTable historyForm;
     ProfilePanel profile;
-
+    NhanVien_DTO nv;
     private JPanel contentPanel;
     private Header header;
     private JPanel mainPanel;
     private Menu menu;
   
     private final JLabel placeholder = new JLabel("");
-
-
     public Main() {
         profile = new ProfilePanel();
         accountForm = new NhanVienTable();
@@ -54,10 +54,9 @@ public class Main extends JFrame {
         initComponents();
         myinit();
         menu.initMoving(Main.this);
-
+        nv = CurrentUser.nhanVien;
         setForm("DashBoard", dashboard);
         header.setVisible(false);
-
         menu.addEventMenuSelected(new MenuSelectedListener() {
             @Override
             public void menuSelected(int index) {
@@ -116,7 +115,6 @@ public class Main extends JFrame {
                 }
             }
         });
-        
     }
 
     private void setForm(String name, JComponent com) {
