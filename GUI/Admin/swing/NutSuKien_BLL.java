@@ -208,7 +208,7 @@ public NutSuKien_BLL(NhanVienTable accountList, CustomerTable customerList,Order
                 new OrderDetailForm((Order_DTO)obj, orderList.getOrderDetailList());
             }else if (obj instanceof NhaCungCap_DTO) {
                 new ChiTietNhaCungCap((NhaCungCap_DTO) obj);
-            }else if (obj instanceof ChiTietPhieuNhap_DTO) {
+            }else if (obj instanceof PhieuNhap_DTO) {
                 new ImportDetailForm((PhieuNhap_DTO) obj);
             }
             else {

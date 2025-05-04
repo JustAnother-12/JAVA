@@ -62,6 +62,18 @@ public class SupplierTable extends javax.swing.JPanel implements GUI.Admin.compo
                 themNhaCungCap();
             }
         });
+        MyButton btnSuaNCC = new MyButton("Sửa nhà cung cấp");
+        btnSuaNCC.setFont(new Font("Segoe UI", 0, 14));
+        btnSuaNCC.setBackground(new Color(255, 204, 0)); // màu khác tí
+        btnSuaNCC.setBounds(560, 0, 150, 30);
+        add(btnSuaNCC);
+
+        btnSuaNCC.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                suaNhaCungCap();
+            }
+       });
         String[] columnNames = {"ID", "Tên NCC", "SĐT", "Email", "Tác vụ"};
         tableModel = new DefaultTableModel(columnNames, 0);
         table = new JTable(tableModel);
@@ -181,13 +193,91 @@ public class SupplierTable extends javax.swing.JPanel implements GUI.Admin.compo
                 NhaCungCap_DTO ncc = new NhaCungCap_DTO("", ten, sdt, email);
                 NhaCungCap_BLL bll = new NhaCungCap_BLL();
                 if (bll.themNCC(ncc)) {
-                    javax.swing.JOptionPane.showMessageDialog(this, "Thêm thành công!");
-                    System.out.println(supplierList.size());
-                    supplierList.add(ncc);
-                    System.out.println(supplierList.size());
-                    tableModel.addRow(new Object[]{bll.getLastestNCCID(), ten, sdt, email, ""});
+                javax.swing.JOptionPane.showMessageDialog(this, "Thêm thành công!");
+
+               // Cập nhật lại dữ liệu từ DB thay vì thêm thủ công
+               supplierList.clear();
+               tableModel.setRowCount(0);
+               bll.LoadDataToTabel(tableModel, supplierList);
+
+               } else {
+               javax.swing.JOptionPane.showMessageDialog(this, "Thêm thất bại!");
+               }
+            }
+        }
+    }
+        private void suaNhaCungCap() {
+        JComboBox<String> comboBox = new JComboBox<>();
+        for (NhaCungCap_DTO ncc : supplierList) {
+            comboBox.addItem(ncc.getMaNCC());
+        }
+    
+        JTextField txtTen = new JTextField();
+        JTextField txtSdt = new JTextField();
+        JTextField txtEmail = new JTextField();
+    
+        comboBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String selectedId = (String) comboBox.getSelectedItem();
+                for (NhaCungCap_DTO ncc : supplierList) {
+                    if (ncc.getMaNCC().equals(selectedId)) {
+                        txtTen.setText(ncc.getTenNCC());
+                        txtSdt.setText(ncc.getSdtNCC());
+                        txtEmail.setText(ncc.getEmailNCC());
+                        break;
+                    }
+                }
+            }
+        });
+    
+        Object[] message = {
+            "Chọn ID NCC:", comboBox,
+            "Tên NCC:", txtTen,
+            "SĐT:", txtSdt,
+            "Email:", txtEmail
+        };
+    
+        int option = JOptionPane.showConfirmDialog(this, message, "Sửa Nhà Cung Cấp", JOptionPane.OK_CANCEL_OPTION);
+        if (option == JOptionPane.OK_OPTION) {
+            String ten = txtTen.getText().trim();
+            String sdt = txtSdt.getText().trim();
+            String email = txtEmail.getText().trim();
+            String id = (String) comboBox.getSelectedItem();
+    
+            if (ten.isEmpty() || sdt.isEmpty() || email.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin!");
+            } else {
+                if (!Pattern.matches(PHONE_PATTERN, sdt)) {
+                    JOptionPane.showMessageDialog(this, "Số điện thoại không đúng định dạng!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+    
+                if (!Pattern.matches(EMAIL_PATTERN, email)) {
+                    JOptionPane.showMessageDialog(this, "Email không đúng định dạng!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+    
+                NhaCungCap_DTO ncc = new NhaCungCap_DTO(id, ten, sdt, email);
+                NhaCungCap_BLL bll = new NhaCungCap_BLL();
+                if (bll.capNhatNCC(ncc)) {
+                    JOptionPane.showMessageDialog(this, "Cập nhật thành công!");
+    
+                    // Cập nhật trong supplierList
+                    for (int i = 0; i < supplierList.size(); i++) {
+                        if (supplierList.get(i).getMaNCC().equals(id)) {
+                            supplierList.set(i, ncc);
+                            break;
+                        }
+                    }
+    
+                    // Refresh lại bảng
+                    tableModel.setRowCount(0);
+                    for (NhaCungCap_DTO item : supplierList) {
+                        tableModel.addRow(new Object[]{item.getMaNCC(), item.getTenNCC(), item.getSdtNCC(), item.getEmailNCC(), ""});
+                    }
                 } else {
-                    javax.swing.JOptionPane.showMessageDialog(this, "Thêm thất bại!");
+                    JOptionPane.showMessageDialog(this, "Cập nhật thất bại!");
                 }
             }
         }

@@ -222,7 +222,21 @@ public class NhanVien_DAO extends javax.swing.JPanel {
         }
         return nv;
     }
-
+    public String getTenNhanVien(String manv) {
+        String tenNV = "";
+        String sql = "SELECT tennv FROM nhanvien WHERE manv = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, manv);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                tenNV = rs.getString("tennv");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return tenNV;
+    }
 
 }
 
