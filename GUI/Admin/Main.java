@@ -5,6 +5,7 @@ import javax.swing.*;
 
 import java.awt.*;
 import GUI.Admin.customer.CustomerTable;
+import GUI.Admin.dashboard.thongkeTongHop;
 import GUI.Admin.order.OrderTable;
 import GUI.Admin.product.ProdmaFrame;
 import GUI.Admin.supplier.SupplierTable;
@@ -20,13 +21,13 @@ public class Main extends JFrame {
     ProdmaFrame productForm;
     SupplierTable supplierForm;
     HistoryTable historyForm;
+    thongkeTongHop dashboard;
     
     private JPanel contentPanel;
     private Header header;
     private JPanel mainPanel;
     private Menu menu;
-    // private GUI.Admin.swing.PanelBorder panelBorder1;
-  
+    
     private final JLabel placeholder = new JLabel("");
     private JToggleButton bt1;
 
@@ -35,45 +36,63 @@ public class Main extends JFrame {
         initComponents();
         myinit();
         menu.initMoving(Main.this);
+        dashboard = new thongkeTongHop();
         accountForm = new NhanVienTable();
         customerForm = new CustomerTable();
         orderForm = new OrderTable();
         productForm = new ProdmaFrame();
         supplierForm = new SupplierTable();
         historyForm =new HistoryTable();
+
+        setForm("DashBoard", dashboard);
+        header.setVisible(false);
+
         menu.addEventMenuSelected(new MenuSelectedListener() {
             @Override
             public void menuSelected(int index) {
+                System.out.println(index);
                 switch (index) {
+                    case 0:
+                        setForm("DashBoard", dashboard);
+                        // header.setSearchListener(dashboard);
+                        // header.getjLabel2().setIcon(new ImageIcon(getClass().getResource("/GUI/Admin/icon/none.jpg")));
+                        header.setVisible(false);
+                        break;
                     case 1:
                         setForm("Product", productForm);
                         header.setSearchListener(productForm);
                         header.getjLabel2().setIcon(new ImageIcon(getClass().getResource("/GUI/Admin/icon/none.jpg")));
+                        header.setVisible(true);
                         break;
                     case 2:
                         setForm("Account", accountForm);
                         header.setSearchListener(accountForm);
                         header.getjLabel2().setIcon(new ImageIcon(getClass().getResource("/GUI/Admin/icon/menu.png")));
+                        header.setVisible(true);
                         break;
                     case 3:
                         setForm("Customer", customerForm);
                         header.setSearchListener(customerForm);
                         header.getjLabel2().setIcon(new ImageIcon(getClass().getResource("/GUI/Admin/icon/none.jpg")));
+                        header.setVisible(true);
                         break;
                     case 4:
                         setForm("Order", orderForm);
                         header.setSearchListener(orderForm);
                         header.getjLabel2().setIcon(new ImageIcon(getClass().getResource("/GUI/Admin/icon/none.jpg")));
+                        header.setVisible(true);
                         break;
                     case 5:
                         setForm("Suppliers", supplierForm);
                         header.setSearchListener(supplierForm);
                         header.getjLabel2().setIcon(new ImageIcon(getClass().getResource("/GUI/Admin/icon/none.jpg")));
+                        header.setVisible(true);
                         break; 
                     case 6:
                         setForm("Import", historyForm);
                         header.setSearchListener(historyForm);
                         header.getjLabel2().setIcon(new ImageIcon(getClass().getResource("/GUI/Admin/icon/none.jpg")));
+                        header.setVisible(true);
                         break;          
                 }
             }
@@ -107,8 +126,6 @@ public class Main extends JFrame {
     
 private void initComponents() {
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    // setUndecorated(true);
-    // setBackground(new Color(0, 0, 0, 0));
     setResizable(false);
     setSize(1100, 800);
     setLocationRelativeTo(null);

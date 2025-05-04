@@ -13,40 +13,53 @@ import utils.MyScrollBarUI;
 
 public class thongkeBanChay extends JPanel {
     private JTable table;
+    private JLabel optionLabel;
     private JComboBox<String> optionComboBox;
-    private JButton btnThongKe;
     private ThongKe_BLL bll = new ThongKe_BLL();
     private JScrollPane tableScrollPane;
 
     public thongkeBanChay() {
         initComponents();
+        loadData("Tất cả");
     }
 
     private void initComponents(){
         table = new JTable();
-        btnThongKe = new JButton("Thống kê");
+        optionLabel = new JLabel("Chọn:");
         optionComboBox = new JComboBox<>(new String[] {"Tất cả", "Bán chạy", "Bán ế"});
-        tableScrollPane = new JScrollPane(table);
+        tableScrollPane = new JScrollPane();
 
         setLayout(new BorderLayout());
 
         JPanel top = new JPanel();
+        top.setLayout(new BoxLayout(top, BoxLayout.X_AXIS));
+        optionLabel.setFont(new Font("Segoe UI", Font.BOLD, 16));
+        top.add(optionLabel);
+        top.add(Box.createHorizontalStrut(5));
+        optionComboBox.setFont(new Font("Segoe UI", 0, 16));
         top.add(optionComboBox);
-        top.add(btnThongKe);
 
         add(top, BorderLayout.NORTH);
 
+        table.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        table.setRowHeight(35);
+        table.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 16));
+        table.setGridColor(new Color(51, 51, 51));
+        table.setDefaultEditor(Object.class, null);
+
         tableScrollPane.getVerticalScrollBar().setUI(new MyScrollBarUI());
         tableScrollPane.getVerticalScrollBar().setPreferredSize(new Dimension(10,0));
+        tableScrollPane.setViewportView(table);
+        tableScrollPane.setPreferredSize(new Dimension(850, 570));
         add(tableScrollPane, BorderLayout.CENTER);
 
-        btnThongKe.addActionListener(new ActionListener() {
+        optionComboBox.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e){
                 loadData((String)optionComboBox.getSelectedItem());
             }
         });
 
-        setSize(600, 400);
+        setSize(850, 570);
         setVisible(true);
     }
 

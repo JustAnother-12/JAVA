@@ -15,7 +15,7 @@ public class ThongKe_DAO {
             try {
                 String query = """
                     SELECT ct.masp, DATE(dh.ngaydat) AS Ngay,
-                        SUM(dh.tongtien) AS DoanhThu
+                        SUM(ct.thanhtien) AS DoanhThu
                     FROM DONHANG dh
                     JOIN CHITIETDONHANG ct ON ct.madonhang = dh.madonhang
                     WHERE MONTH(dh.ngaydat) = ?
@@ -152,11 +152,12 @@ public class ThongKe_DAO {
         if(con != null){
             try {
                 String baseQuery = """
-                    SELECT kh.tenkh, COUNT(dh.madonhang) AS doanhso, SUM(dh.tongtien) AS doanhthu
+                    SELECT kh.tenkh, SUM(ct.soluong) AS doanhso, SUM(ct.thanhtien) AS doanhthu
                     FROM KHACHHANG kh
                     JOIN DONHANG dh ON kh.makh = dh.makh
+                    JOIN CHITIETDONHANG ct ON ct.madonhang = dh.madonhang
                     WHERE dh.tinhtrang = 'Đã xử lý'
-                    GROUP BY kh.tenkh
+                    GROUP BY kh.makh
                 """;
                 String orderByQuery = "ORDER BY ";
 
