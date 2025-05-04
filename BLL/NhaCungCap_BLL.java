@@ -59,6 +59,10 @@ public class NhaCungCap_BLL {
             return ncc;
         return null;
     }
+    public boolean capNhatNCC(NhaCungCap_DTO ncc) {
+    NhaCungCap_DAO dao = new NhaCungCap_DAO();
+    return dao.updateNCC(ncc);
+    }
 
     // public String updateNCC(NhaCungCap_DTO ncc){
     //     if(!nccDAO.hasNCCID(ncc.getMaNCC())){
