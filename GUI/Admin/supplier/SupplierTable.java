@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.regex.Pattern;
 
 import javax.swing.*;
 import javax.swing.table.*;
@@ -18,6 +19,16 @@ public class SupplierTable extends javax.swing.JPanel implements GUI.Admin.compo
     private DefaultTableModel tableModel;
     private JTable table;
     private ArrayList<NhaCungCap_DTO> supplierList = new ArrayList<>();
+    private NutSuKien_BLL nsk;
+
+    // Regex cho email
+    private static final String EMAIL_PATTERN = 
+    "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
+ 
+    // Regex cho số điện thoại Việt Nam (bắt đầu bằng 0, theo sau là 9 số)
+    private static final String PHONE_PATTERN = 
+        "^0[35789][0-9]{8}$";
+
 
     public SupplierTable() {
         initComponents();
@@ -68,7 +79,8 @@ public class SupplierTable extends javax.swing.JPanel implements GUI.Admin.compo
         NhaCungCap_BLL nccBLL = new NhaCungCap_BLL();
         nccBLL.LoadDataToTabel(tableModel, supplierList);
         table.getColumn("Tác vụ").setCellRenderer(new NutGiaoDien_BLL("supplier"));
-        table.getColumn("Tác vụ").setCellEditor(new NutSuKien_BLL(this, tableModel));
+        nsk = new NutSuKien_BLL(this, tableModel);
+        table.getColumn("Tác vụ").setCellEditor(nsk);
         table.setDefaultEditor(Object.class, null);
 
         JScrollPane scrollPane = new JScrollPane(table);
@@ -127,13 +139,13 @@ public class SupplierTable extends javax.swing.JPanel implements GUI.Admin.compo
         return supplierList;
     }
     private void themNhaCungCap() {
-        javax.swing.JTextField txtMa = new javax.swing.JTextField();
         javax.swing.JTextField txtTen = new javax.swing.JTextField();
         javax.swing.JTextField txtSdt = new javax.swing.JTextField();
         javax.swing.JTextField txtEmail = new javax.swing.JTextField();
+
+        
     
         Object[] message = {
-            "Mã NCC:", txtMa,
             "Tên NCC:", txtTen,
             "SĐT:", txtSdt,
             "Email:", txtEmail
@@ -141,23 +153,42 @@ public class SupplierTable extends javax.swing.JPanel implements GUI.Admin.compo
     
         int option = javax.swing.JOptionPane.showConfirmDialog(this, message, "Thêm Nhà Cung Cấp", javax.swing.JOptionPane.OK_CANCEL_OPTION);
         if (option == javax.swing.JOptionPane.OK_OPTION) {
-            String ma = txtMa.getText().trim();
             String ten = txtTen.getText().trim();
             String sdt = txtSdt.getText().trim();
             String email = txtEmail.getText().trim();
     
-            if (!ma.isEmpty() && !ten.isEmpty()) {
-                NhaCungCap_DTO ncc = new NhaCungCap_DTO(ma, ten, sdt, email);
+            if (ten.isEmpty() || sdt.isEmpty() || email.isEmpty()) {
+                javax.swing.JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin!");
+            }else{
+                // Kiểm tra định dạng số điện thoại
+                if (!Pattern.matches(PHONE_PATTERN, sdt)) {
+                    JOptionPane.showMessageDialog(this, 
+                        "Số điện thoại không đúng định dạng!", 
+                        "Lỗi", 
+                        JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                // Kiểm tra định dạng email
+                if (!Pattern.matches(EMAIL_PATTERN, email)) {
+                    JOptionPane.showMessageDialog(this, 
+                        "Email không đúng định dạng!", 
+                        "Lỗi", 
+                        JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                NhaCungCap_DTO ncc = new NhaCungCap_DTO("", ten, sdt, email);
                 NhaCungCap_BLL bll = new NhaCungCap_BLL();
                 if (bll.themNCC(ncc)) {
                     javax.swing.JOptionPane.showMessageDialog(this, "Thêm thành công!");
+                    System.out.println(supplierList.size());
                     supplierList.add(ncc);
-                    tableModel.addRow(new Object[]{ma, ten, sdt, email, ""});
+                    System.out.println(supplierList.size());
+                    tableModel.addRow(new Object[]{bll.getLastestNCCID(), ten, sdt, email, ""});
                 } else {
                     javax.swing.JOptionPane.showMessageDialog(this, "Thêm thất bại!");
                 }
-            } else {
-                javax.swing.JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin!");
             }
         }
     }

@@ -26,7 +26,7 @@ public class NutGiaoDien_BLL extends JPanel implements TableCellRenderer {
         JButton btnDetail = new JButton("Chi tiết");
         JButton btnDelete = new JButton("Xóa");
         JButton btnConfirm = new JButton("Xử lý");
-        if ("customer".equals(formType) || "staff".equals(formType)) {
+        if ("customer".equals(formType) || "staff".equals(formType) || "import".equals(formType) || "supplier".equals(formType)) {
             add(btnDetail);
             add(btnDelete);
         } else if ("order".equals(formType)) {

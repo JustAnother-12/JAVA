@@ -11,6 +11,11 @@ public class NhaCungCap_BLL {
     public ArrayList<NhaCungCap_DTO> getAllNCC(){
         return nccDAO.getAllNCC();
     }
+
+    public String getLastestNCCID(){
+        return nccDAO.getLastestNCCID();
+    }
+
     public void LoadDataToTabel(DefaultTableModel model, ArrayList<NhaCungCap_DTO> list) {
         list.clear();
         list.addAll(getAllNCC());
@@ -32,11 +37,17 @@ public class NhaCungCap_BLL {
     }
 
     public void deleteSupplier(String id, DefaultTableModel model, ArrayList<NhaCungCap_DTO> list) {
+        System.out.println(list.size());
         for (int i = 0; i < list.size(); i++) {
+            System.out.println(list.get(i).getEmailNCC());
             if (list.get(i).getMaNCC().equals(id)) {
-                list.remove(i);
-                model.removeRow(i);
-                nccDAO.deleteNCC(id); // gọi DAO để xóa trong CSDL
+                if(nccDAO.deleteNCC(id)){
+                    list.remove(i);
+                    model.removeRow(i);
+                }
+                else{
+                    System.out.println("Error");
+                }
                 break;
             }
         }

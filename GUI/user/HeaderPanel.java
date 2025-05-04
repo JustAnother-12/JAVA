@@ -21,9 +21,9 @@ public class HeaderPanel extends JPanel {
     protected KhachHang_DTO khachhang;
     private JFrame currFrame;
 
-     // Regex cho email
-     private static final String EMAIL_PATTERN = 
-     "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
+    // Regex cho email
+    private static final String EMAIL_PATTERN = 
+    "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
  
     // Regex cho số điện thoại Việt Nam (bắt đầu bằng 0, theo sau là 9 số)
     private static final String PHONE_PATTERN = 
