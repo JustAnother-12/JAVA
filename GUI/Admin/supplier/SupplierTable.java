@@ -181,14 +181,16 @@ public class SupplierTable extends javax.swing.JPanel implements GUI.Admin.compo
                 NhaCungCap_DTO ncc = new NhaCungCap_DTO("", ten, sdt, email);
                 NhaCungCap_BLL bll = new NhaCungCap_BLL();
                 if (bll.themNCC(ncc)) {
-                    javax.swing.JOptionPane.showMessageDialog(this, "Thêm thành công!");
-                    System.out.println(supplierList.size());
-                    supplierList.add(ncc);
-                    System.out.println(supplierList.size());
-                    tableModel.addRow(new Object[]{bll.getLastestNCCID(), ten, sdt, email, ""});
-                } else {
-                    javax.swing.JOptionPane.showMessageDialog(this, "Thêm thất bại!");
-                }
+                javax.swing.JOptionPane.showMessageDialog(this, "Thêm thành công!");
+
+               // Cập nhật lại dữ liệu từ DB thay vì thêm thủ công
+               supplierList.clear();
+               tableModel.setRowCount(0);
+               bll.LoadDataToTabel(tableModel, supplierList);
+
+               } else {
+               javax.swing.JOptionPane.showMessageDialog(this, "Thêm thất bại!");
+               }
             }
         }
     }
