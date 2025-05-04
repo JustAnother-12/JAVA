@@ -1,7 +1,9 @@
 package BLL;
-import DTO.*;
-import DAO.*;
 import java.util.ArrayList;
+
+import DAO.Order_DAO;
+import DTO.OrderDetail_DTO;
+import DTO.Order_DTO;
 
 public class Order_BLL {
     Order_DAO orderDao = new Order_DAO();
@@ -54,7 +56,7 @@ public class Order_BLL {
         if(!orderDao.hasOrderID(id)){
             return "Đơn hàng không tồn tại!";
         }
-        if(orderDao.ConfirmOrder(id)){
+        if(orderDao.ConfirmOrder(id, id)){
             return "Duyệt đơn hàng thành công!";
         }
 

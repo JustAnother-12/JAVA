@@ -1,15 +1,30 @@
 package GUI.user;
 
-import javax.swing.*;
-
-import BLL.KhachHang_BLL;
-import DTO.KhachHang_DTO;
-
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.font.TextAttribute;
 import java.util.Map;
 import java.util.regex.Pattern;
+
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
+import BLL.KhachHang_BLL;
+import DTO.KhachHang_DTO;
 
 public class HeaderPanel extends JPanel {
     private JPanel logoPanel, searchPanel, btnPanel;
@@ -18,7 +33,8 @@ public class HeaderPanel extends JPanel {
     private DangKy dangkyFrame;
     private DangNhap dangnhapFrame;
     protected KhachHang_BLL kh_BLL;
-    protected KhachHang_DTO khachhang;
+    public static KhachHang_DTO khachhang;
+
     private JFrame currFrame;
 
      // Regex cho email
@@ -220,6 +236,25 @@ public class HeaderPanel extends JPanel {
 
         cartIcon = new JLabel(new ImageIcon("GUI/user/Icon/shopping-cart.png"));
         cartIcon.setBounds(180, 30, 40, 40);
+
+        //Phần bổ sung 
+        cartIcon.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        cartIcon.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (khachhang == null) {
+                    JOptionPane.showMessageDialog(null, "Bạn cần đăng nhập để xem giỏ hàng!");
+                } else {
+                    JFrame frame = new JFrame("Giỏ hàng");
+                    frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                    frame.setSize(900, 500);
+                    frame.setLocationRelativeTo(null);
+                    frame.add(new CartPanel(khachhang));
+                    frame.setVisible(true);
+                }
+            }
+        });
+
 
         accountLabel = new JLabel("");
         accountLabel.setFont(new Font("Segoe UI", Font.BOLD, 14));

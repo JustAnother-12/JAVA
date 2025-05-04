@@ -1,9 +1,10 @@
 
 package DTO;
 
+import java.awt.Image;
+
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import java.awt.Image;
 
 
 
@@ -86,6 +87,12 @@ public class Product_Item_DTO {
         Image scaledImage = og.getScaledInstance(width, height, Image.SCALE_SMOOTH);
 
         return new ImageIcon(scaledImage);
+    }
+    
+    public java.math.BigDecimal getRawPrice() {
+        return new java.math.BigDecimal(
+            price.replace(".", "").replace("₫", "").trim()
+        );
     }
     
 }

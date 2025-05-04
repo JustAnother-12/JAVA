@@ -1,6 +1,17 @@
 package GUI.user;
 
-import javax.swing.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+
+import javax.swing.BorderFactory;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
 
 import BLL.SanPham_BLL;
 import DTO.But_DTO;
@@ -10,11 +21,6 @@ import DTO.SanPham_DTO;
 import DTO.Vo_DTO;
 import utils.MyScrollBarUI;
 import utils.WrapLayout;
-
-import java.awt.*;
-import java.awt.event.*;
-import java.math.BigDecimal;
-import java.util.ArrayList;
 
 public class ProductPanel extends JScrollPane {
     private JPanel ItemPanel;
@@ -267,9 +273,28 @@ public class ProductPanel extends JScrollPane {
     }
 
     private void addEvent(){
-        for(ProductItem item:ProductList){
+        for(ProductItem item : ProductList) {
             item.addMouseListener(mouseListener);
+        
+            item.getAddCartButton().addActionListener(e -> {
+                if (HeaderPanel.khachhang == null) {
+                    JOptionPane.showMessageDialog(null, "Bạn cần đăng nhập để thêm vào giỏ hàng.");
+                    return;
+                }
+        
+                DTO.CartItemDTO cartItem = new DTO.CartItemDTO(
+                    item.getID(),
+                    item.getName(),
+                    "placeholder", // hoặc tên file hình ảnh thực tế
+                    1,
+                    new BigDecimal(item.PriceTaglb.getText()) // cần xử lý đúng định dạng
+                );
+        
+                BLL.Cart_BLL.themVaoGio(cartItem);
+                JOptionPane.showMessageDialog(null, "Đã thêm \"" + item.getName() + "\" vào giỏ hàng!");
+            });
         }
+        
     }
 
     private void initComponents() {
@@ -287,5 +312,7 @@ public class ProductPanel extends JScrollPane {
         setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         setPreferredSize(new Dimension(740, 540));
     }
+
+
 }
 
