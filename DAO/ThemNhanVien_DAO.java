@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import DTO.NhanVien_DTO;
 
 public class ThemNhanVien_DAO {
+    
     public boolean addStaff(NhanVien_DTO nv) {
         String insertQuery = "INSERT INTO NHANVIEN (manv, tennv, chucvu, sdt, username, passwordnv, diachinv, CCCD, gioitinh, ngaysinh) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = DatabaseConnection.getConnection();
@@ -22,7 +23,7 @@ public class ThemNhanVien_DAO {
             pstmt.setString(8, nv.getCCCD());
             pstmt.setString(9, nv.getGioitinh());
             pstmt.setString(10, nv.getNgaysinh());
-
+            
             return pstmt.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();

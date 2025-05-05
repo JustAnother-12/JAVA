@@ -59,7 +59,7 @@ public class NhanVien_BLL extends JDialog{
    public boolean addStaff(JTextField txtName, JComboBox<String> txtPosition, JTextField txtPhone,
                                JTextField txtUsername, JTextField txtPassword, JTextField txtAddress,
                                JTextField txtCCCD, JTextField txtBirthday, JComboBox<String> cbGender,
-                               DefaultTableModel tableModel, HashSet<String> existingIDs) {
+                               DefaultTableModel tableModel, HashSet<String> existingIDs,ArrayList<NhanVien_DTO> staffList) {
         try {
             String name = txtName.getText().trim();
             String position = (String) txtPosition.getSelectedItem();
@@ -94,9 +94,10 @@ public class NhanVien_BLL extends JDialog{
 
             // Tạo DTO
             NhanVien_DTO nv = new NhanVien_DTO(id, name, position, phone, username, password, address, cccd, gender, formattedDate);
-
+            staffList.add(nv);
             // Thêm vào DB
             boolean success = ThemNhanVien_DAO.addStaff(nv);
+            NhanVien_DAO.loadDataFormDatabase(tableModel, staffList);
             if (success) {
                 tableModel.addRow(new Object[]{id, name, username, phone, "Chi tiết", "Xóa"});
                 existingIDs.add(id);

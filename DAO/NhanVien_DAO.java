@@ -135,7 +135,7 @@ public class NhanVien_DAO extends javax.swing.JPanel {
             }
         }
 
-        return a; // Trả về đối tượng customer hoặc null nếu không tìm thấy
+        return a; 
     }
     // Kiểm tra SDT đã tồn tại (ngoại trừ username hiện tại)
     public boolean isPhoneExist(String phone, String currentUsername) throws SQLException {
