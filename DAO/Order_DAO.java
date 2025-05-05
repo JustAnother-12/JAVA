@@ -107,7 +107,8 @@ public class Order_DAO {
         return arr;
     }
 
-    public OrderDetail_DTO getDetailForOrder(String id){
+    public ArrayList<OrderDetail_DTO> getDetailForOrder(String id){
+        ArrayList<OrderDetail_DTO> arr = new  ArrayList<>();
         con = DatabaseConnection.OpenConnection();
         if (con != null){
             try{
@@ -124,7 +125,7 @@ public class Order_DAO {
 
                     // Tạo đối tượng OrderDetail
                     OrderDetail_DTO detail = new OrderDetail_DTO(madonhang, masp, soluong, dongia, thanhtien);
-                    return detail;
+                    arr.add(detail);
                 }
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
@@ -132,7 +133,7 @@ public class Order_DAO {
                 DatabaseConnection.closeConnection(con);
             }
         }
-        return null;
+        return arr;
     }
 
     public ArrayList<OrderDetail_DTO> getAllDetail(){
@@ -205,38 +206,6 @@ public class Order_DAO {
         return false;
     }
 
-    // public boolean AddOrder(Order_DTO order, ArrayList<OrderDetail_DTO> details){
-    //     con = DatabaseConnection.OpenConnection();
-    //     if (con != null) {
-    //         try {                    
-    //             String query1 = "INSERT INTO DONHANG VALUES(?,?,?,?,?,?,?)";
-    //             String query2 = "INSERT INTO CHITIETDONHANG VALUES(?,?,?,?,?)";
-    //             PreparedStatement stmt1 = con.prepareStatement(query1);
-    //             PreparedStatement stmt2 = con.prepareStatement(query2);
-    //             stmt1.setString(1, order.getMadonhang());
-    //             stmt1.setString(2, order.getDiachidat());
-    //             stmt1.setString(3, order.getNgaydat());
-    //             stmt1.setString(4, order.getTinhtrang());
-    //             stmt1.setDouble(5, order.getTongtien());
-    //             stmt1.setString(6, order.getManv());
-    //             stmt1.setString(7, order.getMakh());
-
-    //             stmt2.setString(1, details.getMadonhang());
-    //             stmt2.setString(2, details.getMasp());
-    //             stmt2.setInt(3, details.getSoluong());
-    //             stmt2.setDouble(4, details.getDongia());
-    //             stmt2.setDouble(5, details.getThanhtien());
-
-    //             if (stmt1.executeUpdate()>=1 && stmt2.executeUpdate()>=1)
-    //                 return true;
-    //         } catch (SQLException ex) {
-    //             System.out.println(ex);            
-    //         } finally{
-    //             DatabaseConnection.closeConnection(con);  
-    //         } 
-    //     }
-    //     return false;
-    // }
 
     public String getNextORDERID(Connection con){
         String latestID = "";

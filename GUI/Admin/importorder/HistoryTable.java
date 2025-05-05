@@ -41,7 +41,7 @@ public class HistoryTable extends JPanel implements GUI.Admin.component.Header.s
         btnSortDesc.setBounds(200, 0, 150, 30);
         add(btnSortDesc);
 
-        String[] columnNames = {"Mã Phiếu", "Mã NCC", "Mã NV", "Ngày Nhập", "Tác vụ"};
+        String[] columnNames = {"Mã Phiếu", "Tên Nhà Cung Cấp", "Tên Nhân Viên", "Ngày Nhập", "Tác vụ"};
         tableModel = new DefaultTableModel(columnNames, 0);
         table = new JTable(tableModel);
         table.setRowHeight(40);

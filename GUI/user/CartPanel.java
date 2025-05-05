@@ -22,8 +22,10 @@ import javax.swing.border.EmptyBorder;
 
 import BLL.Cart_BLL;
 import BLL.DonHang_BLL;
+import BLL.SanPham_BLL;
 import DTO.CartItemDTO;
 import DTO.KhachHang_DTO;
+import DTO.SanPham_DTO;
 
 public class CartPanel extends JPanel {
     private JPanel contentPanel;
@@ -31,6 +33,7 @@ public class CartPanel extends JPanel {
     private KhachHang_DTO khachHang;
     private DonHang_BLL orderBLL = new DonHang_BLL();
     private Cart_BLL cartBLL = new Cart_BLL();
+    private SanPham_BLL spBLL = new SanPham_BLL();
     private ArrayList<CartItemDTO> items;
 
     public CartPanel(KhachHang_DTO khachHang) {
@@ -102,8 +105,21 @@ public class CartPanel extends JPanel {
                 }
             });
             plusBtn.addActionListener(e -> {
-                cartBLL.capNhatSoLuong(item.getMaSanPham(), item.getSoLuong() + 1);
-                refresh();
+                String id = item.getMaSanPham();
+                SanPham_DTO sp = null;
+                if (id.contains("S")){
+                    sp = spBLL.getSachFromID(id);
+                }else if (id.contains("V")){
+                    sp = spBLL.getVoFromID(id);
+                }else if (id.contains("B")){
+                    sp = spBLL.getButFromID(id);
+                }
+                if(item.getSoLuong() >= sp.getSoLuong_SanPham()){
+                    JOptionPane.showMessageDialog(this, "Đạt tối đa số lượng của sản phẩm!");
+                }else{
+                    cartBLL.capNhatSoLuong(item.getMaSanPham(), item.getSoLuong() + 1);
+                    refresh();
+                }
             });
             xoaBtn.addActionListener(e -> {
                 cartBLL.xoaKhoiGio(item.getMaSanPham());

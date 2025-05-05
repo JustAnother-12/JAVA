@@ -16,6 +16,7 @@ import javax.swing.ScrollPaneConstants;
 import BLL.Cart_BLL;
 import BLL.SanPham_BLL;
 import DTO.But_DTO;
+import DTO.CartItemDTO;
 import DTO.Sach_DTO;
 import DTO.SanPham_DTO;
 import DTO.Vo_DTO;
@@ -109,11 +110,12 @@ public class ProductPanel extends JScrollPane {
             String id = sach.getID_SanPham();
             String ten = sach.getTen_SanPham();
             double gia = sach.getGia_SanPham();
-
-        ProductItem item = new ProductItem(new Product_Item_Model(id, ten, id, String.valueOf(new BigDecimal(gia))));
-            ProductList.add(item);
-            ItemPanel.add(item);
-            SachDescriptionList.add(sach);
+            if(sach.getSoLuong_SanPham() > 0){
+                ProductItem item = new ProductItem(new Product_Item_Model(id, ten, id, String.valueOf(new BigDecimal(gia))));
+                ProductList.add(item);
+                ItemPanel.add(item);
+                SachDescriptionList.add(sach);
+            }
         }
     }
 
@@ -127,10 +129,12 @@ public class ProductPanel extends JScrollPane {
             String ten = Vo.getTen_SanPham();
             double gia = Vo.getGia_SanPham();
 
-        ProductItem item = new ProductItem(new Product_Item_Model(id, ten, id, String.valueOf(new BigDecimal(gia))));
-            ProductList.add(item);
-            ItemPanel.add(item);
-            VoDescriptionList.add(Vo);
+            if(Vo.getSoLuong_SanPham() > 0){
+                ProductItem item = new ProductItem(new Product_Item_Model(id, ten, id, String.valueOf(new BigDecimal(gia))));
+                ProductList.add(item);
+                ItemPanel.add(item);
+                VoDescriptionList.add(Vo);
+            }
         }
     }
 
@@ -144,10 +148,12 @@ public class ProductPanel extends JScrollPane {
             String ten = But.getTen_SanPham();
             double gia = But.getGia_SanPham();
 
-        ProductItem item = new ProductItem(new Product_Item_Model(id, ten, id, String.valueOf(new BigDecimal(gia))));
-            ProductList.add(item);
-            ItemPanel.add(item);
-            ButDescriptionList.add(But);
+            if(But.getSoLuong_SanPham() > 0){
+                ProductItem item = new ProductItem(new Product_Item_Model(id, ten, id, String.valueOf(new BigDecimal(gia))));
+                ProductList.add(item);
+                ItemPanel.add(item);
+                ButDescriptionList.add(But);
+            }
         }
     }
 
@@ -160,72 +166,13 @@ public class ProductPanel extends JScrollPane {
             String id = null;
             String ten = null;
             double gia = 0.0;
-            if (filter == null){
-                id = sp.getID_SanPham();
-                ten = sp.getTen_SanPham();
-                gia = sp.getGia_SanPham();
-
-            ProductItem item = new ProductItem(new Product_Item_Model(id, ten, id, String.valueOf(new BigDecimal(gia))));
-                ProductList.add(item);
-                ItemPanel.add(item);
-
-                if (sp instanceof Sach_DTO){
-                    Sach_DTO sach = (Sach_DTO)sp;
-                    SachDescriptionList.add(sach);
-                }
-                else if (sp instanceof Vo_DTO){
-                    Vo_DTO vo = (Vo_DTO)sp;
-                    VoDescriptionList.add(vo);
-                }
-                else{
-                    But_DTO but = (But_DTO)sp;
-                    ButDescriptionList.add(but);
-                }
-            }
-            else{
-                SanPham_DTO sph = filter.Filter(sp);
-                    if(sph != null){
-                        id = sph.getID_SanPham();
-                        ten = sph.getTen_SanPham();
-                        gia = sph.getGia_SanPham();
-
-                    ProductItem item = new ProductItem(new Product_Item_Model(id, ten, id, String.valueOf(new BigDecimal(gia))));
-                        ProductList.add(item);
-                        ItemPanel.add(item);
-
-                        if (sph instanceof Sach_DTO){
-                            Sach_DTO sach = (Sach_DTO)sph;
-                            SachDescriptionList.add(sach);
-                        }
-                        else if (sph instanceof Vo_DTO){
-                            Vo_DTO vo = (Vo_DTO)sph;
-                            VoDescriptionList.add(vo);
-                        }
-                        else{
-                            But_DTO but = (But_DTO)sph;
-                            ButDescriptionList.add(but);
-                        }
-                    }
-            }
-        }
-    }
-
-    private void getSearchedItem(String searchtext, FilterPanel Filter){
-        SachDescriptionList = new ArrayList<>();
-        VoDescriptionList = new ArrayList<>();
-        ButDescriptionList = new ArrayList<>();
-        ProductList = new ArrayList<>();
-        for (SanPham_DTO sp : spBLL.getAllSanPham()){
-            if(sp.getTen_SanPham().toLowerCase().contains(searchtext.toLowerCase())){
-                String id = null;
-                String ten = null;
-                double gia = 0.0;
-                if(Filter == null){
+            if(sp.getSoLuong_SanPham() > 0){
+                if (filter == null){
                     id = sp.getID_SanPham();
                     ten = sp.getTen_SanPham();
                     gia = sp.getGia_SanPham();
 
-                ProductItem item = new ProductItem(new Product_Item_Model(id, ten, id, String.valueOf(new BigDecimal(gia))));
+                    ProductItem item = new ProductItem(new Product_Item_Model(id, ten, id, String.valueOf(new BigDecimal(gia))));
                     ProductList.add(item);
                     ItemPanel.add(item);
 
@@ -243,30 +190,93 @@ public class ProductPanel extends JScrollPane {
                     }
                 }
                 else{
-                    SanPham_DTO sph = Filter.Filter(sp);
-                    if(sph != null){
-                        id = sph.getID_SanPham();
-                        ten = sph.getTen_SanPham();
-                        gia = sph.getGia_SanPham();
+                    SanPham_DTO sph = filter.Filter(sp);
+                        if(sph != null){
+                            id = sph.getID_SanPham();
+                            ten = sph.getTen_SanPham();
+                            gia = sph.getGia_SanPham();
 
-                    ProductItem item = new ProductItem(new Product_Item_Model(id, ten, id, String.valueOf(new BigDecimal(gia))));
+                            ProductItem item = new ProductItem(new Product_Item_Model(id, ten, id, String.valueOf(new BigDecimal(gia))));
+                            ProductList.add(item);
+                            ItemPanel.add(item);
+
+                            if (sph instanceof Sach_DTO){
+                                Sach_DTO sach = (Sach_DTO)sph;
+                                SachDescriptionList.add(sach);
+                            }
+                            else if (sph instanceof Vo_DTO){
+                                Vo_DTO vo = (Vo_DTO)sph;
+                                VoDescriptionList.add(vo);
+                            }
+                            else{
+                                But_DTO but = (But_DTO)sph;
+                                ButDescriptionList.add(but);
+                            }
+                        }
+                }
+            }
+        }
+    }
+
+    private void getSearchedItem(String searchtext, FilterPanel Filter){
+        SachDescriptionList = new ArrayList<>();
+        VoDescriptionList = new ArrayList<>();
+        ButDescriptionList = new ArrayList<>();
+        ProductList = new ArrayList<>();
+        for (SanPham_DTO sp : spBLL.getAllSanPham()){
+            if(sp.getTen_SanPham().toLowerCase().contains(searchtext.toLowerCase())){
+                String id = null;
+                String ten = null;
+                double gia = 0.0;
+                if(sp.getSoLuong_SanPham() > 0){
+                    if(Filter == null){
+                        id = sp.getID_SanPham();
+                        ten = sp.getTen_SanPham();
+                        gia = sp.getGia_SanPham();
+
+                        ProductItem item = new ProductItem(new Product_Item_Model(id, ten, id, String.valueOf(new BigDecimal(gia))));
                         ProductList.add(item);
                         ItemPanel.add(item);
 
-                        if (sph instanceof Sach_DTO){
-                            Sach_DTO sach = (Sach_DTO)sph;
+                        if (sp instanceof Sach_DTO){
+                            Sach_DTO sach = (Sach_DTO)sp;
                             SachDescriptionList.add(sach);
                         }
-                        else if (sph instanceof Vo_DTO){
-                            Vo_DTO vo = (Vo_DTO)sph;
+                        else if (sp instanceof Vo_DTO){
+                            Vo_DTO vo = (Vo_DTO)sp;
                             VoDescriptionList.add(vo);
                         }
                         else{
-                            But_DTO but = (But_DTO)sph;
+                            But_DTO but = (But_DTO)sp;
                             ButDescriptionList.add(but);
                         }
                     }
-                }  
+                    else{
+                        SanPham_DTO sph = Filter.Filter(sp);
+                        if(sph != null){
+                            id = sph.getID_SanPham();
+                            ten = sph.getTen_SanPham();
+                            gia = sph.getGia_SanPham();
+
+                        ProductItem item = new ProductItem(new Product_Item_Model(id, ten, id, String.valueOf(new BigDecimal(gia))));
+                            ProductList.add(item);
+                            ItemPanel.add(item);
+
+                            if (sph instanceof Sach_DTO){
+                                Sach_DTO sach = (Sach_DTO)sph;
+                                SachDescriptionList.add(sach);
+                            }
+                            else if (sph instanceof Vo_DTO){
+                                Vo_DTO vo = (Vo_DTO)sph;
+                                VoDescriptionList.add(vo);
+                            }
+                            else{
+                                But_DTO but = (But_DTO)sph;
+                                ButDescriptionList.add(but);
+                            }
+                        }
+                    }  
+                }
             }
         }
     }
@@ -280,7 +290,30 @@ public class ProductPanel extends JScrollPane {
                     JOptionPane.showMessageDialog(null, "Bạn cần đăng nhập để thêm vào giỏ hàng.");
                     return;
                 }
-        
+
+                String id = item.getID();
+                SanPham_DTO sp = null;
+                if (id.contains("S")){
+                    sp = spBLL.getSachFromID(id);
+                }else if (id.contains("V")){
+                    sp = spBLL.getVoFromID(id);
+                }else if (id.contains("B")){
+                    sp = spBLL.getButFromID(id);
+                }
+                if(sp != null && sp.getSoLuong_SanPham() <= 0){
+                    JOptionPane.showMessageDialog(this, "Sản phẩm đã hết số lượng!");
+                    return;
+                }
+
+                for (CartItemDTO cartitem : cartBLL.layDanhSach()){
+                    cartitem.getMaSanPham().equals(id);
+                    if(cartitem.getSoLuong() >= sp.getSoLuong_SanPham()){
+                        JOptionPane.showMessageDialog(this, "Đạt tối đa số lượng!");
+                        return;
+                    }
+                }
+
+                        
                 DTO.CartItemDTO cartItem = new DTO.CartItemDTO(
                     item.getID(),
                     item.getName(),
@@ -289,12 +322,10 @@ public class ProductPanel extends JScrollPane {
                     new BigDecimal(item.PriceTaglb.getText())
                 );
                 
-        
                 cartBLL.themVaoGio(cartItem);
                 JOptionPane.showMessageDialog(null, "Đã thêm \"" + item.getName() + "\" vào giỏ hàng!");
             });
         }
-        
     }
 
     private void initComponents() {

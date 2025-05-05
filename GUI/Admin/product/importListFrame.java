@@ -6,10 +6,12 @@ import javax.swing.table.TableColumnModel;
 
 import BLL.NhaCungCap_BLL;
 import BLL.PhieuNhap_BLL;
+import BLL.SanPham_BLL;
 import DTO.ChiTietPhieuNhap_DTO;
 import DTO.NhaCungCap_DTO;
 import DTO.NhanVien_DTO;
 import DTO.PhieuNhap_DTO;
+import DTO.SanPham_DTO;
 import utils.*;
 
 import java.awt.*;
@@ -33,13 +35,16 @@ public class importListFrame extends JFrame{
 
     private NhaCungCap_BLL nccBLL;
     private PhieuNhap_BLL pnBLL;
+    private SanPham_BLL spBLL;
     private ArrayList<ChiTietPhieuNhap_DTO> importList;
     private ArrayList<NhaCungCap_DTO> danhSachNCC;
     private double TotalValue;
     private int position = -1;
     private NhanVien_DTO currentNV;
+    private ProdmaFrame parent;
 
-    public importListFrame(ArrayList<ChiTietPhieuNhap_DTO> importList, NhanVien_DTO currentNV){
+    public importListFrame(ArrayList<ChiTietPhieuNhap_DTO> importList, NhanVien_DTO currentNV, ProdmaFrame parent){
+        this.parent = parent;
         this.currentNV = currentNV;
         this.importList = importList;
         initComponents();
@@ -69,6 +74,7 @@ public class importListFrame extends JFrame{
         quantityLabel = new JLabel();
         quantitySpinner = new JSpinner();
         deleteButton = new MyButton();
+        spBLL = new SanPham_BLL();
 
         providerLabel = new JLabel();
         nccBLL = new NhaCungCap_BLL();
@@ -276,6 +282,12 @@ public class importListFrame extends JFrame{
         if (nhacungcap != null && !importList.isEmpty()){
             PhieuNhap_DTO pn = new PhieuNhap_DTO("",nhacungcap.getMaNCC(), currentNV.getManv(), getCurrentDay(), importList);
             JOptionPane.showMessageDialog(this, pnBLL.addPhieuNhap(pn), "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+            for(ChiTietPhieuNhap_DTO ct:importList){
+                SanPham_DTO sp = ct.getThongtinSP(); 
+                sp.setSoLuong_SanPham(sp.getSoLuong_SanPham() + ct.getSoluongNhap());
+                spBLL.updateSP(sp); // cập nhật số lượng
+                parent.refreshProducts();
+            }
             importList.clear();
             showImports(importList);
             TotalValueLabel.setText(String.valueOf(getTotalValue())); // Tính lại tổng tiền

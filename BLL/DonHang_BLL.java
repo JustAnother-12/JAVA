@@ -9,8 +9,13 @@ import DAO.NhanVien_DAO;
 import DAO.Order_DAO;
 import DTO.OrderDetail_DTO;
 import DTO.Order_DTO;
+import DTO.SanPham_DTO;
 
 public class DonHang_BLL {
+    Order_DAO orderDao = new Order_DAO();
+    SanPham_BLL spBLL = new SanPham_BLL();
+
+
     public void LoadDataToTabel(DefaultTableModel tableModel, ArrayList<Order_DTO> orderList,ArrayList<OrderDetail_DTO> orderDetailList) {
         try {
             Order_DAO order_DAO = new Order_DAO();
@@ -19,13 +24,12 @@ public class DonHang_BLL {
             System.out.println(ex);
         }
     }
-    Order_DAO orderDao = new Order_DAO();
 
     public ArrayList<Order_DTO> getAllOrder(){
         return orderDao.getAllOrder();
     }
 
-    public OrderDetail_DTO getDetails(String id){
+    public ArrayList<OrderDetail_DTO> getDetails(String id){
         return orderDao.getDetailForOrder(id);
     }
 
@@ -79,11 +83,29 @@ public class DonHang_BLL {
             return "Đơn hàng không tồn tại!";
         }
         if(orderDao.ConfirmOrder(id, nvid)){
+            ArrayList<OrderDetail_DTO> details = getDetails(id);
+            for (OrderDetail_DTO detail : details){
+                String idsp = detail.getMasp();
+                SanPham_DTO sp = null;
+                if (idsp.contains("S")){
+                    sp = spBLL.getSachFromID(idsp);
+                }else if (idsp.contains("V")){
+                    sp = spBLL.getVoFromID(idsp);
+                }else if (idsp.contains("B")){
+                    sp = spBLL.getButFromID(idsp);
+                }
+                System.out.println(sp.getTen_SanPham());
+                if(sp != null){
+                    sp.setSoLuong_SanPham(sp.getSoLuong_SanPham() - detail.getSoluong()); // Giảm số lượng sau khi xác nhận
+                    spBLL.updateSP(sp);
+                }
+            }
             return "Duyệt đơn hàng thành công!";
         }
 
         return "Duyệt đơn hàng thất bại!";
     }
+    
     public void DeleteOrder(String id) throws SQLException {
         try {
             Order_DAO temp = new Order_DAO();

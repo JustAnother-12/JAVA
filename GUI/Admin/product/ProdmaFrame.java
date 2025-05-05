@@ -62,7 +62,6 @@ public class ProdmaFrame extends JPanel implements Header.searchListener{
         initComponents();
         getSPandDetails("Tất cả");
         showProducts(products);
-        System.out.println(productTable.getSelectedRow());
     }
 
     public void showProducts(ArrayList<SanPham_DTO> productList) {
@@ -252,7 +251,7 @@ public class ProdmaFrame extends JPanel implements Header.searchListener{
         importListButton.setPreferredSize(new Dimension(140, 30));
         importListButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
-                new importListFrame(importList, nv);
+                importListButtonActionPerformed();
             }
         });
         rightPanel.add(importListButton);
@@ -423,28 +422,34 @@ public class ProdmaFrame extends JPanel implements Header.searchListener{
                                         new Object[] {"OK","Cancel"}, 
                                         "Cancel");
             if (choice == 0){
+                boolean flag = true;
                 for(ChiTietPhieuNhap_DTO ct:pnBLL.getAllChiTiet()){
                     if(ct.getThongtinSP().getID_SanPham().equals(product.getID_SanPham())){
-                        pnBLL.removeCTPhieuNhapBySP(ct.getMaPN());
+                        flag = false;
+                        JOptionPane.showMessageDialog(this, "Xóa thất bại! Có phiếu nhập liên quan đến sản phẩm này", "Thông báo", JOptionPane.ERROR_MESSAGE);
                         break;
                     }
                 }
                 for(OrderDetail_DTO detail:orderBLL.getAllDetail()){
                     if(detail.getMasp().equals(product.getID_SanPham())){
-                        orderBLL.removeDetailBySP(product.getID_SanPham());
+                        flag = false;
+                        JOptionPane.showMessageDialog(this, "Xóa thất bại! Có đơn hàng liên quan đến sản phẩm này", "Thông báo", JOptionPane.ERROR_MESSAGE);
                         break;
                     }
                 }
-                if(productBLL.removeSP(product).contains("thành công")){
-                    JOptionPane.showMessageDialog(this, "Xóa thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
-                    if(deleteProductImageById(product.getID_SanPham())){
-                        JOptionPane.showMessageDialog(this, "Xóa ảnh thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+
+                if(flag){
+                    if(productBLL.removeSP(product).contains("thành công")){
+                        JOptionPane.showMessageDialog(this, "Xóa thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+                        if(deleteProductImageById(product.getID_SanPham())){
+                            JOptionPane.showMessageDialog(this, "Xóa ảnh thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+                        }else{
+                            JOptionPane.showMessageDialog(this, "Xóa ảnh thất bại!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+                        }
+                        refreshProducts();
                     }else{
-                        JOptionPane.showMessageDialog(this, "Xóa ảnh thất bại!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(this, "Xóa thất bại!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
                     }
-                    refreshProducts();
-                }else{
-                    JOptionPane.showMessageDialog(this, "Xóa thất bại!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
                 }
             }
         }
@@ -481,6 +486,10 @@ public class ProdmaFrame extends JPanel implements Header.searchListener{
                 }
             }
         }
+    }
+
+    private void importListButtonActionPerformed(){
+        new importListFrame(importList, nv,this);
     }
 
     private void firstButtonActionPerformed(ActionEvent evt) {
