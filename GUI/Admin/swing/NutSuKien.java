@@ -268,6 +268,7 @@ public NutSuKien(NhanVienTable accountList, CustomerTable customerList,OrderTabl
             String id = table.getValueAt(selectedRow, 0).toString();
             int confirm = JOptionPane.showConfirmDialog(panel, "Bạn có chắc chắn muốn xóa tài khoản này?", "Xác nhận xóa", JOptionPane.YES_NO_OPTION);
             if (confirm == JOptionPane.YES_OPTION) {
+                boolean flag = true;
                 if (formType == FormType.STAFF) {
                     NhanVien_BLL temp = new NhanVien_BLL();
                     temp.deleteStaff(id, tableModel, staffList.getAccountList());
@@ -279,7 +280,16 @@ public NutSuKien(NhanVienTable accountList, CustomerTable customerList,OrderTabl
                     temp.DeleteOrder(id);
                 }else if (formType == FormType.SUPPLIER) {
                     NhaCungCap_BLL temp = new NhaCungCap_BLL();
-                    temp.deleteSupplier(id, tableModel, supplierList.getSupplierList());
+                    PhieuNhap_BLL pnBLL = new PhieuNhap_BLL();
+                    for(PhieuNhap_DTO pn:pnBLL.getAllPhieuNhap()){
+                        if(pn.getMaNCC().equals(id)){
+                            flag = false;
+                            JOptionPane.showMessageDialog(null, "Xóa thất bại! Có phiếu nhập liên quan đến nhà cung cấp này", "Thông báo", JOptionPane.ERROR_MESSAGE);
+                            break;
+                        }
+                    }
+                    if(flag)
+                        temp.deleteSupplier(id, tableModel, supplierList.getSupplierList());
                 }
                 else if (formType == FormType.IMPORT) {
                     PhieuNhap_BLL temp = new PhieuNhap_BLL();
