@@ -167,21 +167,6 @@ public class NhanVien_DAO extends javax.swing.JPanel {
             String newUsername = txtUsername.getText();
             String currentUsername = nv.getUsername();
 
-            // if (isPhoneExist(conn, newPhone, currentUsername)) {
-            //     JOptionPane.showMessageDialog(null, "Số điện thoại đã tồn tại!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
-            //     return;
-            // }
-
-            // if (isCCCDExist(conn, newCCCD, currentUsername)) {
-            //     JOptionPane.showMessageDialog(null, "CCCD đã tồn tại!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
-            //     return;
-            // }
-
-            // if (!newUsername.equals(currentUsername) && isUsernameExist(conn, newUsername)) {
-            //     JOptionPane.showMessageDialog(null, "Username đã tồn tại!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
-            //     return;
-            // }
-
             String query = "UPDATE NHANVIEN SET tennv = ?, sdt = ?, username = ?, diachinv = ?, gioitinh = ?, ngaysinh = ?, chucvu = ?, CCCD = ? WHERE username = ?";
             PreparedStatement pstmt = conn.prepareStatement(query);
             pstmt.setString(1, txtName.getText());

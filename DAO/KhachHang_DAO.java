@@ -208,56 +208,53 @@ public class KhachHang_DAO {
         }
         return null;
     }
-    public void deleteCustomer(String id, DefaultTableModel tableModel, ArrayList<KhachHang_DTO> customerList) {
+    public boolean deleteCustomer(String id, DefaultTableModel tableModel, ArrayList<KhachHang_DTO> customerList) {
         try (Connection conn = DatabaseConnection.getConnection()) {
-    
             // 1. Lấy tất cả mã đơn hàng của khách hàng
             String selectOrders = "SELECT madonhang FROM donhang WHERE makh = ?";
             try (PreparedStatement selectOrderStmt = conn.prepareStatement(selectOrders)) {
                 selectOrderStmt.setString(1, id);
                 ResultSet rs = selectOrderStmt.executeQuery();
-    
-                // 2. Với mỗi đơn hàng, xóa chi tiết đơn hàng
-                while (rs.next()) {
+                ArrayList<String> idArray = new ArrayList<>();
+                while (rs.next())  {
                     String madh = rs.getString("madonhang");
+                    idArray.add(madh);
+                }
+                if (idArray.isEmpty()) {
+                    String deleteCustomer = "DELETE FROM khachhang WHERE makh = ?";
+                    try (PreparedStatement delCustomerStmt = conn.prepareStatement(deleteCustomer)) {
+                        delCustomerStmt.setString(1, id);
+                        int affected = delCustomerStmt.executeUpdate();
     
-                    String deleteChiTiet = "DELETE FROM chitietdonhang WHERE madonhang = ?";
-                    try (PreparedStatement delCTStmt = conn.prepareStatement(deleteChiTiet)) {
-                        delCTStmt.setString(1, madh);
-                        delCTStmt.executeUpdate();
+                        if (affected > 0) {
+                            JOptionPane.showMessageDialog(null, "Đã xóa khách hàng, đơn hàng và chi tiết liên quan.");
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Không tìm thấy khách hàng để xóa.");
+                        }
+                        loadDataFormDatabase(customerList, tableModel);
+                        return true;
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                        JOptionPane.showMessageDialog(null,
+                            "Lỗi khi xóa khách hàng: " + e.getMessage(),
+                            "Lỗi", JOptionPane.ERROR_MESSAGE);
                     }
-                }
-            }
-    
-            // 3. Xoá đơn hàng của khách
-            String deleteDonHang = "DELETE FROM donhang WHERE makh = ?";
-            try (PreparedStatement delOrderStmt = conn.prepareStatement(deleteDonHang)) {
-                delOrderStmt.setString(1, id);
-                delOrderStmt.executeUpdate();
-            }
-    
-            // 4. Xoá khách hàng
-            String deleteCustomer = "DELETE FROM khachhang WHERE makh = ?";
-            try (PreparedStatement delCustomerStmt = conn.prepareStatement(deleteCustomer)) {
-                delCustomerStmt.setString(1, id);
-                int affected = delCustomerStmt.executeUpdate();
-    
-                if (affected > 0) {
-                    JOptionPane.showMessageDialog(null, "Đã xóa khách hàng, đơn hàng và chi tiết liên quan.");
                 } else {
-                    JOptionPane.showMessageDialog(null, "Không tìm thấy khách hàng để xóa.");
+                    return false;
                 }
+            } catch (SQLException e) {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(null,
+                    "Lỗi: " + e.getMessage(),
+                    "Lỗi", JOptionPane.ERROR_MESSAGE);
             }
-    
-            // 5. Cập nhật lại bảng hiển thị
-            loadDataFormDatabase(customerList, tableModel);
-    
         } catch (SQLException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(null,
-                "Lỗi khi xóa khách hàng: " + e.getMessage(),
+                "Lỗi: " + e.getMessage(),
                 "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
+        return false;
     }
     
     
