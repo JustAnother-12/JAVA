@@ -3,10 +3,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.HashSet;
 import javax.swing.table.DefaultTableModel;
 
 import BLL.NhanVien_BLL;
+import DTO.NhanVien_DTO;
 public class ThemNhanVien extends javax.swing.JDialog{
         private JTextField txtName, txtPhone, txtUsername, txtPassword, txtAddress, txtCCCD, txtBirthday;
         private JButton btnSave, btnCancel;
@@ -15,7 +17,7 @@ public class ThemNhanVien extends javax.swing.JDialog{
         private DefaultTableModel tableModel;
         
         private HashSet<String> existingIDs; 
-        public ThemNhanVien(DefaultTableModel tableModel) {
+        public ThemNhanVien(DefaultTableModel tableModel,ArrayList<NhanVien_DTO> staffList) {
             initComponents();
             this.tableModel = tableModel;
             existingIDs = new HashSet<>();
@@ -71,7 +73,7 @@ public class ThemNhanVien extends javax.swing.JDialog{
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     NhanVien_BLL NhanVien_BLL = new NhanVien_BLL();
-                    boolean nhanvien = NhanVien_BLL.addStaff(txtName, cbPosition, txtPhone, txtUsername, txtPassword, txtAddress, txtCCCD, txtBirthday, cbGender, tableModel, existingIDs);
+                    boolean nhanvien = NhanVien_BLL.addStaff(txtName, cbPosition, txtPhone, txtUsername, txtPassword, txtAddress, txtCCCD, txtBirthday, cbGender, tableModel, existingIDs,staffList);
                     if (nhanvien == true)
                         dispose();
                 }
