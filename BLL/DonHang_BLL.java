@@ -106,13 +106,19 @@ public class DonHang_BLL {
         return "Duyệt đơn hàng thất bại!";
     }
     
-    public void DeleteOrder(String id) throws SQLException {
+    public boolean DeleteOrder(String id) throws SQLException {
         try {
             Order_DAO temp = new Order_DAO();
-            temp.DeleteOrder(id);
+            boolean result =  temp.DeleteOrder(id);
+            if (result == true) {
+                return true;
+            } else {
+                return false;
+            }
         } catch (Exception ex) {
             Logger.getLogger(NhanVien_DAO.class.getName()).log(Level.SEVERE, "General Error deleting staff", ex);
         }
+        return false;
     }
     public String getCustomerName(String makh) {
         try {

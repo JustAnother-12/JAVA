@@ -96,18 +96,18 @@ public class KhachHang_BLL extends JDialog{
         }
         return false;
     }
-    public void deleteCustomer(String id, DefaultTableModel tableModel, ArrayList<KhachHang_DTO> customerList) throws SQLException {
+    public boolean deleteCustomer(String id, DefaultTableModel tableModel, ArrayList<KhachHang_DTO> customerList) throws SQLException {
     try {
         KhachHang_DAO temp = new KhachHang_DAO();
         boolean result = temp.deleteCustomer(id, tableModel, customerList);
         if (result == true) {
-            JOptionPane.showMessageDialog(this, "Xoá khách tài khoản khách hàng thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE); 
+            return true;
         } else {
-            JOptionPane.showMessageDialog(this, "Xoá thất bại! Có đơn hàng liên quan đến khách hàng này!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
-            temp.loadDataFormDatabase(customerList,tableModel);
+            return false;
         }
     } catch (Exception ex) {
         Logger.getLogger(KhachHang_DAO.class.getName()).log(Level.SEVERE, "General Error deleting staff", ex);
     }
+    return false;
    }
 }

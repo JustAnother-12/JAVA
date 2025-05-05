@@ -124,7 +124,7 @@ public class NhanVien_BLL extends JDialog{
         if (ThemNhanVien_DAO.isCCCDExists(cccd)) throw new Exception("CCCD đã tồn tại.");
         if (ThemNhanVien_DAO.isUserNameExists(username)) throw new Exception("Username đã tồn tại.");
     }
-    public void deleteStaff(String id, DefaultTableModel tableModel, ArrayList<NhanVien_DTO> staffList) {
+    public boolean deleteStaff(String id, DefaultTableModel tableModel, ArrayList<NhanVien_DTO> staffList) {
         boolean deleted = NhanVien_DAO.deleteStaff(id, tableModel, staffList);
         if (deleted) {
         for (int i = 0; i < tableModel.getRowCount(); i++) {
@@ -134,9 +134,9 @@ public class NhanVien_BLL extends JDialog{
             }
         }
         staffList.removeIf(nv -> nv.getManv().equals(id));
-        JOptionPane.showMessageDialog(null, "Xóa nhân viên thành công!");
+        return true;
     } else {
-        JOptionPane.showMessageDialog(null, "Không tìm thấy nhân viên để xóa!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+        return false;
     }
     }
 }

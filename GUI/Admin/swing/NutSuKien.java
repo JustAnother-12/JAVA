@@ -271,13 +271,31 @@ public NutSuKien(NhanVienTable accountList, CustomerTable customerList,OrderTabl
                 boolean flag = true;
                 if (formType == FormType.STAFF) {
                     NhanVien_BLL temp = new NhanVien_BLL();
-                    temp.deleteStaff(id, tableModel, staffList.getAccountList());
+                    boolean rs = temp.deleteStaff(id, tableModel, staffList.getAccountList());
+                    if (rs == true) {
+                        JOptionPane.showMessageDialog(null, "Xoá khách tài khoản khách hàng thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE); 
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Xoá thất bại! Có đơn hàng liên quan đến khách hàng này!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+                        flag = false;
+                    }
                 } else if (formType == FormType.CUSTOMER){
                     KhachHang_BLL temp = new KhachHang_BLL();
-                    temp.deleteCustomer(id, tableModel, customerList.getCustomerList());
+                    boolean rs = temp.deleteCustomer(id, tableModel, customerList.getCustomerList());
+                    if (rs == true) {
+                        JOptionPane.showMessageDialog(null, "Xóa nhân viên thành công!");
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Không tìm thấy nhân viên để xóa!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                        flag = false;
+                    }
                 } else if (formType == FormType.ORDER) {
                     DonHang_BLL temp = new DonHang_BLL();
-                    temp.DeleteOrder(id);
+                    boolean rs = temp.DeleteOrder(id);
+                    if (rs == true) {
+                        JOptionPane.showMessageDialog(null, "Xóa đơn hàng thành công!");
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Không tìm thấy đơn hàng để xóa!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                        flag = false;
+                    }
                 }else if (formType == FormType.SUPPLIER) {
                     NhaCungCap_BLL temp = new NhaCungCap_BLL();
                     PhieuNhap_BLL pnBLL = new PhieuNhap_BLL();
@@ -295,8 +313,10 @@ public NutSuKien(NhanVienTable accountList, CustomerTable customerList,OrderTabl
                     PhieuNhap_BLL temp = new PhieuNhap_BLL();
                     temp.deleteImport(id, tableModel, importList.getImportList());
                 }
-                ((DefaultTableModel) table.getModel()).removeRow(selectedRow);
-                stopCellEditing();
+                if (flag) {
+                    ((DefaultTableModel) table.getModel()).removeRow(selectedRow);
+                    stopCellEditing();
+                }
             }
         }
     }
