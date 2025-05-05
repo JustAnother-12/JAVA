@@ -81,7 +81,7 @@ public class KhachHang_DAO {
     public String getNextKHID(Connection con){
         String latestID = "";
         try {
-            String sql = "SELECT makh FROM BUT KHACHHANG BY makh DESC LIMIT 1";
+            String sql = "SELECT makh FROM KHACHHANG ORDER BY makh DESC LIMIT 1";
             PreparedStatement stmt = con.prepareStatement(sql);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {

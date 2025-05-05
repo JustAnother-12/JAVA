@@ -109,19 +109,20 @@ public class HeaderPanel extends JPanel {
     private void addDangKyEvent(){
         dangkyFrame.btnDangKy.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                String hoTen = dangkyFrame.txtHoTen.getText();
-                String sdt = dangkyFrame.txtSDT.getText();
+                String hoTen = dangkyFrame.txtHoTen.getText().trim();
+                String sdt = dangkyFrame.txtSDT.getText().trim();
                 String gioitinh = dangkyFrame.genderGroup.getSelection().getActionCommand();
-                String email = dangkyFrame.txtEmail.getText();
+                String email = dangkyFrame.txtEmail.getText().trim();
                 String ngay = Integer.toString((int)dangkyFrame.cbNgay.getSelectedItem());
                 String thang = Integer.toString((int)dangkyFrame.cbThang.getSelectedItem());
                 String nam = Integer.toString((int)dangkyFrame.cbNam.getSelectedItem());
                 String date = nam + "-" + thang + "-" + ngay;
+                String user = dangkyFrame.txtUsername.getText().trim();
                 String matKhau = new String(dangkyFrame.txtMatKhau.getPassword());
                 String diaChi = (String) dangkyFrame.cbDiaChi.getSelectedItem();
 
                 // Kiểm tra các trường rỗng
-                if (hoTen.isEmpty() || sdt.isEmpty() || email.isEmpty() || matKhau.isEmpty() || gioitinh.isEmpty() || diaChi == null || ngay == null || thang == null || nam == null) {
+                if (hoTen.isEmpty() || sdt.isEmpty() || email.isEmpty() || user.isEmpty() || matKhau.isEmpty() || gioitinh.isEmpty() || diaChi == null || ngay == null || thang == null || nam == null) {
                     JOptionPane.showMessageDialog(dangkyFrame, 
                         "Vui lòng điền đầy đủ thông tin!", 
                         "Cảnh báo", 
@@ -157,7 +158,7 @@ public class HeaderPanel extends JPanel {
                 }
 
                 JOptionPane.showMessageDialog(dangkyFrame, "Đăng ký thành công!");
-                khachhang = new KhachHang_DTO("", hoTen, sdt, gioitinh, diaChi, email, matKhau, diaChi, date);
+                khachhang = new KhachHang_DTO("", hoTen, sdt, gioitinh, diaChi, email, user, matKhau, date);
                 kh_BLL.addKhachHang(khachhang);
                 accountLabel.setText(hoTen);
                 dangkyFrame.dispose();
