@@ -1,7 +1,7 @@
 package GUI.Admin.staff;
 
 import java.util.ArrayList;
-import javax.swing.JButton;
+import GUI.Admin.staff.ThemNhanVien;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -43,7 +43,7 @@ public class NhanVienTable extends JPanel  implements GUI.Admin.component.Header
         btnAdd.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new ThemNhanVien(tableModel,staffList,table,NhanVienTable.this); // Mở form thêm nhân viên
+                new ThemNhanVien(tableModel,staffList,table); // Mở form thêm nhân viên
             }
         });
         // Nút sắp xếp tăng

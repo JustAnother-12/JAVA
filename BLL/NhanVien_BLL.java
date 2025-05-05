@@ -63,7 +63,7 @@ public class NhanVien_BLL extends JDialog{
    public boolean addStaff(JTextField txtName, JComboBox<String> txtPosition, JTextField txtPhone,
                                JTextField txtUsername, JTextField txtPassword, JTextField txtAddress,
                                JTextField txtCCCD, JTextField txtBirthday, JComboBox<String> cbGender,
-                               DefaultTableModel tableModel, HashSet<String> existingIDs,ArrayList<NhanVien_DTO> staffList,JTable table,NhanVienTable NhanVienTable) {
+                               DefaultTableModel tableModel, HashSet<String> existingIDs,ArrayList<NhanVien_DTO> staffList,JTable table) {
         try {
             String name = txtName.getText().trim();
             String position = (String) txtPosition.getSelectedItem();
@@ -101,41 +101,11 @@ public class NhanVien_BLL extends JDialog{
             staffList.add(nv);
             // Thêm vào DB
             boolean success = ThemNhanVien_DAO.addStaff(nv);
-            int columnIndex = -1;
-                try {
-                    columnIndex = table.getColumnModel().getColumnIndex("Tác vụ");
-                } catch (IllegalArgumentException e) {
-                    columnIndex = -1;
-                }
-            DefaultTableModel newTableModel = new DefaultTableModel();
-                for (int i = 0; i < tableModel.getColumnCount(); i++) {
-                    if (i != columnIndex) {
-                        newTableModel.addColumn(tableModel.getColumnName(i));
-                    }
-                }
-                for (int row = 0; row < tableModel.getRowCount(); row++) {
-                    Object[] rowData = new Object[newTableModel.getColumnCount()];
-                    int newColIndex = 0;
-                    for (int i = 0; i < tableModel.getColumnCount(); i++) {
-                        if (i != columnIndex) {
-                            rowData[newColIndex++] = tableModel.getValueAt(row, i);
-                        }
-                    }
-                    newTableModel.addRow(rowData);
-                }
-    
-                table.setModel(newTableModel);
-                tableModel = newTableModel;
-                // ❗️ Xoá toàn bộ dữ liệu bảng cũ
-                tableModel.setRowCount(0);
-    
-                NhanVien_DAO.loadDataFormDatabase(tableModel, staffList);
-                table.getColumn("Tác vụ").setCellRenderer(new NutGiaoDien("staff"));
-                table.getColumn("Tác vụ").setCellEditor(new NutSuKien(NhanVienTable,tableModel));
             if (success) {
-                //tableModel.addRow(new Object[]{id, name, username, phone, "Chi tiết", "Xóa"});
+                tableModel.addRow(new Object[]{id, name, username, phone, "Chi tiết", "Xóa"});
                 existingIDs.add(id);
                 JOptionPane.showMessageDialog(null, "Thêm nhân viên thành công!");
+                new NhanVienTable();
                 return true;
             } else {
                 throw new Exception("Không thể thêm nhân viên vào cơ sở dữ liệu.");
