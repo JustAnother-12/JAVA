@@ -271,22 +271,38 @@ public NutSuKien(NhanVienTable accountList, CustomerTable customerList,OrderTabl
                 boolean flag = true;
                 if (formType == FormType.STAFF) {
                     NhanVien_BLL temp = new NhanVien_BLL();
-                    boolean rs = temp.deleteStaff(id, tableModel, staffList.getAccountList());
-                    if (rs == true) {
-                        JOptionPane.showMessageDialog(null, "Xoá khách tài khoản khách hàng thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE); 
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Xoá thất bại! Có đơn hàng liên quan đến khách hàng này!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
-                        flag = false;
+                    PhieuNhap_BLL pnBLL = new PhieuNhap_BLL();
+                    for(PhieuNhap_DTO pn:pnBLL.getAllPhieuNhap()){
+                        if(pn.getMaNV().equals(id)){
+                            flag = false;
+                            JOptionPane.showMessageDialog(null, "Xóa thất bại! Có phiếu nhập liên quan đến nhân viên này", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                            break;
+                        }
                     }
+                    DonHang_BLL dhBLL = new DonHang_BLL();
+                    for(Order_DTO order:dhBLL.getAllOrder()){
+                        if(order.getManv()!=null && order.getManv().equals(id)){
+                            flag = false;
+                            JOptionPane.showMessageDialog(null, "Xóa thất bại! Có đơn hàng liên quan đến nhân viên này", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                            break;
+                        }
+                    }
+                    if(flag)
+                        temp.deleteStaff(id, tableModel, staffList.getAccountList());
+                    
                 } else if (formType == FormType.CUSTOMER){
                     KhachHang_BLL temp = new KhachHang_BLL();
-                    boolean rs = temp.deleteCustomer(id, tableModel, customerList.getCustomerList());
-                    if (rs == true) {
-                        JOptionPane.showMessageDialog(null, "Xóa nhân viên thành công!");
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Không tìm thấy nhân viên để xóa!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-                        flag = false;
+                    DonHang_BLL dhBLL = new DonHang_BLL();
+                    for(Order_DTO order:dhBLL.getAllOrder()){
+                        if(order.getMakh().equals(id)){
+                            flag = false;
+                            JOptionPane.showMessageDialog(null, "Xóa thất bại! Có đơn hàng liên quan đến khách hàng này", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                            break;
+                        }
                     }
+                    if(flag)
+                        temp.deleteCustomer(id, tableModel, customerList.getCustomerList());
+                    
                 } else if (formType == FormType.ORDER) {
                     DonHang_BLL temp = new DonHang_BLL();
                     boolean rs = temp.DeleteOrder(id);
@@ -302,7 +318,7 @@ public NutSuKien(NhanVienTable accountList, CustomerTable customerList,OrderTabl
                     for(PhieuNhap_DTO pn:pnBLL.getAllPhieuNhap()){
                         if(pn.getMaNCC().equals(id)){
                             flag = false;
-                            JOptionPane.showMessageDialog(null, "Xóa thất bại! Có phiếu nhập liên quan đến nhà cung cấp này", "Thông báo", JOptionPane.ERROR_MESSAGE);
+                            JOptionPane.showMessageDialog(null, "Xóa thất bại! Có phiếu nhập liên quan đến nhà cung cấp này", "Lỗi", JOptionPane.ERROR_MESSAGE);
                             break;
                         }
                     }
@@ -313,8 +329,10 @@ public NutSuKien(NhanVienTable accountList, CustomerTable customerList,OrderTabl
                     PhieuNhap_BLL temp = new PhieuNhap_BLL();
                     temp.deleteImport(id, tableModel, importList.getImportList());
                 }
-                ((DefaultTableModel) table.getModel()).removeRow(selectedRow);
-                stopCellEditing();
+                if(flag){
+                    ((DefaultTableModel) table.getModel()).removeRow(selectedRow);
+                    stopCellEditing();
+                }
             }
         }
     }
