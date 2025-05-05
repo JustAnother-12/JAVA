@@ -295,8 +295,10 @@ public NutSuKien(NhanVienTable accountList, CustomerTable customerList,OrderTabl
                     PhieuNhap_BLL temp = new PhieuNhap_BLL();
                     temp.deleteImport(id, tableModel, importList.getImportList());
                 }
-                ((DefaultTableModel) table.getModel()).removeRow(selectedRow);
-                stopCellEditing();
+                if(flag){
+                    ((DefaultTableModel) table.getModel()).removeRow(selectedRow);
+                    stopCellEditing();
+                }
             }
         }
     }
