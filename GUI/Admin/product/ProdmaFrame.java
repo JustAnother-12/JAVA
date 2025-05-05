@@ -378,22 +378,32 @@ public class ProdmaFrame extends JPanel implements Header.searchListener{
     
     private void searchByName(String txt) {
         ArrayList<SanPham_DTO> Searchproducts = new ArrayList<>();
-        for(SanPham_DTO sp:products){
-            if(sp.getTen_SanPham().toLowerCase().contains(txt)){
-                Searchproducts.add(sp);
+        if(txt.trim().isEmpty()){
+            getSPandDetails((String)FilterComboBox.getSelectedItem());
+        }else{
+            for(SanPham_DTO sp:products){
+                if(sp.getTen_SanPham().toLowerCase().contains(txt)){
+                    Searchproducts.add(sp);
+                }
             }
+            products = Searchproducts;
         }
-        showProducts(Searchproducts);
+        showProducts(products);
     }
 
     private void searchByID(String txt) {
         ArrayList<SanPham_DTO> Searchproducts = new ArrayList<>();
-        for(SanPham_DTO sp:products){
-            if(sp.getID_SanPham().toLowerCase().contains(txt)){
-                Searchproducts.add(sp);
+        if(txt.trim().isEmpty()){
+            getSPandDetails((String)FilterComboBox.getSelectedItem());
+        }else{
+            for(SanPham_DTO sp:products){
+                if(sp.getID_SanPham().toLowerCase().contains(txt)){
+                    Searchproducts.add(sp);
+                }
             }
+            products = Searchproducts;
         }
-        showProducts(Searchproducts);
+        showProducts(products);
     }
 
 
