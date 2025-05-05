@@ -30,6 +30,37 @@ public class ThemNhanVien_DAO {
         }
         return false;
     }
+    public String getNextNVID() {
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            String latestID = "";
+            try {
+                String sql = "SELECT manv FROM NHANVIEN ORDER BY manv DESC LIMIT 1";
+                PreparedStatement stmt = conn.prepareStatement(sql);
+                ResultSet rs = stmt.executeQuery();
+                if (rs.next()) {
+                    latestID = rs.getString("manv");
+                }
+            } catch (SQLException e) {
+                System.out.println("Lỗi khi truy vấn mã nhân viên: " + e.getMessage());
+            }
+    
+            String prefix = latestID.replaceAll("\\d+", "");
+            String numberic = latestID.replaceAll("[^\\d]", "");
+    
+            try {
+                int number = Integer.parseInt(numberic);
+                number++;
+                String nextnumberic = String.format("%03d", number);
+                return (prefix + nextnumberic).replace(" ", "");
+            } catch (NumberFormatException e) {
+                System.out.println("Lỗi định dạng mã nhân viên trong CSDL: " + latestID);
+                return "NV001"; // fallback nếu định dạng sai
+            }
+        } catch (SQLException e) {
+            System.out.println("Lỗi kết nối database: " + e.getMessage());
+        }
+        return null;
+    }
         public boolean isIDExists(String id) {
             try (Connection conn = DatabaseConnection.getConnection()) {
                 String checkQuery = "SELECT COUNT(*) FROM NHANVIEN WHERE manv = ?";

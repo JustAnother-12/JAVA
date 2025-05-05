@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
@@ -16,7 +17,10 @@ import DAO.NhanVien_DAO;
 import DAO.ThemNhanVien_DAO;
 import DTO.NhanVien_DTO;
 import GUI.Admin.staff.ChiTietNhanVien;
+import GUI.Admin.staff.NhanVienTable;
 import GUI.Admin.swing.CheckFailInput;
+import GUI.Admin.swing.NutGiaoDien;
+import GUI.Admin.swing.NutSuKien;
 
 public class NhanVien_BLL extends JDialog{
     public void loadDataToTable(DefaultTableModel tableModel,ArrayList<NhanVien_DTO> staffList){
@@ -59,7 +63,7 @@ public class NhanVien_BLL extends JDialog{
    public boolean addStaff(JTextField txtName, JComboBox<String> txtPosition, JTextField txtPhone,
                                JTextField txtUsername, JTextField txtPassword, JTextField txtAddress,
                                JTextField txtCCCD, JTextField txtBirthday, JComboBox<String> cbGender,
-                               DefaultTableModel tableModel, HashSet<String> existingIDs,ArrayList<NhanVien_DTO> staffList) {
+                               DefaultTableModel tableModel, HashSet<String> existingIDs,ArrayList<NhanVien_DTO> staffList,JTable table) {
         try {
             String name = txtName.getText().trim();
             String position = (String) txtPosition.getSelectedItem();
@@ -86,22 +90,22 @@ public class NhanVien_BLL extends JDialog{
             // Tạo ID duy nhất
             String id;
             do {
-                id = checkFailInput_BLL.generateRandomID();
+                id = ThemNhanVien_DAO.getNextNVID();
             } while (existingIDs.contains(id));
 
             // Kiểm tra trùng
             validateUniqueFields(txtPhone.getText(), txtCCCD.getText(), txtUsername.getText());
-
+            
             // Tạo DTO
             NhanVien_DTO nv = new NhanVien_DTO(id, name, position, phone, username, password, address, cccd, gender, formattedDate);
             staffList.add(nv);
             // Thêm vào DB
             boolean success = ThemNhanVien_DAO.addStaff(nv);
-            NhanVien_DAO.loadDataFormDatabase(tableModel, staffList);
             if (success) {
                 tableModel.addRow(new Object[]{id, name, username, phone, "Chi tiết", "Xóa"});
                 existingIDs.add(id);
                 JOptionPane.showMessageDialog(null, "Thêm nhân viên thành công!");
+                new NhanVienTable();
                 return true;
             } else {
                 throw new Exception("Không thể thêm nhân viên vào cơ sở dữ liệu.");
