@@ -116,7 +116,7 @@ public class HeaderPanel extends JPanel {
                 String ngay = Integer.toString((int)dangkyFrame.cbNgay.getSelectedItem());
                 String thang = Integer.toString((int)dangkyFrame.cbThang.getSelectedItem());
                 String nam = Integer.toString((int)dangkyFrame.cbNam.getSelectedItem());
-                String date = ngay + "/" + thang + "/" + nam;
+                String date = nam + "-" + thang + "-" + ngay;
                 String matKhau = new String(dangkyFrame.txtMatKhau.getPassword());
                 String diaChi = (String) dangkyFrame.cbDiaChi.getSelectedItem();
 
@@ -157,7 +157,7 @@ public class HeaderPanel extends JPanel {
                 }
 
                 JOptionPane.showMessageDialog(dangkyFrame, "Đăng ký thành công!");
-                khachhang = new KhachHang_DTO("", hoTen, sdt, gioitinh, diaChi, email, matKhau, diaChi, ngay);
+                khachhang = new KhachHang_DTO("", hoTen, sdt, gioitinh, diaChi, email, matKhau, diaChi, date);
                 kh_BLL.addKhachHang(khachhang);
                 accountLabel.setText(hoTen);
                 dangkyFrame.dispose();

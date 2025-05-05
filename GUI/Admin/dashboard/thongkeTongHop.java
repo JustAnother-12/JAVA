@@ -152,13 +152,12 @@ public class thongkeTongHop extends JPanel{
         
         for (JPanel pnl:PanelList){
             optionPanel.add(pnl);
-            // optionPanel.add(Box.createHorizontalStrut(5));
+            
         }
         optionPanel.add(Box.createHorizontalStrut(45));
         optionPanel.add(Box.createHorizontalGlue());
 
-        // optionComboBox.setPreferredSize(new Dimension(150,30));
-        // optionPanel.add(optionComboBox, BorderLayout.EAST);
+        
         add(optionPanel, BorderLayout.NORTH);
 
         // Các panel thống kê

@@ -234,14 +234,7 @@ public class ProductForm extends JFrame {
         Image og = image.getImage();
         int w = 140;
         int h = 180;
-        int iw = image.getIconWidth();
-        int ih = image.getIconHeight();
-        double xscale = (double) w / iw;
-        double yscale = (double) h / ih;
-        double scale = Math.max(xscale, yscale);
-        int width = (int)(scale*iw);
-        int height = (int)(scale*ih);
-        Image scaledImage = og.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+        Image scaledImage = og.getScaledInstance(w, h, Image.SCALE_SMOOTH);
         label.setIcon(new ImageIcon(scaledImage));
     }
 

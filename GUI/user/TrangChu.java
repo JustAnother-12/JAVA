@@ -73,7 +73,7 @@ public class TrangChu extends JFrame{
             }
             else if(e.getSource() == Filter.FilterButton && !Filter.MinPriceTF.getText().equals("Giá thấp nhất") && !Filter.MaxPriceTF.getText().equals("Giá cao nhất")){
                 ContentPanel.remove(productPanel);
-                // ContentPanel.setLayout(new BoxLayout(ContentPanel, BoxLayout.X_AXIS));
+                
                 if(header.searchBox.getText().equals("Search...")){
                     productPanel = new ProductPanel("ALL", null, Filter);
                 }
@@ -84,7 +84,6 @@ public class TrangChu extends JFrame{
                 ContentPanel.add(productPanel);
             }
 
-            // Revalidate and repaint the ContentPanel to reflect changes
             ContentPanel.revalidate();
             ContentPanel.repaint();
             }
@@ -128,7 +127,6 @@ public class TrangChu extends JFrame{
         Filter.FilterButton.addMouseListener(mouseListener);
         productPanel = new ProductPanel("SEARCH", header.searchBox.getText(), null);
 
-        // ContentPanel.add(Filter);
         ContentPanel.add(Filter);
         ContentPanel.add(productPanel);
 

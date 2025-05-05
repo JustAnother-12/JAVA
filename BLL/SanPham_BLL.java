@@ -47,23 +47,17 @@ public class SanPham_BLL {
 
     public Sach_DTO getSachFromID(String id){
         Sach_DTO sach = Sachdao.getSACHfromID(id);
-        if (sach != null)
-            return sach;
-        return null;
+        return sach; 
     }
 
     public Vo_DTO getVoFromID(String id){
         Vo_DTO vo = Vodao.getVOfromID(id);
-        if (vo != null)
-            return vo;
-        return null;
+        return vo;
     }
 
     public But_DTO getButFromID(String id){
         But_DTO but = Butdao.getBUTfromID(id);
-        if (but != null)
-            return but;
-        return null;
+        return but;
     }
 
     public ArrayList<SanPham_DTO> getAllSanPham(){

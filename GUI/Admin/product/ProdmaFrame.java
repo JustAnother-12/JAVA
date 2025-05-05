@@ -121,12 +121,7 @@ public class ProdmaFrame extends JPanel implements Header.searchListener{
 
 
         productTable.setModel(new DefaultTableModel(
-            new Object[][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
-            },
+            new Object[][] {},
             new String[] {
                 "ID", "Tên", "Phân loại", "Số lượng", "Đơn giá", "Tác vụ"
             }
@@ -420,7 +415,6 @@ public class ProdmaFrame extends JPanel implements Header.searchListener{
             productForm.categoryComboBox.setSelectedItem(product.getDanhMuc());
             productForm.categoryComboBox.setEnabled(false);
             productForm.priceTextField.setText(String.valueOf(product.getGia_SanPham()));
-            System.out.println("test");
             productForm.productImageLabel.setIcon(new ImageIcon("GUI/user/ProductImage/" + product.getID_SanPham() + ".png"));
 
             if(product instanceof Sach_DTO){

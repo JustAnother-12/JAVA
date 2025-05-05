@@ -10,27 +10,6 @@ public class PhieuNhap_DAO {
     private Connection con;
     private SanPham_BLL spbll = new SanPham_BLL();
 
-    // public boolean OpenConnection() {
-    //     try {
-    //         Class.forName("com.mysql.cj.jdbc.Driver");
-    //         con = DriverManager.getConnection("jdbc:mysql://localhost:3306/ban_van_phong_pham", "root", "123456789");
-    //         return true;
-    //     } catch (ClassNotFoundException | SQLException e) {
-    //         System.out.println(e.getMessage());
-    //         return false;
-    //     }
-    // }
-
-    // public void closeConnection() {
-    //     try {
-    //         if (con != null){
-    //             con.close();
-    //         }
-    //     }catch (SQLException e){
-    //         System.out.println(e.getMessage());
-    //     }
-    // }
-
     public String getNextPHIEUID(Connection con){
         String latestID = "";
         try {
@@ -219,12 +198,12 @@ public class PhieuNhap_DAO {
                 PreparedStatement stmt1 = con.prepareStatement(query1);
                 PreparedStatement stmt2 = con.prepareStatement(query2);
                 
-                // Đúng thứ tự: Xóa chi tiết trước
+                
                 stmt1.setString(1, id);
                 stmt2.setString(1, id);
 
-                stmt1.executeUpdate(); // Xóa chi tiết phiếu nhập
-                int rowsMain   = stmt2.executeUpdate(); // Sau đó xóa phiếu nhập
+                stmt1.executeUpdate(); 
+                int rowsMain = stmt2.executeUpdate();
                 
                 if (rowsMain >= 1) {
                     con.commit();
@@ -270,7 +249,7 @@ public class PhieuNhap_DAO {
                         String deletePN = "DELETE FROM PHIEUNHAP WHERE maphieu = ?";
                         PreparedStatement delStmt = con.prepareStatement(deletePN);
                         delStmt.setString(1, id);
-                        delStmt.executeUpdate(); // không cần kiểm tra số dòng vì COUNT trước đó đã xác nhận
+                        delStmt.executeUpdate();
                     }
     
                     con.commit();
@@ -333,22 +312,4 @@ public class PhieuNhap_DAO {
         }
         return false;
     }
-    // public boolean deletePhieuNhap(String id) {
-    //     boolean result = false;
-    //     con = DatabaseConnection.OpenConnection();
-    //     if (con != null) {
-    //         try {
-    //             String sql = "DELETE FROM PHIEUNHAP WHERE maphieu = ?";
-    //             PreparedStatement stmt = con.prepareStatement(sql);
-    //             stmt.setString(1, id);
-    //             int rowsAffected = stmt.executeUpdate();
-    //             result = rowsAffected > 0;
-    //         } catch (SQLException e) {
-    //             System.out.println(e.getMessage());
-    //         } finally {
-    //             DatabaseConnection.closeConnection(con);
-    //         }
-    //     }
-    //     return result;
-    // }
 }

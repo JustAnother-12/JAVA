@@ -16,8 +16,6 @@ import utils.*;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class importListFrame extends JFrame{
@@ -129,11 +127,6 @@ public class importListFrame extends JFrame{
         providerComboBox.setBackground(Color.WHITE);
         providerComboBox.setFont(new Font("Segoe UI", 0, 14));
         providerComboBox.setPreferredSize(new Dimension(150, 30));
-        providerComboBox.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                
-            }
-        });
         leftPanel.add(providerComboBox);
 
         // Right side: Buttons
@@ -280,7 +273,7 @@ public class importListFrame extends JFrame{
             }
         }
         if (nhacungcap != null && !importList.isEmpty()){
-            PhieuNhap_DTO pn = new PhieuNhap_DTO("",nhacungcap.getMaNCC(), currentNV.getManv(), getCurrentDay(), importList);
+            PhieuNhap_DTO pn = new PhieuNhap_DTO("",nhacungcap.getMaNCC(), currentNV.getManv(), pnBLL.getCurrentDay(), importList);
             JOptionPane.showMessageDialog(this, pnBLL.addPhieuNhap(pn), "Thông báo", JOptionPane.INFORMATION_MESSAGE);
             for(ChiTietPhieuNhap_DTO ct:importList){
                 SanPham_DTO sp = ct.getThongtinSP(); 
@@ -296,11 +289,5 @@ public class importListFrame extends JFrame{
         else{
             JOptionPane.showMessageDialog(this, "Danh sách rỗng!", "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
-    }
-
-    private String getCurrentDay() {
-        LocalDate ngayHienTai = LocalDate.now();
-        DateTimeFormatter dinhDang = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        return ngayHienTai.format(dinhDang);
     }
 }

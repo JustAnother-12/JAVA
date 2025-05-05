@@ -5,6 +5,9 @@ import DTO.ChiTietPhieuNhap_DTO;
 import DAO.NhaCungCap_DAO;
 import DAO.NhanVien_DAO;
 import DAO.PhieuNhap_DAO;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import javax.swing.table.DefaultTableModel;
@@ -66,5 +69,11 @@ public class PhieuNhap_BLL {
                 break;
             }
         }
+    }
+
+    public String getCurrentDay() {
+        LocalDate ngayHienTai = LocalDate.now();
+        DateTimeFormatter dinhDang = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        return ngayHienTai.format(dinhDang);
     }
 }

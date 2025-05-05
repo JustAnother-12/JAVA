@@ -191,28 +191,28 @@ public class ProductPanel extends JScrollPane {
                 }
                 else{
                     SanPham_DTO sph = filter.Filter(sp);
-                        if(sph != null){
-                            id = sph.getID_SanPham();
-                            ten = sph.getTen_SanPham();
-                            gia = sph.getGia_SanPham();
+                    if(sph != null){
+                        id = sph.getID_SanPham();
+                        ten = sph.getTen_SanPham();
+                        gia = sph.getGia_SanPham();
 
-                            ProductItem item = new ProductItem(new Product_Item_Model(id, ten, id, String.valueOf(new BigDecimal(gia))));
-                            ProductList.add(item);
-                            ItemPanel.add(item);
+                        ProductItem item = new ProductItem(new Product_Item_Model(id, ten, id, String.valueOf(new BigDecimal(gia))));
+                        ProductList.add(item);
+                        ItemPanel.add(item);
 
-                            if (sph instanceof Sach_DTO){
-                                Sach_DTO sach = (Sach_DTO)sph;
-                                SachDescriptionList.add(sach);
-                            }
-                            else if (sph instanceof Vo_DTO){
-                                Vo_DTO vo = (Vo_DTO)sph;
-                                VoDescriptionList.add(vo);
-                            }
-                            else{
-                                But_DTO but = (But_DTO)sph;
-                                ButDescriptionList.add(but);
-                            }
+                        if (sph instanceof Sach_DTO){
+                            Sach_DTO sach = (Sach_DTO)sph;
+                            SachDescriptionList.add(sach);
                         }
+                        else if (sph instanceof Vo_DTO){
+                            Vo_DTO vo = (Vo_DTO)sph;
+                            VoDescriptionList.add(vo);
+                        }
+                        else{
+                            But_DTO but = (But_DTO)sph;
+                            ButDescriptionList.add(but);
+                        }
+                    }
                 }
             }
         }

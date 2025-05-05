@@ -81,14 +81,14 @@ public class FilterPanel extends JPanel{
         MinPriceTF.setPreferredSize(new Dimension(140, 40));
         MinPriceTF.setText("Giá thấp nhất");
         MinPriceTF.setForeground(Color.GRAY);
-        // MinPriceTF.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
+        
         MinPriceTF.setAlignmentX(CENTER_ALIGNMENT);
 
         MaxPriceTF.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         MaxPriceTF.setPreferredSize(new Dimension(140, 40));
         MaxPriceTF.setText("Giá cao nhất");
         MaxPriceTF.setForeground(Color.GRAY);
-        // MaxPriceTF.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
+        
         MaxPriceTF.setAlignmentX(CENTER_ALIGNMENT);
 
         FilterPanel.setLayout(new BoxLayout(FilterPanel, BoxLayout.Y_AXIS));

@@ -35,13 +35,6 @@ public class importQuantityFrame extends JFrame{
         quantityTextfield = new JTextField();
 
 
-        // providerLabel = new JLabel("Nhà cung cấp:");
-        // ArrayList<NhaCungCap_DTO> danhSachNCC = nccBLL.getAllNCC();
-        // String[] listTenNCC = new String[danhSachNCC.size()];
-        // for (int i = 0; i < danhSachNCC.size(); i++) {
-        //     listTenNCC[i] = danhSachNCC.get(i).getTenNCC();
-        // }
-        // providerComboBox = new JComboBox<>(listTenNCC);
         confirmButton = new MyButton("Xác nhận");
         cancelButton = new MyButton("Hủy"); 
 
