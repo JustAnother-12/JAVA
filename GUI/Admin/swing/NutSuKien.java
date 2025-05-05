@@ -218,8 +218,8 @@ public NutSuKien(NhanVienTable accountList, CustomerTable customerList,OrderTabl
                 new ImportDetailForm((PhieuNhap_DTO) obj);
             }
             else {
-                // Nếu không tìm thấy account hợp lệ, hiển thị thông báo
-                showDetailDialog("Lỗi", "Không tìm thấy thông tin tài khoản.");
+                // Nếu không tìm thấy thông tin, hiển thị thông báo
+                showDetailDialog("Lỗi", "Không tìm thấy thông tin.");
             }
         }
     } 
@@ -266,7 +266,7 @@ public NutSuKien(NhanVienTable accountList, CustomerTable customerList,OrderTabl
     private void deleteRow(DefaultTableModel tableModel) throws SQLException{
         if (table != null) {
             String id = table.getValueAt(selectedRow, 0).toString();
-            int confirm = JOptionPane.showConfirmDialog(panel, "Bạn có chắc chắn muốn xóa tài khoản này?", "Xác nhận xóa", JOptionPane.YES_NO_OPTION);
+            int confirm = JOptionPane.showConfirmDialog(panel, "Bạn có chắc chắn muốn xóa dòng này?", "Xác nhận xóa", JOptionPane.YES_NO_OPTION);
             if (confirm == JOptionPane.YES_OPTION) {
                 boolean flag = true;
                 if (formType == FormType.STAFF) {

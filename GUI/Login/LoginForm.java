@@ -32,6 +32,7 @@ public class LoginForm extends JFrame {
         setSize(400, 250);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
+        setVisible(true);
         
     }
 
@@ -76,6 +77,6 @@ public class LoginForm extends JFrame {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new LoginForm().setVisible(true));
+        SwingUtilities.invokeLater(() -> new LoginForm());
     }
 }

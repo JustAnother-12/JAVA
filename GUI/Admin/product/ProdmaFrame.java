@@ -137,13 +137,23 @@ public class ProdmaFrame extends JPanel implements Header.searchListener{
             }
         });
 
+        
         productTable.setRowHeight(35);
         productTable.setGridColor(new Color(51, 51, 51));
         productTable.setShowGrid(true);
+        // Căn giữa dữ liệu trong bảng
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+
+        // Thiết lập renderer cho từng cột
+        for (int i = 0; i < productTable.getColumnCount(); i++) {
+            productTable.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+        }
         productTable.setDefaultEditor(Object.class, null);
         productTable.addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent evt) {
                 productTableMouseClicked(evt);
+                System.out.println(position);
             }
         });
 
@@ -353,17 +363,33 @@ public class ProdmaFrame extends JPanel implements Header.searchListener{
 
     @Override
     public void onSearch(String text) {
-        searchByName(text.trim().toLowerCase());
+
+        if(text.trim().matches("[0-9]+")){
+            searchByID(text.trim().toLowerCase());
+        }else{
+            searchByName(text.trim().toLowerCase());
+        }
+
     }
     @Override
     public void onFilterByRole(String role) {
         
     }
-
+    
     private void searchByName(String txt) {
         ArrayList<SanPham_DTO> Searchproducts = new ArrayList<>();
         for(SanPham_DTO sp:products){
             if(sp.getTen_SanPham().toLowerCase().contains(txt)){
+                Searchproducts.add(sp);
+            }
+        }
+        showProducts(Searchproducts);
+    }
+
+    private void searchByID(String txt) {
+        ArrayList<SanPham_DTO> Searchproducts = new ArrayList<>();
+        for(SanPham_DTO sp:products){
+            if(sp.getID_SanPham().toLowerCase().contains(txt)){
                 Searchproducts.add(sp);
             }
         }

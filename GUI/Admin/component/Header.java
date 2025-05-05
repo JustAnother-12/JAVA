@@ -63,7 +63,6 @@ public class Header extends JPanel {
     }
     public Header() {
         initComponents();
-        //myinitcomponent();
         setOpaque(false);
         setSize(800, 150);
     }
@@ -113,18 +112,10 @@ public class Header extends JPanel {
         getAccessibleContext().setAccessibleName("");
     }
 
-    // private void jToggleButton1ActionPerformed(java.awt.event.ActionEvent evt) {
-    //     System.exit(0);
-    // }
+    
 
     private static final Logger LOG = Logger.getLogger(Header.class.getName());
-    // private void myinitcomponent() {
-    //     JButton closeButton = new JButton("/com/raven/icon/close.jpg");
-    //     closeButton.addActionListener(e ->{
-    //         System.exit(0);
-    //     });
-    //     this.add(closeButton);
-    // }
+    
     @Override
     protected void paintComponent(Graphics grphcs) {
         Graphics2D g2 = (Graphics2D) grphcs;

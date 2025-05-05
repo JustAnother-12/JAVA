@@ -22,6 +22,7 @@ import GUI.Admin.product.ProdmaFrame;
 import GUI.Admin.staff.NhanVienTable;
 import GUI.Admin.supplier.SupplierTable;
 import GUI.Admin.swing.MenuSelectedListener;
+import GUI.Login.LoginForm;
 import helper.CurrentUser;
 
 public class Main extends JFrame {
@@ -175,9 +176,9 @@ public class Main extends JFrame {
         mainPanel.add(contentPanel, BorderLayout.CENTER);
     }
     
-    // public static void main(String args[]){
-    //     new Main();
-    // }
+    public static void main(String[] args){
+        new LoginForm();
+    }
 
 }
 

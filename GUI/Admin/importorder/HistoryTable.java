@@ -92,18 +92,22 @@ public class HistoryTable extends JPanel implements GUI.Admin.component.Header.s
 
     @Override
     public void onSearch(String text) {
-        TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(tableModel);
-        table.setRowSorter(sorter);
-        if (text.trim().isEmpty()) {
-            sorter.setRowFilter(null);
-        } else {
-            sorter.setRowFilter(RowFilter.regexFilter("(?i)" + text.trim(), 0)); // Tìm theo mã phiếu
-        }
+        searchByIdOrName(text);
     }
 
     @Override
     public void onFilterByRole(String role) {
         // Không áp dụng
+    }
+
+    public void searchByIdOrName(String text) {
+        TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(tableModel);
+        table.setRowSorter(sorter);
+        if (text.trim().isEmpty()) {
+            sorter.setRowFilter(null);
+        } else {
+            sorter.setRowFilter(RowFilter.regexFilter("(?i)" + text.trim(), 0, 1, 3)); // ID hoặc Tên NCC, NV
+        }
     }
 
     public void sortTable(boolean ascending) {
