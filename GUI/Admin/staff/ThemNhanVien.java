@@ -17,7 +17,7 @@ public class ThemNhanVien extends javax.swing.JDialog{
         private DefaultTableModel tableModel;
         
         private HashSet<String> existingIDs; 
-        public ThemNhanVien(DefaultTableModel tableModel,ArrayList<NhanVien_DTO> staffList) {
+        public ThemNhanVien(DefaultTableModel tableModel,ArrayList<NhanVien_DTO> staffList,JTable table, NhanVienTable NhanVienTable) {
             initComponents();
             this.tableModel = tableModel;
             existingIDs = new HashSet<>();
@@ -73,7 +73,7 @@ public class ThemNhanVien extends javax.swing.JDialog{
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     NhanVien_BLL NhanVien_BLL = new NhanVien_BLL();
-                    boolean nhanvien = NhanVien_BLL.addStaff(txtName, cbPosition, txtPhone, txtUsername, txtPassword, txtAddress, txtCCCD, txtBirthday, cbGender, tableModel, existingIDs,staffList);
+                    boolean nhanvien = NhanVien_BLL.addStaff(txtName, cbPosition, txtPhone, txtUsername, txtPassword, txtAddress, txtCCCD, txtBirthday, cbGender, tableModel, existingIDs,staffList,table, NhanVienTable);
                     if (nhanvien == true)
                         dispose();
                 }

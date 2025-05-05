@@ -43,7 +43,7 @@ public class NhanVienTable extends JPanel  implements GUI.Admin.component.Header
         btnAdd.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new ThemNhanVien(tableModel,staffList); // Mở form thêm nhân viên
+                new ThemNhanVien(tableModel,staffList,table,NhanVienTable.this); // Mở form thêm nhân viên
             }
         });
         // Nút sắp xếp tăng

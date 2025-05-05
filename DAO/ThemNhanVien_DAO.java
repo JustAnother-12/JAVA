@@ -30,6 +30,32 @@ public class ThemNhanVien_DAO {
         }
         return false;
     }
+    public String getNextNVID(){
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            String latestID = "";
+            try {
+                String sql = "SELECT manv FROM NHANVIEN ORDER  BY manv DESC LIMIT 1";
+                PreparedStatement stmt = conn.prepareStatement(sql);
+                ResultSet rs = stmt.executeQuery();
+                if (rs.next()) {
+                    latestID = rs.getString("manv");
+                }
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            }
+
+            String prefix = latestID.replaceAll("\\d+", "");
+            String numberic = latestID.replaceAll("[^\\d]", "");
+
+            int number = Integer.parseInt(numberic);
+            number++;
+            String nextnumberic = String.format("%03d", number);
+            return (prefix+nextnumberic).replace(" ", "");
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
         public boolean isIDExists(String id) {
             try (Connection conn = DatabaseConnection.getConnection()) {
                 String checkQuery = "SELECT COUNT(*) FROM NHANVIEN WHERE manv = ?";
