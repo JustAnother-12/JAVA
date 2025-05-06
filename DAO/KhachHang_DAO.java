@@ -31,7 +31,7 @@ public class KhachHang_DAO {
                     String id = rs.getString("makh");
                     String ten = rs.getString("tenkh");
                     String sdt = rs.getString("sdt");
-                    String gioitinh = rs.getString("gioi");
+                    String gioitinh = rs.getString("gioitinh");
                     String emailkh = rs.getString("email");
                     String date = rs.getString("ngaysinh");
                     String diachi = rs.getString("diachikh");
@@ -236,7 +236,7 @@ public class KhachHang_DAO {
                             int affected = delCustomerStmt.executeUpdate();
         
                             if (affected > 0) {
-                                JOptionPane.showMessageDialog(null, "Đã xóa khách hàng, đơn hàng và chi tiết liên quan.");
+                                JOptionPane.showMessageDialog(null, "Đã xóa khách hàng.");
                             } else {
                                 JOptionPane.showMessageDialog(null, "Không tìm thấy khách hàng để xóa.");
                             }
@@ -363,10 +363,10 @@ public class KhachHang_DAO {
                 String newPhone = txtPhone.getText();
                 String newEmail = txtEmail.getText();
                 String newUsername = txtUsername.getText();
-                String currentUsername = kh.getUsername();  // Lưu ý: bạn phải có getUsername() trong DTO
+                String currentUsername = kh.getUsername();
 
                 // Nếu không trùng thì cập nhật
-                String query = "UPDATE KHACHHANG SET tenkh = ?, sdt = ?, username = ?, diachikh = ?, ngaysinh = ?, email = ?, gioi = ? WHERE username = ?";
+                String query = "UPDATE KHACHHANG SET tenkh = ?, sdt = ?, username = ?, diachikh = ?, ngaysinh = ?, email = ?, gioitinh = ? WHERE username = ?";
                 PreparedStatement pstmt = con.prepareStatement(query);
                 pstmt.setString(1, txtName.getText());
                 pstmt.setString(2, newPhone);
@@ -395,7 +395,7 @@ public class KhachHang_DAO {
         }
     }
 
-    // ===== BỔ SUNG: Hàm checkLogin dùng cho phân quyền đăng nhập (LoginForm.java) =====
+
     public static KhachHang_DTO checkLogin(String username, String password) {
         KhachHang_DTO kh = null;
         Connection con = DatabaseConnection.OpenConnection();
@@ -411,7 +411,7 @@ public class KhachHang_DAO {
                 kh.setId_KhachHang(rs.getString("makh"));
                 kh.setTen_KhachHang(rs.getString("tenkh"));
                 kh.setSdt_KhachHang(rs.getString("sdt"));
-                kh.setGioiTinh_KhachHang(rs.getString("gioitinh")); // hoặc \"gioi\" tùy DB
+                kh.setGioiTinh_KhachHang(rs.getString("gioitinh"));
                 kh.setEmail(rs.getString("email"));
                 kh.setNgaySinh_KhachHang(rs.getString("ngaysinh"));
                 kh.setDiaChi_KhachHang(rs.getString("diachikh"));
